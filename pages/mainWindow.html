@@ -58,7 +58,8 @@
 
         let _data_;
 
-        let addVis = (visName, parentElement) => {
+        let addVis
+            = (visName, parentElement) => {
             let pc = new vis[visName](parentElement);
             pc
                 .on("highlightstart",function(d,i){
@@ -99,6 +100,12 @@
         ipc.on('add-vis', function(event, arg){
             addVis(arg, $(".partition-content").get(0))
         });
+
+        ipc.on('file-data',function (event,data) {
+            _data_ = data;
+            console.log(data);
+            updatevis();
+        })
         ipc.on('change-datasample', function(event, data){
             console.log(data);
             _data_ = data;
@@ -108,8 +115,21 @@
         ipc.on('cl', function(event, arg){
             console.log("from_main: ", arg);
         });
+        $(document).ready(function() {
+            ipc.send("not-data");
+            ipc.on('errror-data', function(event, arg){
+                if(arg==null){
+                console.log("data is empty");
+                $("body").click(function () {
+                    alert("insert a database!");
+                })
+                }else{
+                    console.log("teste");
+                }
+            });
 
-        $(document).ready(function(){
+
+
             ipc.send("document-ready");
             let $body = $("body");
             let partitionLayout = new PartitionLayout($body.get(0));
@@ -137,6 +157,7 @@
             //         "Treemap": {name: "Treemap"}
             //     }
             // });
+
 
             $(window).resize(function(){
                 $(".partition-content").each(function(){
@@ -198,8 +219,9 @@
                 }
             });
         }
-    </script>
 
+
+    </script>
 </head>
 <body>
 
