@@ -49,7 +49,6 @@
         }
 
     </style>
-
     <script>
         let ipc = require('electron').ipcRenderer;
         let vis = require("@labvis-ufpa/vistechlib");
@@ -115,19 +114,9 @@
         ipc.on('cl', function(event, arg){
             console.log("from_main: ", arg);
         });
-        $(document).ready(function() {
-            ipc.send("not-data");
-            ipc.on('errror-data', function(event, arg){
-                if(arg==null){
-                console.log("data is empty");
-                $("body").click(function () {
-                    alert("insert a database!");
-                })
-                }else{
-                    console.log("teste");
-                }
-            });
 
+        ipc.send('not-data');
+        $(document).ready(function() {
 
 
             ipc.send("document-ready");
@@ -194,11 +183,15 @@
                     selector: '.btn.btn-large.btn-positive',
                     trigger: 'left',
                     callback: function (key) {
-                        let content = $("#"+$(this).attr("data-nodeid")).children(".partition-content");
-                        content.empty();
-                        addVis(key, content.get(0));
-                        ipc.send('update-sampledata', {});
-                        updatevis();
+                        if(_data_){
+                            let content = $("#"+$(this).attr("data-nodeid")).children(".partition-content");
+                            content.empty();
+                            addVis(key, content.get(0));
+                            ipc.send('update-sampledata', {});
+                            updatevis();
+                        }else{
+                            alert("You have to link data first");
+                        }
                     },
                     items: {
                         "ParallelCoordinates": {name: "Parallel Coordinates"},

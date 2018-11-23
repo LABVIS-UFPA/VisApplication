@@ -37,11 +37,12 @@ function initialize () {
         // }
 
         ipcMain.on('not-data', (event, message) => {
-            if(typeof message){
+            if(message){
                 mainWindow.webContents.send('errror-data');
-         }
+            }else{
+                console.log("NOT-DATA");
+            }
         });
-
 
         mainWindow = new BrowserWindow(windowOptions)
         mainWindow.loadURL(path.join('file://', __dirname, '/pages/mainWindow.html'))
@@ -53,21 +54,28 @@ function initialize () {
         const menu = new Menu();
 
         const menuTemplateFile = {
-                label: 'File',
-                submenu: [
-                    {label: 'loadFile',click (){
-                            let dataFile =  dialog.showOpenDialog({properties: ['openFile'], filters: [{ name: 'JSON', extensions: ['json'] }]});
-                            if(dataFile){
-                                fs.readFile(dataFile.toString(), 'utf8', (err, data) => {
-                                    if (err) throw err;
-                                    console.log(data);
-                                    mainWindow.webContents.send('file-data', data);
-                                    mainWindow.webContents.send('errror-data', data);
-                                });
-                            }
-                    }}
-                ]
-            };
+            label: 'File',
+            submenu: [
+                {label: 'loadFile',click (){
+                        let dataFile =  dialog.showOpenDialog({properties: ['openFile'], filters: [{ name: 'CSV', extensions: ['csv'] }]});
+
+                            // fs.readFile(dataFile.toString(), 'utf8', (err, data) => {
+                            //     if (err) throw err;
+                            console.log("arquivo:----------->  ",dataFile)
+                            const csv = require('csvtojson')
+
+
+                            csv()
+                                .fromFile(dataFile[0])
+                                .then((jsonObj)=>{
+                                    console.log(jsonObj);
+                                    mainWindow.webContents.send("file-data", jsonObj)
+                                })
+
+
+                }}
+            ]
+        };
 
         const menuTemplateDebug = {
             label: 'Debug',
