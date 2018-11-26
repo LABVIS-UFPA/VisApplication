@@ -14,6 +14,8 @@ let mainWindow = null
 const Menu = electron.Menu;
 const MenuItem = electron.MenuItem;
 const fs = require('fs')
+const csv = require('csvtojson')
+let _ = require('underscore');
 
 // only add update server if it's not being run from cli
 if (require.main !== module) {
@@ -56,19 +58,18 @@ function initialize () {
         const menuTemplateFile = {
             label: 'File',
             submenu: [
-                {label: 'loadFile',click (){
+                {label: 'load',click (){
                         let dataFile =  dialog.showOpenDialog({properties: ['openFile'], filters: [{ name: 'CSV', extensions: ['csv'] }]});
 
                             // fs.readFile(dataFile.toString(), 'utf8', (err, data) => {
                             //     if (err) throw err;
                             console.log("arquivo:----------->  ",dataFile)
-                            const csv = require('csvtojson')
-
 
                             csv()
                                 .fromFile(dataFile[0])
                                 .then((jsonObj)=>{
-                                    console.log(jsonObj);
+                                    console.log(jsonObj[0]);
+
                                     mainWindow.webContents.send("file-data", jsonObj)
                                 })
 
