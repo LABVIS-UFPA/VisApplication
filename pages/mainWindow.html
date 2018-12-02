@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="../lib/layout/partition_layout.css">
     <link rel="stylesheet" href="../lib/contextMenu/jquery.contextMenu.min.css">
     <script>
-        if (typeof module === 'object') {
-            window.module = module;
-            module = undefined;
-        }
+      if (typeof module === 'object') {
+        window.module = module;
+        module = undefined;
+      }
     </script>
     <script src="../lib/jquery-3.2.1.min.js"></script>
     <script src="../lib/contextMenu/jquery.contextMenu.js"></script>
@@ -49,299 +49,355 @@
     </style>
     <script>
 
-        let ipc = require('electron').ipcRenderer;
-        let vis = require("@labvis-ufpa/vistechlib");
-        console.log(vis);
-        console.log(ipc);
-        let _ = require('underscore');
-        console.log(_);
+      let ipc = require('electron').ipcRenderer;
+      let vis = require("@labvis-ufpa/vistechlib");
+      let _ = require('underscore');
+      let d3 = require('d3');
+      let DataPreparation = require("./DataPreparation.js");
+      console.log(vis);
+      console.log(ipc);
 
-        let _data_;
+      let _data_;
+      let data_prep;
 
-        let addVis
-            = (visName, parentElement) => {
-            let pc = new vis[visName](parentElement);
-            pc
-                .on("highlightstart",function(d,i){
-                    $(".partition-content").each(function(){
-                        if(this.__vis__ && this.__vis__ !== pc){
-                            this.__vis__.highlight(d,i);
-                        }
-                    });
-                })
-                .on("highlightend",function(d,i){
-                    console.log(i, "tem que remover...");
-                    $(".partition-content").each(function(){
-                        if(this.__vis__ && this.__vis__ !== pc){
-                            this.__vis__.removeHighlight(d,i);
-                        }
-                    });
-                })
-                .on("datamouseover",function(d,i){
-                    pc.highlight(d,i);
-                })
-                .on("datamouseout",function(d,i){
-                    pc.removeHighlight(d,i);
-                })
-                .on("dataclick",function(d,i){
-                    $(".partition-content").each(function(){
-                        if(this.__vis__){
-                            console.log("clicou", d, i);
-                            let elem = this.__vis__.getHighlightElement(i);
-                            // d3.select(elem).selectAll(".lineHighlight").style("stroke", "limegreen");
-                            this.__vis__.annotate(elem);
-                        }
-                    });
-                });
-            // let color = d3.scale.category10();
-            // pc.settings.color = (d) =>{ return color(d["bar_size"])};
+      let addVis
+        = (visName, parentElement) => {
+        let pc = new vis[visName](parentElement);
+        pc
+          .on("highlightstart",function(d,i){
+            $(".partition-content").each(function(){
+              if(this.__vis__ && this.__vis__ !== pc){
+                this.__vis__.highlight(d,i);
+              }
+            });
+          })
+          .on("highlightend",function(d,i){
+            console.log(i, "tem que remover...");
+            $(".partition-content").each(function(){
+              if(this.__vis__ && this.__vis__ !== pc){
+                this.__vis__.removeHighlight(d,i);
+              }
+            });
+          })
+          .on("datamouseover",function(d,i){
+            pc.highlight(d,i);
+          })
+          .on("datamouseout",function(d,i){
+            pc.removeHighlight(d,i);
+          })
+          .on("dataclick",function(d,i){
+            $(".partition-content").each(function(){
+              if(this.__vis__){
+                console.log("clicou", d, i);
+                let elem = this.__vis__.getHighlightElement(i);
+                // d3.select(elem).selectAll(".lineHighlight").style("stroke", "limegreen");
+                this.__vis__.annotate(elem);
+              }
+            });
+          });
+        // let color = d3.scale.category10();
+        // pc.settings.color = (d) =>{ return color(d["bar_size"])};
+      };
+
+      ipc.on('add-vis', function(event, arg){
+        addVis(arg, $(".partition-content").get(0))
+      });
+
+      ipc.on('file-data',function (event,data) {
+        _data_ = data;
+        console.log(data);
+        updatevis();
+      })
+      ipc.on('change-datasample', function(event, data){
+        console.log(data);
+        _data_ = data;
+        console.log(_.values(data[0]));
+        updatevis();
+
+      });
+
+      ipc.on('cl', function(event, arg){
+        console.log("from_main: ", arg);
+      });
+
+      ipc.send('not-data');
+      $(document).ready(function() {
+
+
+        ipc.send("document-ready");
+        let $body = $("body");
+        let partitionLayout = new PartitionLayout($body.get(0));
+
+        $(window).resize(function(){
+          $(".partition-content").each(function(){
+            if(this.__vis__)
+              this.__vis__.resize();
+          });
+        });
+
+        $body.on("layout:resize", ".partition-node", function(e){
+          let content = $(this).children(".partition-content").get(0);
+
+          if(content && content.__vis__){
+            content.__vis__.resize();
+          }
+        });
+        $body.on("layout:created", ".partition-node", function(e){
+
+          console.log("layout:created", this);
+          if(this !== e.target)
+            return;
+
+          if(this !== e.target)
+            return;
+
+          if($(this).children(".partition-content").children().is("button.btn.btn-large.btn-positive")) {
+            $(this).children(".partition-content").children().attr("data-nodeid", $(this).attr("id"));
+            return;
+          }else
+          if(($(this).children(".partition-content").children().is(".menuColor"))){
+
+            return
+          }
+
+          $(this).children(".partition-content").append($("<button/>")
+            .text("Add Settings")
+            .addClass("AddSettings")
+            .addClass("btn btn-large btn-positive")
+            .attr("data-nodeid", $(this).attr("id"))
+            .css({"float": "right"}));
+
+
+          $.contextMenu({
+            selector: '.AddSettings',
+            trigger: 'left',
+            callback: function (key) {
+              if(_data_){
+                let content = $("#"+$(this).attr("data-nodeid")).children(".partition-content");
+                // let content = $("#"+$(this).attr("data-nodeVis")).children(".partition-content");
+                let partition = $(this).parents('.partition-node').attr('id');
+                content.empty();
+                addMenu(key,content);
+                ipc.send('update-sampledata', {});
+                updateInteface();
+              }else{
+                alert("You have to link data first");
+              }
+            },
+            items: {
+              "Color": {name: "Color"},
+              "Hierarchy": {name: "Hierarchy"},
+              "Filter": {name: "Filter"},
+              "Details": {name: "Details"}}
+          });
+
+          $(this).children(".partition-content").append($("<button/>")
+            .text("Add Visualization")
+            .addClass("btn btn-large btn-positive")
+            .attr("data-nodeid", $(this).attr("id"))
+            .css({"float": "right"}));
+
+          $.contextMenu({
+            selector: '.btn.btn-large.btn-positive',
+            trigger: 'left',
+            callback: function (key) {
+              if(_data_){
+                let content = $("#"+$(this).attr("data-nodeid")).children(".partition-content");
+                content.empty();
+                addVis(key, content.get(0));
+                ipc.send('update-sampledata', {});
+                updatevis();
+              }else{
+                alert("You have to link data first");
+              }
+            },
+            items: {
+              "ParallelCoordinates": {name: "Parallel Coordinates"},
+              "ParallelBundling": {name: "Bundled Parallel Coordinates"},
+              "ScatterplotMatrix": {name: "Scatter Plot"},
+              "BeeswarmPlot": {name: "Beeswarm Plot"},
+              "Treemap": {name: "Treemap"}
+            }
+          });
+        });
+      });
+
+
+      function updateColorContinues(attr,item,colors,limit) {
+        let colors_continuos = d3.interpolateRgb(colors[0], colors[1])(0.5);
+        let valor = $("select.colorSelector").val();
+        $(".partition-content").each(function (i, index) {
+          if ($(index).children("svg").length) {
+
+            this.__vis__.setColor(function (d, i) {
+              return colors_continuos(d.data[valor]);
+            });
+            this.__vis__.redraw();
+          }
+          // let colors_continuos = d3.interpolateRgb(colors[0],colors[1]);
+          // $(".partition-content").each(function () {
+          //   console.log("aqui tambme");
+          //   $(".partition-content").each(function (i,index) {
+          //     if($(index).children("svg").length){
+          //       this.__vis__.setColor(function (d,i) {
+          //         colors_continuos(d.data[item]);
+          //       });
+          //       this.__vis__.redraw();
+          //     }
+          //   });
+          // });
+        });
+      }
+      function updateColor(attr,item,colors) {
+        $(".partition-content").each(function () {
+          $(".partition-content").each(function (i,index) {
+            if($(index).children("svg").length){
+              this.__vis__.setColor(function (d,i) {
+                return colors[attr.indexOf(d.data[item])];
+              });
+              this.__vis__.redraw();
+            }
+          });
+        });
+      };
+
+
+      function updateInteface(){
+        data_prep = new DataPreparation(_data_);
+        let dimension = data_prep.data_keys;
+        let d_values = data_prep.data_values;
+        let attrs = $("select.colorSelector");
+        let limit = data_prep.limit_values;
+
+
+        dimension.unshift("...")
+        $(attrs).each(function (i, attr) {
+          let items = $(attr).children(".optionItem").length;
+          $.each(dimension, function (i, item) {
+            if ($(attr).length && items < dimension.length) {
+              $(attr).append($('<option>', {
+                value: dimension[i],
+                text: dimension[i]
+              }).addClass("optionItem"));
+            }
+          });
+        });
+        dimension.shift();
+
+        if ($("div.menuColor").length) {
+          $("select.colorSelector").change(function () {
+            let valor = $("select.colorSelector").val();
+            for (let i = 0; i < dimension.length; i++) {
+              if ((valor == dimension[i] && !isNaN(d_values[i][0])) && d_values[i].length > 10) {
+                addColorsSelector(dimension[i] ,data_prep.limit_values);
+                return;
+              }
+              if (valor == dimension[i]) {
+                addColorCat(d_values[i]);
+                return;
+              }
+            }
+          });
         };
 
-        ipc.on('add-vis', function(event, arg){
-            addVis(arg, $(".partition-content").get(0))
-        });
+        $("div.menuColor").change(function () {
+          let inputs = $("div.menuColor").children('input');
+          let  dataHeader = $("select.colorSelector").val();
+          let i = (dimension.indexOf(dataHeader));
+          let colors = [];
+          let attrs = [];
+          $.each(inputs, function (i,item) {
+            attrs.push(inputs.get(i).id);
+            colors.push(inputs[i].value);
+          });
 
-        ipc.on('file-data',function (event,data) {
-            _data_ = data;
-            console.log(data);
-            updatevis();
-        })
-        ipc.on('change-datasample', function(event, data){
-            console.log(data);
-            _data_ = data;
-
-            console.log(_.values(data[0]));
-            updatevis();
-
-        });
-
-        ipc.on('cl', function(event, arg){
-            console.log("from_main: ", arg);
-        });
-
-        ipc.send('not-data');
-        $(document).ready(function() {
-
-
-            ipc.send("document-ready");
-            let $body = $("body");
-            let partitionLayout = new PartitionLayout($body.get(0));
-
-            $(window).resize(function(){
-                $(".partition-content").each(function(){
-                    if(this.__vis__)
-                        this.__vis__.resize();
-                });
-            });
-
-            $body.on("layout:resize", ".partition-node", function(e){
-                let content = $(this).children(".partition-content").get(0);
-
-                if(content && content.__vis__){
-                    content.__vis__.resize();
-                }
-            });
-            $body.on("layout:created", ".partition-node", function(e){
-
-                console.log("layout:created", this);
-                if(this !== e.target)
-                    return;
-
-                if(this !== e.target)
-                    return;
-
-                if($(this).children(".partition-content").children().is("button.btn.btn-large.btn-positive")) {
-                    $(this).children(".partition-content").children().attr("data-nodeid", $(this).attr("id"));
-                    return;
-                }else
-                if(($(this).children(".partition-content").children().is(".menuColor"))){
-
-                    return
-                }
-
-
-                $(this).children(".partition-content").append($("<button/>")
-                    .text("Add Settings")
-                    .addClass("AddSettings")
-                    .addClass("btn btn-large btn-positive")
-                    .attr("data-nodeid", $(this).attr("id"))
-                    .css({"float": "right"}));
-
-
-                $.contextMenu({
-                    selector: '.AddSettings',
-                    trigger: 'left',
-                    callback: function (key) {
-                        if(_data_){
-                            let content = $("#"+$(this).attr("data-nodeid")).children(".partition-content");
-                            // let content = $("#"+$(this).attr("data-nodeVis")).children(".partition-content");
-                            let partition = $(this).parents('.partition-node').attr('id');
-                            content.empty();
-                            addMenu(key,content);
-                            ipc.send('update-sampledata', {});
-                            updatevis();
-                        }else{
-                            alert("You have to link data first");
-                        }
-                    },
-                    items: {
-                        "Color": {name: "Color"},
-                        "Hierarchy": {name: "Hierarchy"},
-                        "Filter": {name: "Filter"},
-                        "Details": {name: "Details"}}
-                });
-
-                $(this).children(".partition-content").append($("<button/>")
-                    .text("Add Visualization")
-                    .addClass("btn btn-large btn-positive")
-                    .attr("data-nodeid", $(this).attr("id"))
-                    .css({"float": "right"}));
-
-                $.contextMenu({
-                    selector: '.btn.btn-large.btn-positive',
-                    trigger: 'left',
-                    callback: function (key) {
-                        if(_data_){
-                            let content = $("#"+$(this).attr("data-nodeid")).children(".partition-content");
-                            content.empty();
-                            addVis(key, content.get(0));
-                            ipc.send('update-sampledata', {});
-                            updatevis();
-                        }else{
-                            alert("You have to link data first");
-                        }
-                    },
-                    items: {
-                        "ParallelCoordinates": {name: "Parallel Coordinates"},
-                        "ParallelBundling": {name: "Bundled Parallel Coordinates"},
-                        "ScatterplotMatrix": {name: "Scatter Plot"},
-                        "BeeswarmPlot": {name: "Beeswarm Plot"},
-                        "Treemap": {name: "Treemap"}
-                    }
-                });
-            });
-        });
-
-        //data functions
-        function updatevis(){
-            $(".partition-content").each(function(){
-                if(this.__vis__){
-                    this.__vis__.data(_data_);
-                    this.__vis__.redraw();
-                }
-            });
-
-
-            let visualizationInit = function() {
-                $(".partition-content").each(function () {
-                    if (this.__vis__) {
-                        this.__vis__.data(_data_);
-                        this.__vis__.redraw();
-
-                    }
-                });
-            };
-
-            let updateColor = function () {
-                $(".partition-content").each(function () {
-                    let valor = $("select.colorSelector").val();
-                    let color1 = $("#getColor1").val();
-                    let color2 = $("#getColor2").val();
-                    let colors_continuos = d3.interpolateRgb(color1, color2);
-
-                    $(".partition-content").each(function (i,index) {
-                        if($(index).children("svg").length){
-                            // this.__vis__.setColor(color1);
-                            this.__vis__.setColor(function(d,i) {
-                                return colors_continuos(d.data[valor]);
-                            });
-                            this.__vis__.redraw();
-                        }
-                    });
-                });
-
-            };
-
-            let dimension = _.keys(_data_[0]);
-            console.log(dimension);
-            let attrs = $("select");
-
-            $(attrs).each(function (i,attr) {
-                let items = $(attr).children(".optionItem").length;
-                $.each(dimension, function (i, item) {
-                    if($(attr).length && items < dimension.length){
-                        $(attr).append($('<option>', {
-                            value: item,
-                            text : item
-                        }).addClass("optionItem"));
-                    }
-                });
-            });
-
-            console.log(_.values(_data_[0])[0]);
-
-            _.values(_data_[0][0]);
-
-            let arr = [];
-            for (let i = 0; i <_data_.length ; i++) {
-                arr = _.values(_data_[i][0]);
+          for (let arr in limit) {
+            if(arr.indexOf(dataHeader) && d_values[i].length>10 && !isNaN(d_values[i][0])){
+              console.log("-------------i");
+              console.log(dataHeader);
+              return updateColorContinues(d_values[i],dataHeader,colors,limit);
             }
+          }
+          return  updateColor(d_values[i],dataHeader,colors);
+        });
+      }
 
-            console.log(arr);
+      function updatevis() {
+        $(".partition-content").each(function () {
+          if (this.__vis__) {
+            this.__vis__.data(_data_);
+            this.__vis__.redraw();
+          }
+        });
+      }
 
-            let valor = $("select.colorSelector").val();
+      let addColorCat = (values) =>{
+        $("div.menuColor").children('input').remove();
+        $("div.menuColor").children('label').remove();
 
-            if($("div.menuColor").length){
-                console.log($("#getColor1"));
-                let color = $("#getColor1").val();
-                console.log(color);
+        $.each(values, function (i, item) {
+          $("div.menuColor")
+            .append($("<label/>").text(item))
+            .append($("<input/>")
+              .css({margin: ".4rem", height: "40px"})
+              .attr("type", 'color')
+              .addClass("getColor")
+              .attr("value","#437dcc")
+              .attr('id',item)
+            )
+        });
+      }
 
-                $("div.menuColor").change(function () {
-                    return updateColor(color);
-                });
+      let addColorsSelector = (value,limit) =>{
+        $("div.menuColor").children('input').remove();
+        $("div.menuColor").children('label').remove();
 
-            }
-            return visualizationInit();
+        if(!($(".getColor").length)){
+          $("div.menuColor")
+            .append($("<label/>").text(limit[1]).
+            css({margin:".4rem", height:"40px",float: "left"})
+              .append($("<input/>")
+                .css({height:"40px"})
+                .attr("type",'color')
+                .addClass("getColor")
+                .attr("value","#437dcc")
+                .attr('id',value)
+              ));
+          $("div.menuColor")
+            .append($("<label/>").text(limit[2])
+              .css({margin:".4rem", height:"40px",float: "right"})
+              .append($("<input/>")
+                .css({height:"40px",float: "right"})
+                .attr("type",'color')
+                .addClass("getColor")
+                .attr("value","#437dcc")
+                .attr('id',value)
+              ));
 
-            console.log(_.values(_data_[0]));
         }
+      }
 
-        let addMenu = (name,parentElement) =>{
-            switch (name){
-                case 'Color':
-                    console.log($(parentElement).parent().attr('id'));
-                    let id = $(parentElement).parent().attr('id')
-                    $(parentElement).append($("<div/>")
-                        .addClass("menuColor")
-                        .append($("<select/>")
-                            .addClass("form-control")
-                            .addClass("colorSelector")
-                            .attr("id",id+"-colorSelector"))
-                    );
-
-                    // $("<span/>").text("attr1").appendTo(".menuColor");
-                    $(parentElement).children(".menuColor")
-                        .append($("<input/>")
-                            .css({margin:".4rem", height:"40px"})
-                            .attr("type",'color')
-                            .addClass("getColor")
-                            .attr('id','getColor1'));
-
-                    $(parentElement).children(".menuColor")
-                        .append($("<input/>")
-                            .css({margin:".4rem", height:"40px",float: "right"})
-                            .attr("type",'color')
-                            .addClass("getColor")
-                            .attr('id','getColor2'));
-                    break;
-                case 'Hierarchy':
-                    break;
-                case 'Filter':
-                    break;
-                case 'Details':
-                    break;
-            }}
-
+      let addMenu = (name, parentElement) => {
+        switch (name) {
+          case 'Color':
+            console.log($(parentElement).parent().attr('id'));
+            let id = $(parentElement).parent().attr('id')
+            $(parentElement).append($("<div/>")
+              .addClass("menuColor")
+              .append($("<select/>")
+                .addClass("form-control")
+                .addClass("colorSelector")
+                .attr("id", id + "-colorSelector"))
+            );
+            break;
+          case 'Hierarchy':
+            break;
+          case 'Filter':
+            break;
+          case 'Details':
+            break;
+        }
+      }
 
     </script>
 </head>

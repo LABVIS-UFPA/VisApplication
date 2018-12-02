@@ -68,7 +68,35 @@ function initialize () {
                             csv()
                                 .fromFile(dataFile[0])
                                 .then((jsonObj)=>{
-                                    console.log(jsonObj[0]);
+
+                                  for(let i = 0; i < jsonObj.length; i++){
+                                    let obj = jsonObj[i];
+                                    for(let prop in obj){
+                                      if(obj.hasOwnProperty(prop) && obj[prop] !== null && !isNaN(obj[prop])){
+                                        obj[prop] = +obj[prop];
+                                      }
+                                    }
+                                  }
+
+                                  // Object.keys(jsonObj).map(function(objectKey, value) {
+                                  //   for (let i in jsonObj[objectKey]){
+                                  //       console.log(jsonObj[objectKey][i]);
+                                  //       if(!isNaN(jsonObj[objectKey][i])){
+                                  //           parseInt(jsonObj[objectKey][i]);
+                                  //         // console.log(value);
+                                  //       }
+                                  //
+                                  //   }
+                                  // });
+
+
+                                    // _.map(jsonObj, function(i, key){
+                                    //     if(!isNaN(key)){
+                                    //         key = +key;
+                                    //     }
+                                    //
+                                    // });
+
 
                                     mainWindow.webContents.send("file-data", jsonObj)
                                 })
