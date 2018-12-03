@@ -222,32 +222,23 @@
         });
       });
 
-
-      function updateColorContinues(attr,item,colors,limit) {
-        let colors_continuos = d3.interpolateRgb(colors[0], colors[1])(0.5);
-        let valor = $("select.colorSelector").val();
+      function updateColorContinues(attr,item,min,max){
+        let color1 = $("#getColor1").val();
+        let color2 = $("#getColor2").val();
+        console.log(min,max);
+        let c = d3.scaleLinear()
+          .domain([min,max])
+          .range([color1,color2]);
         $(".partition-content").each(function (i, index) {
-          if ($(index).children("svg").length) {
-
+          if ($(index).children("svg").length){
             this.__vis__.setColor(function (d, i) {
-              return colors_continuos(d.data[valor]);
+              return c(d.data[item]);
             });
             this.__vis__.redraw();
           }
-          // let colors_continuos = d3.interpolateRgb(colors[0],colors[1]);
-          // $(".partition-content").each(function () {
-          //   console.log("aqui tambme");
-          //   $(".partition-content").each(function (i,index) {
-          //     if($(index).children("svg").length){
-          //       this.__vis__.setColor(function (d,i) {
-          //         colors_continuos(d.data[item]);
-          //       });
-          //       this.__vis__.redraw();
-          //     }
-          //   });
-          // });
         });
       }
+
       function updateColor(attr,item,colors) {
         $(".partition-content").each(function () {
           $(".partition-content").each(function (i,index) {
@@ -289,7 +280,8 @@
             let valor = $("select.colorSelector").val();
             for (let i = 0; i < dimension.length; i++) {
               if ((valor == dimension[i] && !isNaN(d_values[i][0])) && d_values[i].length > 10) {
-                addColorsSelector(dimension[i] ,data_prep.limit_values);
+                let j = limit.indexOf(dimension[i]);
+                addColorsSelector(dimension[i],limit[j+1],limit[j+2]);
                 return;
               }
               if (valor == dimension[i]) {
@@ -303,22 +295,23 @@
         $("div.menuColor").change(function () {
           let inputs = $("div.menuColor").children('input');
           let  dataHeader = $("select.colorSelector").val();
-          let i = (dimension.indexOf(dataHeader));
+          let index = (dimension.indexOf(dataHeader));
           let colors = [];
           let attrs = [];
           $.each(inputs, function (i,item) {
             attrs.push(inputs.get(i).id);
-            colors.push(inputs[i].value);
-          });
+            colors.push(inputs.get(i).value);
 
-          for (let arr in limit) {
-            if(arr.indexOf(dataHeader) && d_values[i].length>10 && !isNaN(d_values[i][0])){
-              console.log("-------------i");
-              console.log(dataHeader);
-              return updateColorContinues(d_values[i],dataHeader,colors,limit);
-            }
+          });
+          if(isNaN(d_values[index][0])){
+            return  updateColor(d_values[index],dataHeader,colors);
           }
-          return  updateColor(d_values[i],dataHeader,colors);
+          else if(!isNaN(d_values[index][1]) && d_values[index].length>10){
+            let k = limit.indexOf(dataHeader);
+            return updateColorContinues(d_values[index],dataHeader,limit[k+1],limit[k+2]);
+          }else{
+            return  updateColor(d_values[index],dataHeader,colors);
+          }
         });
       }
 
@@ -348,13 +341,13 @@
         });
       }
 
-      let addColorsSelector = (value,limit) =>{
+      let addColorsSelector = (value,min,max) =>{
         $("div.menuColor").children('input').remove();
         $("div.menuColor").children('label').remove();
 
         if(!($(".getColor").length)){
           $("div.menuColor")
-            .append($("<label/>").text(limit[1]).
+            .append($("<label/>").text(min).
             css({margin:".4rem", height:"40px",float: "left"})
               .append($("<input/>")
                 .css({height:"40px"})
@@ -362,9 +355,10 @@
                 .addClass("getColor")
                 .attr("value","#437dcc")
                 .attr('id',value)
+                .attr('id','getColor1')
               ));
           $("div.menuColor")
-            .append($("<label/>").text(limit[2])
+            .append($("<label/>").text(max)
               .css({margin:".4rem", height:"40px",float: "right"})
               .append($("<input/>")
                 .css({height:"40px",float: "right"})
@@ -372,6 +366,7 @@
                 .addClass("getColor")
                 .attr("value","#437dcc")
                 .attr('id',value)
+                .attr('id','getColor2')
               ));
 
         }
