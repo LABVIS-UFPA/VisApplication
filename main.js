@@ -106,7 +106,7 @@ ipcMain.on("document-ready", function(evt, msg){
 
         wss.on('connection', function (socket) {
 
-
+            mainWindow.webContents.send("cl", "Client Socket Connected");
             socket.on('message', function (message, flags) {
                 mainWindow.webContents.send("cl", "WS Message: " + message);
                 if(message && typeof message === 'string'){
