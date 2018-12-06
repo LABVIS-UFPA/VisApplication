@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="../lib/layout/partition_layout.css">
     <link rel="stylesheet" href="../lib/contextMenu/jquery.contextMenu.min.css">
     <script>
-        if (typeof module === 'object') {
-            window.module = module;
-            module = undefined;
-        }
+      if (typeof module === 'object') {
+        window.module = module;
+        module = undefined;
+      }
     </script>
     <script src="../lib/jquery-3.2.1.min.js"></script>
     <script src="../lib/contextMenu/jquery.contextMenu.js"></script>
@@ -22,14 +22,13 @@
     <script src="../lib/date/parser.js"></script>
 
     <script src="../lib/layout/partition_layout.js"></script>
-    <!--<script src="../lib/underscore-min.js"></script>-->
-
 
     <style>
         svg, text {
             font: 12px MONOSPACE;
             fill: black;
         }
+
         /*.axis line,*/
         /*.axis path {*/
         /*fill: none;*/
@@ -47,159 +46,372 @@
         .frame {
             shape-rendering: crispEdges;
         }
+        .form-control, label {
+            text-align: center;
+            display: inline-grid;
+            font-size: 13px;
+        }
+
 
     </style>
-
     <script>
-        let ipc = require('electron').ipcRenderer;
-        let vis = require("@labvis-ufpa/vistechlib");
-        console.log(vis);
-        console.log(ipc);
 
-        let _data_;
+      let ipc = require('electron').ipcRenderer;
+      let vis = require("@labvis-ufpa/vistechlib");
+      let _ = require('underscore');
+      let d3 = require('d3');
+      let DataPreparation = require("./DataPreparation.js");
+      console.log(vis);
+      console.log(ipc);
 
-        let addVis = (visName, parentElement) => {
-            let pc = new vis[visName](parentElement);
-            pc
-                .on("highlightstart",function(d,i){
-                    $(".partition-content").each(function(){
-                        if(this.__vis__ && this.__vis__ !== pc){
-                            this.__vis__.highlight(d,i);
-                        }
-                    });
-                })
-                .on("highlightend",function(d,i){
-                    console.log(i, "tem que remover...");
-                    $(".partition-content").each(function(){
-                        if(this.__vis__ && this.__vis__ !== pc){
-                            this.__vis__.removeHighlight(d,i);
-                        }
-                    });
-                })
-                .on("datamouseover",function(d,i){
-                    pc.highlight(d,i);
-                })
-                .on("datamouseout",function(d,i){
-                    pc.removeHighlight(d,i);
-                })
-                .on("dataclick",function(d,i){
-                    $(".partition-content").each(function(){
-                        if(this.__vis__){
-                            console.log("clicou", d, i);
-                            let elem = this.__vis__.getHighlightElement(i);
-                            // d3.select(elem).selectAll(".lineHighlight").style("stroke", "limegreen");
-                            this.__vis__.annotate(elem);
-                        }
-                    });
-                });
-            // let color = d3.scale.category10();
-            // pc.settings.color = (d) =>{ return color(d["bar_size"])};
+      let _data_;
+      let data_prep;
+
+      let addVis
+        = (visName, parentElement) => {
+        let pc = new vis[visName](parentElement);
+        pc
+          .on("highlightstart",function(d,i){
+            $(".partition-content").each(function(){
+              if(this.__vis__ && this.__vis__ !== pc){
+                this.__vis__.highlight(d,i);
+              }
+            });
+          })
+          .on("highlightend",function(d,i){
+            console.log(i, "tem que remover...");
+            $(".partition-content").each(function(){
+              if(this.__vis__ && this.__vis__ !== pc){
+                this.__vis__.removeHighlight(d,i);
+              }
+            });
+          })
+          .on("datamouseover",function(d,i){
+            pc.highlight(d,i);
+          })
+          .on("datamouseout",function(d,i){
+            pc.removeHighlight(d,i);
+          })
+          .on("dataclick",function(d,i){
+            $(".partition-content").each(function(){
+              if(this.__vis__){
+                console.log("clicou", d, i);
+                let elem = this.__vis__.getHighlightElement(i);
+                // d3.select(elem).selectAll(".lineHighlight").style("stroke", "limegreen");
+                this.__vis__.annotate(elem);
+              }
+            });
+          });
+        // let color = d3.scale.category10();
+        // pc.settings.color = (d) =>{ return color(d["bar_size"])};
+      };
+
+      ipc.on('add-vis', function(event, arg){
+        addVis(arg, $(".partition-content").get(0))
+      });
+
+      ipc.on('file-data',function (event,data) {
+        _data_ = data;
+        console.log(data);
+        updatevis();
+      })
+      ipc.on('change-datasample', function(event, data){
+        console.log(data);
+        _data_ = data;
+        console.log(_.values(data[0]));
+        updatevis();
+
+      });
+
+      ipc.on('cl', function(event, arg){
+        console.log("from_main: ", arg);
+      });
+
+      ipc.send('not-data');
+      $(document).ready(function() {
+
+
+        ipc.send("document-ready");
+        let $body = $("body");
+        let partitionLayout = new PartitionLayout($body.get(0));
+
+        $(window).resize(function(){
+          $(".partition-content").each(function(){
+            if(this.__vis__)
+              this.__vis__.resize();
+          });
+        });
+
+        $body.on("layout:resize", ".partition-node", function(e){
+          let content = $(this).children(".partition-content").get(0);
+
+          if(content && content.__vis__){
+            content.__vis__.resize();
+          }
+        });
+        $body.on("layout:created", ".partition-node", function(e){
+
+          console.log("layout:created", this);
+          if(this !== e.target)
+            return;
+
+          if(this !== e.target)
+            return;
+
+          if($(this).children(".partition-content").children().is("button.btn.btn-large.btn-positive")) {
+            $(this).children(".partition-content").children().attr("data-nodeid", $(this).attr("id"));
+            return;
+          }else
+          if(($(this).children(".partition-content").children().is(".menuColor"))){
+
+            return
+          }
+
+          $(this).children(".partition-content").append($("<button/>")
+            .text("Add Settings")
+            .addClass("AddSettings")
+            .addClass("btn btn-large btn-positive")
+            .attr("data-nodeid", $(this).attr("id"))
+            .css({"float": "right"}));
+
+
+          $.contextMenu({
+            selector: '.AddSettings',
+            trigger: 'left',
+            callback: function (key) {
+              if(_data_){
+                let content = $("#"+$(this).attr("data-nodeid")).children(".partition-content");
+                // let content = $("#"+$(this).attr("data-nodeVis")).children(".partition-content");
+                let partition = $(this).parents('.partition-node').attr('id');
+                content.empty();
+                addMenu(key,content);
+                ipc.send('update-sampledata', {});
+                updateInteface();
+              }else{
+                alert("You have to link data first");
+              }
+            },
+            items: {
+              "Color": {name: "Color"},
+              "Hierarchy": {name: "Hierarchy"},
+              "Filter": {name: "Filter"},
+              "Details": {name: "Details"}}
+          });
+
+          $(this).children(".partition-content").append($("<button/>")
+            .text("Add Visualization")
+            .addClass("btn btn-large btn-positive")
+            .attr("data-nodeid", $(this).attr("id"))
+            .css({"float": "right"}));
+
+          $.contextMenu({
+            selector: '.btn.btn-large.btn-positive',
+            trigger: 'left',
+            callback: function (key) {
+              if(_data_){
+                let content = $("#"+$(this).attr("data-nodeid")).children(".partition-content");
+                content.empty();
+                addVis(key, content.get(0));
+                ipc.send('update-sampledata', {});
+                updatevis();
+              }else{
+                alert("You have to link data first");
+              }
+            },
+            items: {
+              "ParallelCoordinates": {name: "Parallel Coordinates"},
+              "ParallelBundling": {name: "Bundled Parallel Coordinates"},
+              "ScatterplotMatrix": {name: "Scatter Plot"},
+              "BeeswarmPlot": {name: "Beeswarm Plot"},
+              "Treemap": {name: "Treemap"}
+            }
+          });
+        });
+      });
+
+      function updateColorContinues(attr,item,min,max){
+        let color1 = $("#getColor1").val();
+        let color2 = $("#getColor2").val();
+        console.log(min,max);
+        let c = d3.scaleLinear()
+          .domain([min,max])
+          .range([color1,color2]);
+        $(".partition-content").each(function (i, index) {
+          if ($(index).children("svg").length){
+            this.__vis__.setColor(function (d, i) {
+              return c(d.data[item]);
+            });
+            this.__vis__.redraw();
+          }
+        });
+      }
+
+      function updateColor(attr,item,colors) {
+        $(".partition-content").each(function () {
+          $(".partition-content").each(function (i,index) {
+            if($(index).children("svg").length){
+              this.__vis__.setColor(function (d,i) {
+                return colors[attr.indexOf(d.data[item])];
+              });
+              this.__vis__.redraw();
+            }
+          });
+        });
+      };
+
+
+      function updateInteface(){
+        data_prep = new DataPreparation(_data_);
+        let dimension = data_prep.data_keys;
+        let d_values = data_prep.data_values;
+        let attrs = $("select.colorSelector");
+        let limit = data_prep.limit_values;
+
+
+        dimension.unshift("...")
+        $(attrs).each(function (i, attr) {
+          let items = $(attr).children(".optionItem").length;
+          $.each(dimension, function (i, item) {
+            if ($(attr).length && items < dimension.length) {
+              $(attr).append($('<option>', {
+                value: dimension[i],
+                text: dimension[i]
+              }).addClass("optionItem"));
+            }
+          });
+        });
+        dimension.shift();
+
+        if ($("div.menuColor").length) {
+          $("select.colorSelector").change(function () {
+            let valor = $("select.colorSelector").val();
+            for (let i = 0; i < dimension.length; i++) {
+              if ((valor == dimension[i] && !isNaN(d_values[i][0])) && d_values[i].length > 10) {
+                let j = limit.indexOf(dimension[i]);
+                addColorsSelector(dimension[i],limit[j+1],limit[j+2]);
+                return;
+              }
+              if (valor == dimension[i]) {
+                addColorCat(d_values[i]);
+                return;
+              }
+            }
+          });
         };
 
-        ipc.on('add-vis', function(event, arg){
-            addVis(arg, $(".partition-content").get(0))
+        $("div.menuColor").change(function () {
+          let inputs = $("div.menuColor").children('label').children("input");
+          let  dataHeader = $("select.colorSelector").val();
+          let index = (dimension.indexOf(dataHeader));
+          let colors = [];
+          let attrs = [];
+          $.each(inputs, function (i,item) {
+            attrs.push(inputs.get(i).id);
+            colors.push(inputs.get(i).value);
+
+          });
+          if(isNaN(d_values[index][0])){
+            return  updateColor(d_values[index],dataHeader,colors);
+          }
+          else if(!isNaN(d_values[index][1]) && d_values[index].length>10){
+            let k = limit.indexOf(dataHeader);
+            return updateColorContinues(d_values[index],dataHeader,limit[k+1],limit[k+2]);
+          }else{
+            return  updateColor(d_values[index],dataHeader,colors);
+          }
         });
-        ipc.on('change-datasample', function(event, data){
-            console.log(data);
-            _data_ = data;
-            updatevis();
+      }
+
+      function updatevis() {
+        $(".partition-content").each(function () {
+          if (this.__vis__) {
+            this.__vis__.data(_data_);
+            this.__vis__.redraw();
+          }
         });
+      }
 
-        ipc.on('cl', function(event, arg){
-            console.log("from_main: ", arg);
+      let addColorCat = (values) =>{
+
+        let defautColor =["#4682b4","#24d068","#C53A10","#ff27ac",
+          "#DBE70D","#08821e","#1135b2","#ff7043",
+          "#78909c","#ECEDF0","#4D8000","#B33300",
+          "#CC80CC","#66664D","#991AFF","#E666FF",
+          "#4DB3FF","#1AB399","#E666B3","#33991A",
+          "#CC9999","#B3B31A","#00E680","#4D8066",
+          "#809980","#E6FF80","#1AFF33","#999933"];
+
+        $("div.menuColor").children('input').remove();
+        $("div.menuColor").children('label').remove();
+
+        $.each(values, function (i, item) {
+          console.log(i);
+          $("div.menuColor")
+            .append($("<label/>").text(item)
+            .append($("<input/>")
+              .css({margin: ".4rem", height: "40px"})
+              .attr("type", 'color')
+              .addClass("getColor")
+              .attr("value",defautColor[i])
+              .attr('id',item))
+            )
         });
+      }
 
-        $(document).ready(function(){
-            ipc.send("document-ready");
-            let $body = $("body");
-            let partitionLayout = new PartitionLayout($body.get(0));
+      let addColorsSelector = (value,min,max) =>{
+        $("div.menuColor").children('input').remove();
+        $("div.menuColor").children('label').remove();
 
-            // $body.children(".partition-content").append($("<button/>")
-            //     .text("Add Visualization")
-            //     .addClass("btn btn-large btn-positive")
-            //     .attr("data-nodeid", $body.children(".partition-node").attr("id"))
-            //     .css({"float": "right"}));
-            //
-            // $.contextMenu({
-            //     selector: '.btn.btn-large.btn-positive',
-            //     trigger: 'left',
-            //     callback: function (key) {
-            //         let content = $("#"+$(this).attr("data-nodeid")).children(".partition-content");
-            //         content.empty();
-            //         addVis(key, content.get(0));
-            //         ipc.send('update-sampledata', {});
-            //     },
-            //     items: {
-            //         "ParallelCoordinates": {name: "Parallel Coordinates"},
-            //         "ParallelBundling": {name: "Bundled Parallel Coordinates"},
-            //         "ScatterplotMatrix": {name: "Scatter Plot"},
-            //         "BeeswarmPlot": {name: "Beeswarm Plot"},
-            //         "Treemap": {name: "Treemap"}
-            //     }
-            // });
+        if(!($(".getColor").length)){
+          $("div.menuColor")
+            .append($("<label/>").text(min).
+            css({margin:".4rem",float: "left"})
+              .append($("<input/>")
+                .css({height:"40px"})
+                .attr("type",'color')
+                .addClass("getColor")
+                .attr("value","#f7f9f9")
+                .attr('id',value)
+                .attr('id','getColor1')
+              ));
+          $("div.menuColor")
+            .append($("<label/>").text(max)
+              .css({margin:".4rem",float: "right"})
+              .append($("<input/>")
+                .css({height:"40px",float: "right"})
+                .attr("type",'color')
+                .addClass("getColor")
+                .attr("value","#437dcc")
+                .attr('id',value)
+                .attr('id','getColor2')
+              ));
 
-            $(window).resize(function(){
-                $(".partition-content").each(function(){
-                    if(this.__vis__)
-                        this.__vis__.resize();
-                });
-            });
-
-            $body.on("layout:resize", ".partition-node", function(e){
-                let content = $(this).children(".partition-content").get(0);
-
-                if(content && content.__vis__){
-                    content.__vis__.resize();
-                }
-            });
-            $body.on("layout:created", ".partition-node", function(e){
-
-                console.log("layout:created", this);
-                if(this !== e.target)
-                    return;
-
-                if($(this).children(".partition-content").children().is("button.btn.btn-large.btn-positive")) {
-                    $(this).children(".partition-content").children().attr("data-nodeid", $(this).attr("id"));
-                    return;
-                }
-
-                $(this).children(".partition-content").append($("<button/>")
-                    .text("Add Visualization")
-                    .addClass("btn btn-large btn-positive")
-                    .attr("data-nodeid", $(this).attr("id"))
-                    .css({"float": "right"}));
-
-                $.contextMenu({
-                    selector: '.btn.btn-large.btn-positive',
-                    trigger: 'left',
-                    callback: function (key) {
-                        let content = $("#"+$(this).attr("data-nodeid")).children(".partition-content");
-                        content.empty();
-                        addVis(key, content.get(0));
-                        ipc.send('update-sampledata', {});
-                        updatevis();
-                    },
-                    items: {
-                        "ParallelCoordinates": {name: "Parallel Coordinates"},
-                        "ParallelBundling": {name: "Bundled Parallel Coordinates"},
-                        "ScatterplotMatrix": {name: "Scatter Plot"},
-                        "BeeswarmPlot": {name: "Beeswarm Plot"},
-                        "Treemap": {name: "Treemap"}
-                    }
-                });
-            });
-        });
-
-        function updatevis(){
-            $(".partition-content").each(function(){
-                if(this.__vis__){
-                    this.__vis__.data(_data_);
-                    this.__vis__.redraw();
-                }
-            });
         }
-    </script>
+      }
 
+      let addMenu = (name, parentElement) => {
+        switch (name) {
+          case 'Color':
+            console.log($(parentElement).parent().attr('id'));
+            let id = $(parentElement).parent().attr('id')
+            $(parentElement).append($("<div/>")
+              .addClass("menuColor")
+              .append($("<select/>")
+                .addClass("form-control")
+                .addClass("colorSelector")
+                .attr("id", id + "-colorSelector"))
+            );
+            break;
+          case 'Hierarchy':
+            break;
+          case 'Filter':
+            break;
+          case 'Details':
+            break;
+        }
+      }
+
+    </script>
 </head>
 <body>
 
