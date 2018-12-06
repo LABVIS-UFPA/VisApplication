@@ -28,6 +28,7 @@
             font: 12px MONOSPACE;
             fill: black;
         }
+
         /*.axis line,*/
         /*.axis path {*/
         /*fill: none;*/
@@ -45,6 +46,12 @@
         .frame {
             shape-rendering: crispEdges;
         }
+        .form-control, label {
+            text-align: center;
+            display: inline-grid;
+            font-size: 13px;
+        }
+
 
     </style>
     <script>
@@ -293,7 +300,7 @@
         };
 
         $("div.menuColor").change(function () {
-          let inputs = $("div.menuColor").children('input');
+          let inputs = $("div.menuColor").children('label').children("input");
           let  dataHeader = $("select.colorSelector").val();
           let index = (dimension.indexOf(dataHeader));
           let colors = [];
@@ -325,18 +332,28 @@
       }
 
       let addColorCat = (values) =>{
+
+        let defautColor =["#4682b4","#24d068","#C53A10","#ff27ac",
+          "#DBE70D","#08821e","#1135b2","#ff7043",
+          "#78909c","#ECEDF0","#4D8000","#B33300",
+          "#CC80CC","#66664D","#991AFF","#E666FF",
+          "#4DB3FF","#1AB399","#E666B3","#33991A",
+          "#CC9999","#B3B31A","#00E680","#4D8066",
+          "#809980","#E6FF80","#1AFF33","#999933"];
+
         $("div.menuColor").children('input').remove();
         $("div.menuColor").children('label').remove();
 
         $.each(values, function (i, item) {
+          console.log(i);
           $("div.menuColor")
-            .append($("<label/>").text(item))
+            .append($("<label/>").text(item)
             .append($("<input/>")
               .css({margin: ".4rem", height: "40px"})
               .attr("type", 'color')
               .addClass("getColor")
-              .attr("value","#437dcc")
-              .attr('id',item)
+              .attr("value",defautColor[i])
+              .attr('id',item))
             )
         });
       }
@@ -348,18 +365,18 @@
         if(!($(".getColor").length)){
           $("div.menuColor")
             .append($("<label/>").text(min).
-            css({margin:".4rem", height:"40px",float: "left"})
+            css({margin:".4rem",float: "left"})
               .append($("<input/>")
                 .css({height:"40px"})
                 .attr("type",'color')
                 .addClass("getColor")
-                .attr("value","#437dcc")
+                .attr("value","#f7f9f9")
                 .attr('id',value)
                 .attr('id','getColor1')
               ));
           $("div.menuColor")
             .append($("<label/>").text(max)
-              .css({margin:".4rem", height:"40px",float: "right"})
+              .css({margin:".4rem",float: "right"})
               .append($("<input/>")
                 .css({height:"40px",float: "right"})
                 .attr("type",'color')
