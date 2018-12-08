@@ -162,7 +162,8 @@
             $(this).children(".partition-content").children().attr("data-nodeid", $(this).attr("id"));
             return;
           }else
-          if(($(this).children(".partition-content").children().is(".menuColor"))){
+          if($(this).children(".partition-content").children().is(".menuColor") ||
+             $(this).children(".partition-content").children().is(".menuHie")){
 
             return
           }
@@ -259,16 +260,52 @@
         });
       };
 
-
+      //function update and create dinamic menus
       function updateInteface(){
         data_prep = new DataPreparation(_data_);
         let dimension = data_prep.data_keys;
         let d_values = data_prep.data_values;
         let attrs = $("select.colorSelector");
+        let hierarchyAttrs = $("select.selectHierarchy");
+        let  sizeAttr = $("select.selectSize");
+
         let limit = data_prep.limit_values;
+        //input select set values
+        $(hierarchyAttrs).each(function (i,attr) {
+          let items = $(attr).children(".optionItem").length;
+          $.each(dimension, function (i, item){
+            if($(attr).length && items <= dimension.length) {
+              console.log( dimension[i]);
+              console.log(d_values[i]);
+              if(isNaN(d_values[i][0]) || (!isNaN(d_values[i][0])&& d_values[i].length<15)){
+                $(attr).append($('<option>', {
+                  value: dimension[i],
+                  text: dimension[i]
+                }).addClass("optionItem"));
+              }
+            }
+            // }
+          })
+        });
 
+        //input select set values
+        $(sizeAttr).each(function (i,attr) {
+          let items = $(attr).children(".optionItem").length;
+          $.each(dimension, function (i, item) {
+            if($(attr).length && items <= dimension.length) {
+              if(!isNaN(d_values[i][0])){
+                console.log( dimension[i]);
+                console.log(d_values[i]);
+                $(attr).append($('<option>', {
+                  value: dimension[i],
+                  text: dimension[i]
+                }).addClass("optionItem"));
+              }
+            }
+          })
+        });
 
-        dimension.unshift("...")
+        dimension.unshift("...");
         $(attrs).each(function (i, attr) {
           let items = $(attr).children(".optionItem").length;
           $.each(dimension, function (i, item) {
@@ -282,7 +319,7 @@
         });
         dimension.shift();
 
-        if ($("div.menuColor").length) {
+        if($("div.menuColor").length) {
           $("select.colorSelector").change(function () {
             let valor = $("select.colorSelector").val();
             for (let i = 0; i < dimension.length; i++) {
@@ -298,6 +335,11 @@
             }
           });
         };
+
+        $("select.selectSize").change(function(){
+
+          updateSize();
+        });
 
         $("div.menuColor").change(function () {
           let inputs = $("div.menuColor").children('label').children("input");
@@ -331,8 +373,19 @@
         });
       }
 
+      //size items treeamp
+      function updateSize() {
+        let size = $("select.selectSize").val();
+        $(".partition-content").each(function () {
+          if (this.__vis__) {
+            this.__vis__.setSize(size);
+            this.__vis__.data(_data_);
+            this.__vis__.redraw();
+          }
+        });
+      }
+      //itens color pic data categorical
       let addColorCat = (values) =>{
-
         let defautColor =["#4682b4","#24d068","#C53A10","#ff27ac",
           "#DBE70D","#08821e","#1135b2","#ff7043",
           "#78909c","#ECEDF0","#4D8000","#B33300",
@@ -348,16 +401,17 @@
           console.log(i);
           $("div.menuColor")
             .append($("<label/>").text(item)
-            .append($("<input/>")
-              .css({margin: ".4rem", height: "40px"})
-              .attr("type", 'color')
-              .addClass("getColor")
-              .attr("value",defautColor[i])
-              .attr('id',item))
+              .append($("<input/>")
+                .css({margin: ".4rem", height: "40px"})
+                .attr("type", 'color')
+                .addClass("getColor")
+                .attr("value",defautColor[i])
+                .attr('id',item))
             )
         });
       }
 
+      //itens color pic data continuos
       let addColorsSelector = (value,min,max) =>{
         $("div.menuColor").children('input').remove();
         $("div.menuColor").children('label').remove();
@@ -390,12 +444,14 @@
       }
 
       let addMenu = (name, parentElement) => {
+        console.log($(parentElement).parent().attr('id'));
+        let id = $(parentElement).parent().attr('id')
         switch (name) {
           case 'Color':
-            console.log($(parentElement).parent().attr('id'));
-            let id = $(parentElement).parent().attr('id')
             $(parentElement).append($("<div/>")
               .addClass("menuColor")
+              .text("Color")
+              .css({"width":"100%","position": "relative","text-align": "left"})
               .append($("<select/>")
                 .addClass("form-control")
                 .addClass("colorSelector")
@@ -403,6 +459,25 @@
             );
             break;
           case 'Hierarchy':
+            $(parentElement).append($("<div/>")
+                .addClass("menuHie")
+                .addClass("hierarchy")
+                .text("Hierarchy")
+                .css({"width":"100%","position": "relative","text-align": "left"})
+                .append($("<select/>")
+                  .addClass("form-control")
+                  .addClass("selectHierarchy")
+                )
+            );
+            $(parentElement).append($("<div/>")
+                .addClass("menuHie")
+                .addClass("size")
+                .text("size")
+                .css({"width":"100%","position": "relative","text-align": "left"})
+                .append($("<select/>")
+                  .addClass("form-control")
+                  .addClass("selectSize")
+                ));
             break;
           case 'Filter':
             break;
