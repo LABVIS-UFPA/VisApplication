@@ -7,9 +7,12 @@ module.exports = class DataPreparation{
     this.data_keys =_.keys(this.data[0]);
     this.data_values = [];
     this.limit_values = [];
-
+    this.numeric_values = [];
+    this.categorical_values = [];
     this.values();
     this.data_min_and_max();
+    this.setNumeric_values();
+    this.setCategorical_values();
   }
 
   getKeys(){
@@ -25,7 +28,6 @@ module.exports = class DataPreparation{
     return this.limit_values;
 
   }
-
 
   values(){
     for (let i = 0; i <this.data_keys.length; i++) {
@@ -45,6 +47,31 @@ module.exports = class DataPreparation{
       }
     }
     return this.limit_values;
+  }
+
+  setCategorical_values(){
+    for (let i = 0; i < this.data_keys.length ; i++) {
+      if(isNaN(this.data_values[i][0]) || (!isNaN(this.data_values[i][0]) && this.data_values.length<=10)){
+       this.categorical_values.push(this.data_keys[i]);
+      }
+    }
+  }
+
+  getCategorical_values(){
+    return this.categorical_values;
+  }
+
+
+  setNumeric_values(){
+    for (let i = 0; i < this.data_keys.length ; i++) {
+      if(!isNaN(this.data_values[i][0])){
+        this.numeric_values.push(this.data_keys[i]);
+      }
+    }
+  }
+
+  getNumeric_values(){
+    return this.numeric_values;
   }
 
 }

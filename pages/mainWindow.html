@@ -163,7 +163,7 @@
             return;
           }else
           if($(this).children(".partition-content").children().is(".menuColor") ||
-             $(this).children(".partition-content").children().is(".menuHie")){
+            $(this).children(".partition-content").children().is(".menuHie")){
 
             return
           }
@@ -265,55 +265,50 @@
         data_prep = new DataPreparation(_data_);
         let dimension = data_prep.data_keys;
         let d_values = data_prep.data_values;
-        let attrs = $("select.colorSelector");
-        let hierarchyAttrs = $("select.selectHierarchy");
-        let  sizeAttr = $("select.selectSize");
+        let attrs = $(".colorSelector");
+        let hierarchyAttrs = $(".selectHierarchy");
+        let  sizeAttr = $(".selectSize");
 
         let limit = data_prep.limit_values;
         //input select set values
+
+        let categorical_values = data_prep.getCategorical_values();
         $(hierarchyAttrs).each(function (i,attr) {
-          let items = $(attr).children(".optionItem").length;
-          $.each(dimension, function (i, item){
-            if($(attr).length && items <= dimension.length) {
-              console.log( dimension[i]);
-              console.log(d_values[i]);
-              if(isNaN(d_values[i][0]) || (!isNaN(d_values[i][0])&& d_values[i].length<15)){
-                $(attr).append($('<option>', {
-                  value: dimension[i],
-                  text: dimension[i]
-                }).addClass("optionItem"));
-              }
+          let items = $(attr).children(".optHie").length;
+          $.each(categorical_values , function (i, item){
+            if($(attr).length && items < categorical_values.length) {
+              $(attr).append($('<option>', {
+                value: categorical_values[i],
+                text: categorical_values[i]
+              }).addClass("optHie"));
             }
-            // }
           })
         });
 
         //input select set values
         $(sizeAttr).each(function (i,attr) {
-          let items = $(attr).children(".optionItem").length;
-          $.each(dimension, function (i, item) {
-            if($(attr).length && items <= dimension.length) {
-              if(!isNaN(d_values[i][0])){
-                console.log( dimension[i]);
-                console.log(d_values[i]);
-                $(attr).append($('<option>', {
-                  value: dimension[i],
-                  text: dimension[i]
-                }).addClass("optionItem"));
-              }
+          let items = $(attr).children(".optSize").length;
+
+          let numeric_value = data_prep.getNumeric_values();
+          $.each(numeric_value, function (i, item) {
+            if($(attr).length && items < numeric_value.length) {
+              $(attr).append($('<option>', {
+                value: numeric_value[i],
+                text: numeric_value[i]
+              }).addClass("optSize"));
             }
           })
         });
 
         dimension.unshift("...");
         $(attrs).each(function (i, attr) {
-          let items = $(attr).children(".optionItem").length;
+          let items = $(attr).children(".optColor").length;
           $.each(dimension, function (i, item) {
             if ($(attr).length && items < dimension.length) {
               $(attr).append($('<option>', {
                 value: dimension[i],
                 text: dimension[i]
-              }).addClass("optionItem"));
+              }).addClass("optColor"));
             }
           });
         });
@@ -341,6 +336,11 @@
           updateSize();
         });
 
+        $("select.selectHierarchy").change(function(){
+          let hie = $("select.selectHierarchy").val();
+          updatevis(hie);
+        });
+
         $("div.menuColor").change(function () {
           let inputs = $("div.menuColor").children('label').children("input");
           let  dataHeader = $("select.colorSelector").val();
@@ -364,11 +364,15 @@
         });
       }
 
-      function updatevis() {
+      function updatevis(hie) {
         $(".partition-content").each(function () {
           if (this.__vis__) {
-            this.__vis__.data(_data_);
-            this.__vis__.redraw();
+            if(hie){
+              this.__vis__.hierarchy([hie]);
+            }
+              this.__vis__.data(_data_);
+              this.__vis__.redraw();
+
           }
         });
       }
@@ -381,6 +385,18 @@
             this.__vis__.setSize(size);
             this.__vis__.data(_data_);
             this.__vis__.redraw();
+          }
+        });
+      }
+
+      function updateHie() {
+        let hie = $("select.selectHierarchy").val();
+        $(".partition-content").each(function () {
+          if (this.__vis__) {
+            this.__vis__.hierarchy([hie]);
+            console.log("data hie------------------------------------------")
+            console.log(_data_);
+            this.__vis__.data(_data_);
           }
         });
       }
@@ -415,6 +431,8 @@
       let addColorsSelector = (value,min,max) =>{
         $("div.menuColor").children('input').remove();
         $("div.menuColor").children('label').remove();
+        $("div.menuColor").children("div.legendColor").remove();
+
 
         if(!($(".getColor").length)){
           $("div.menuColor")
@@ -441,7 +459,36 @@
               ));
 
         }
+
+        let color1 = $("#getColor1").val();
+        let color2 = $("#getColor2").val();
+      //   let svg = d3.selectAll("svg.rectInterpolate");
+      //   let linearGradient = svg.append("defs")
+      //     .append("linearGradient")
+      //     .attr("id", "linear-gradient");
+      //
+      //   linearGradient.append("stop")
+      //     .attr("offset", "0%")
+      //     .attr("stop-color", "red");
+      //
+      //   linearGradient.append("stop")
+      //     .attr("offset", "50%")
+      //
+      //     .attr("stop-color","blue");
+      //
+      //
+      //   d3.selectAll("div.menuColor").append("div").attr("id","legendColor")
+      //     .append("svg").attr("class","rectInterpolate").attr("width","100%").attr("height","40px")
+      //     .append("rect")
+      //     .attr("x", 0)
+      //     .attr("y", 0)
+      //     .attr("width", "100%")
+      //     .attr("height", "40px")
+      //     .style("stroke", "black")
+      //     .style("stroke-width",1)
+      //     .style("fill", "url(#linear-gradient)");
       }
+
 
       let addMenu = (name, parentElement) => {
         console.log($(parentElement).parent().attr('id'));
@@ -460,24 +507,22 @@
             break;
           case 'Hierarchy':
             $(parentElement).append($("<div/>")
-                .addClass("menuHie")
-                .addClass("hierarchy")
-                .text("Hierarchy")
-                .css({"width":"100%","position": "relative","text-align": "left"})
-                .append($("<select/>")
-                  .addClass("form-control")
-                  .addClass("selectHierarchy")
-                )
+              .addClass("menuHie")
+              .text("Hierarchy")
+              .css({"width":"100%","position": "relative","text-align": "left"})
+              .append($("<select/>")
+                .addClass("form-control")
+                .addClass("selectHierarchy")
+              )
             );
             $(parentElement).append($("<div/>")
-                .addClass("menuHie")
-                .addClass("size")
-                .text("size")
-                .css({"width":"100%","position": "relative","text-align": "left"})
-                .append($("<select/>")
-                  .addClass("form-control")
-                  .addClass("selectSize")
-                ));
+              .addClass("menuHie")
+              .text("size")
+              .css({"width":"100%","position": "relative","text-align": "left"})
+              .append($("<select/>")
+                .addClass("form-control")
+                .addClass("selectSize")
+              ));
             break;
           case 'Filter':
             break;
