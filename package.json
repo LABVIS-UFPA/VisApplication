@@ -49,6 +49,7 @@
   "dependencies": {
     "@labvis-ufpa/vistechlib": "file:../vistechlib",
     "csvtojson": "^2.0.8",
+    "d3": "^5.7.0",
     "electron": "^3.0.3",
     "electron-log": "^2.2.14",
     "electron-settings": "^3.0.7",

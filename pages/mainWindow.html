@@ -58,7 +58,6 @@
 
       let ipc = require('electron').ipcRenderer;
       let vis = require("@labvis-ufpa/vistechlib");
-      let _ = require('underscore');
       let d3 = require('d3');
       let DataPreparation = require("./DataPreparation.js");
       console.log(vis);
@@ -118,7 +117,7 @@
       ipc.on('change-datasample', function(event, data){
         console.log(data);
         _data_ = data;
-        console.log(_.values(data[0]));
+        console.log(Object.keys(data[0]).map(key => data[0][key]));
         updatevis();
 
       });
