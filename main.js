@@ -15,7 +15,6 @@ const Menu = electron.Menu;
 const MenuItem = electron.MenuItem;
 const fs = require('fs')
 const csv = require('csvtojson')
-let _ = require('underscore');
 
 // only add update server if it's not being run from cli
 if (require.main !== module) {
