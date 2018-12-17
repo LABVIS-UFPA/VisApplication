@@ -1,10 +1,9 @@
-let _ = require('underscore');
 
 
 module.exports = class DataPreparation{
   constructor(data) {
     this.data = data;
-    this.data_keys =_.keys(this.data[0]);
+    this.data_keys =Object.keys(this.data[0]);
     this.data_values = [];
     this.limit_values = [];
     this.numeric_values = [];
@@ -31,8 +30,9 @@ module.exports = class DataPreparation{
 
   values(){
     for (let i = 0; i <this.data_keys.length; i++) {
-      let values =_.pluck(this.data,this.data_keys[i]);
-      values = _.uniq(values);
+
+      let values =this.data.map(value=>value[this.data_keys[i]]);
+      values = [...new Set(values)];
       // console.log(values);
       this.data_values.push(values);
     }
@@ -43,7 +43,10 @@ module.exports = class DataPreparation{
     // console.log(this.data_keys);
     for (let i = 0; i <this.data_values.length; i++) {
       if(!isNaN(this.data_values[i][0])){
-        this.limit_values.push(this.data_keys[i],_.min(this.data_values[i]),_.max(this.data_values[i]));
+        this.limit_values.push(
+            this.data_keys[i],
+            Math.min.apply(null,this.data_values[i]),
+            Math.max.apply(null,this.data_values[i]));
       }
     }
     return this.limit_values;
