@@ -20,9 +20,9 @@
     <script src="../lib/date/date-en-US.js"></script>
     <script src="../lib/date/core.js"></script>
     <script src="../lib/date/parser.js"></script>
+    <script src="../lib/jquery-ui.min.js"></script>
 
     <script src="../lib/layout/partition_layout.js"></script>
-
     <style>
         svg, text {
             font: 12px MONOSPACE;
@@ -52,7 +52,14 @@
             font-size: 13px;
         }
 
+        .window-content{
+        max-width:200px;
+        max-height: 150px;
+        }
 
+        span.icon-trash:hover{
+            color: mediumvioletred;
+        }
     </style>
     <script>
 
@@ -173,7 +180,6 @@
             .addClass("btn btn-large btn-positive")
             .attr("data-nodeid", $(this).attr("id"))
             .css({"float": "right"}));
-
 
           $.contextMenu({
             selector: '.AddSettings',
@@ -330,6 +336,10 @@
           });
         };
 
+          $("#sortable" ).sortable();
+          $("#sortable" ).disableSelection();
+
+
         $("select.selectSize").change(function(){
 
           updateSize();
@@ -337,7 +347,39 @@
 
         $("select.selectHierarchy").change(function(){
           let hie = $("select.selectHierarchy").val();
-          updatevis(hie);
+          let ul = $(".window-content").children("ul")
+
+          let IDs = [];
+          $(ul).find("li").each(function(){
+              IDs.push($(this).attr("id"));
+          });
+
+          if(IDs.indexOf(hie)==-1){
+          $(".menuHie").children(".window-content").children("ul")
+            .append($("<li/>")
+              .css({"padding": "5px","font-size": "12px","color":"#414142","border": "1px solid #ddd","border-radius": "10px"})
+                .addClass("list-group-item")
+                .attr("id",hie)
+                .append($("<div/>").attr("class","listH").addClass("media-body")
+                  .append($("<span/>").addClass("icon icon-arrow-combo"))
+                  .append($("<strong/>").text(" -"+hie))
+                  .append($("<span/>").addClass("remove").addClass("icon icon-trash")
+                    .css("float", "right")
+                    .click(function(){
+                      $(this).parent().parent().remove();
+                  }))
+                ));
+          }
+        });
+
+
+        $("ul#sortable").on('DOMSubtreeModified', function(event) {
+          let ul = $(".window-content").children("ul")
+          let IDs = [];
+          $(ul).find("li").each(function(){
+            IDs.push($(this).attr("id"));
+          });
+          updateHie(IDs);
         });
 
         $("div.menuColor").change(function () {
@@ -363,15 +405,11 @@
         });
       }
 
-      function updatevis(hie) {
+      function updatevis() {
         $(".partition-content").each(function () {
           if (this.__vis__) {
-            if(hie){
-              this.__vis__.hierarchy([hie]);
-            }
               this.__vis__.data(_data_);
               this.__vis__.redraw();
-
           }
         });
       }
@@ -388,14 +426,12 @@
         });
       }
 
-      function updateHie() {
-        let hie = $("select.selectHierarchy").val();
+      function updateHie(hie){
         $(".partition-content").each(function () {
           if (this.__vis__) {
-            this.__vis__.hierarchy([hie]);
-            console.log("data hie------------------------------------------")
-            console.log(_data_);
+            this.__vis__.hierarchy(hie);
             this.__vis__.data(_data_);
+            this.__vis__.redraw();
           }
         });
       }
@@ -512,10 +548,17 @@
               .append($("<select/>")
                 .addClass("form-control")
                 .addClass("selectHierarchy")
-              )
-            );
+              ))
+
+            $(parentElement).children(".menuHie")
+              .append($("<div>/")
+                  .addClass("window-content")
+                  .append($("<ul/>")
+                    .addClass("list-group")
+                  .attr("id","sortable")));
+
             $(parentElement).append($("<div/>")
-              .addClass("menuHie")
+              .addClass("menuSize")
               .text("size")
               .css({"width":"100%","position": "relative","text-align": "left"})
               .append($("<select/>")
@@ -530,7 +573,10 @@
         }
       }
 
+
+
     </script>
+
 </head>
 <body>
 
