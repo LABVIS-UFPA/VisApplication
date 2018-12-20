@@ -357,17 +357,22 @@
           if(IDs.indexOf(hie)==-1){
           $(".menuHie").children(".window-content").children("ul")
             .append($("<li/>")
-              .css({"padding": "5px","font-size": "12px","color":"#414142","border": "1px solid #ddd","border-radius": "10px"})
+              .css({"padding": "5px","font-size":
+                   "12px","color":"#414142",
+                   "border": "1px solid #ddd",
+                   "border-radius": "10px"})
                 .addClass("list-group-item")
                 .attr("id",hie)
-                .append($("<div/>").attr("class","listH").addClass("media-body")
-                  .append($("<span/>").addClass("icon icon-arrow-combo"))
-                  .append($("<strong/>").text(" -"+hie))
-                  .append($("<span/>").addClass("remove").addClass("icon icon-trash")
-                    .css("float", "right")
-                    .click(function(){
-                      $(this).parent().parent().remove();
-                  }))
+                .append($("<div/>")
+                    .attr("class","listH")
+                    .addClass("media-body")
+                    .append($("<span/>").addClass("icon icon-arrow-combo"))
+                    .append($("<strong/>").text(" -"+hie))
+                    .append($("<span/>").addClass("remove").addClass("icon icon-trash")
+                        .css("float", "right")
+                        .click(function(){
+                            $(this).parent().parent().remove();
+                        }))
                 ));
           }
         });
@@ -429,9 +434,14 @@
       function updateHie(hie){
         $(".partition-content").each(function () {
           if (this.__vis__) {
-            this.__vis__.hierarchy(hie);
-            this.__vis__.data(_data_);
-            this.__vis__.redraw();
+              if(hie.length){
+                  this.__vis__.hierarchy(hie);
+              }
+              else{
+                  this.__vis__.hierarchy();
+              }
+              this.__vis__.data(_data_);
+              this.__vis__.redraw();
           }
         });
       }
@@ -572,8 +582,6 @@
             break;
         }
       }
-
-
 
     </script>
 
