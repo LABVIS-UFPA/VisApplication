@@ -54,7 +54,10 @@ function updateColorContinues(attr,item,min,max){
   $(".partition-content").each(function (i, index) {
     if ($(index).children("svg").length){
       this.__vis__.setColor(function (d, i) {
-        return c(d.data[item]);
+        if (d.data)
+          return c(d.data[item]);
+        else
+          return c(d[item]);
       });
       this.__vis__.redraw();
     }
@@ -71,9 +74,13 @@ function filterColorContinues(item,min,max,min_select,max_select){
   $(".partition-content").each(function (i, index) {
     if ($(index).children("svg").length){
       this.__vis__.setColor(function (d, i) {
-        if(d.data[item]>=min_select && d.data[item]<=max_select) {
+        if(d.data && d.data[item]>=min_select && d.data[item]<=max_select) {
           return c(d.data[item]);
-        }else{
+        }
+        else if(!d.data && d[item]>=min_select && d[item]<=max_select){
+        return c(d[item]);
+        }
+        else{
           return "grey";
         }
       });
@@ -87,7 +94,10 @@ function updateColor(attr,item,colors) {
     $(".partition-content").each(function (i,index) {
       if($(index).children("svg").length){
         this.__vis__.setColor(function (d,i) {
-          return colors[attr.indexOf(d.data[item])];
+          if(d.data)
+            return colors[attr.indexOf(d.data[item])];
+          else
+            return colors[attr.indexOf(d[item])];
         });
         this.__vis__.redraw();
       }
@@ -101,10 +111,13 @@ function filterCategoricalValues(attr,item_name, item_value) {
     $(".partition-content").each(function (i,index) {
       if($(index).children("svg").length){
         this.__vis__.setColor(function (d,i) {
-          if(d.data[item_name] == item_value){
-            console.log("vai filhão",d.data[item_name]);
+          if(d.data && d.data[item_name] == item_value){
             return defautColor[attr.indexOf(d.data[item_name])];
-          }else{
+          }
+          else if(!d.data && d[item_name] == item_value) {
+            return defautColor[attr.indexOf(d[item_name])];
+          }
+          else{
             return "grey";
           }
         });
