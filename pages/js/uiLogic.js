@@ -256,13 +256,13 @@ function updateInteface(){
 
     });
     if(isNaN(d_values[index][0])){
-      return  updateColor(d_values[index],dataHeader,colors);
+      return  updateCategoricalColor(d_values[index],dataHeader,colors);
     }
     else if(!isNaN(d_values[index][1]) && d_values[index].length>10){
       let k = limit.indexOf(dataHeader);
       return updateColorContinues(d_values[index],dataHeader,limit[k+1],limit[k+2]);
     }else{
-      return  updateColor(d_values[index],dataHeader,colors);
+      return  updateCategoricalColor(d_values[index],dataHeader,colors);
     }
   });
 
