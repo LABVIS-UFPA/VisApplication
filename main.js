@@ -41,7 +41,7 @@ function initialize () {
             if(message){
                 mainWindow.webContents.send('errror-data');
             }else{
-                console.log("NOT-DATA");
+                openFile();
             }
         });
 
@@ -58,51 +58,9 @@ function initialize () {
             label: 'File',
             submenu: [
                 {label: 'load',click (){
-                        let dataFile =  dialog.showOpenDialog({properties: ['openFile'], filters: [{ name: 'CSV', extensions: ['csv'] }]});
-
-                            // fs.readFile(dataFile.toString(), 'utf8', (err, data) => {
-                            //     if (err) throw err;
-                            console.log("arquivo:----------->  ",dataFile)
-
-                            csv()
-                                .fromFile(dataFile[0])
-                                .then((jsonObj)=>{
-
-                                  for(let i = 0; i < jsonObj.length; i++){
-                                    let obj = jsonObj[i];
-                                    for(let prop in obj){
-                                      if(obj.hasOwnProperty(prop) && obj[prop] !== null && !isNaN(obj[prop])){
-                                        obj[prop] = +obj[prop];
-                                      }
-                                    }
-                                  }
-
-                                  // Object.keys(jsonObj).map(function(objectKey, value) {
-                                  //   for (let i in jsonObj[objectKey]){
-                                  //       console.log(jsonObj[objectKey][i]);
-                                  //       if(!isNaN(jsonObj[objectKey][i])){
-                                  //           parseInt(jsonObj[objectKey][i]);
-                                  //         // console.log(value);
-                                  //       }
-                                  //
-                                  //   }
-                                  // });
-
-
-                                    // _.map(jsonObj, function(i, key){
-                                    //     if(!isNaN(key)){
-                                    //         key = +key;
-                                    //     }
-                                    //
-                                    // });
-
-
-                                    mainWindow.webContents.send("file-data", jsonObj)
-                                })
-
-
-                }}
-            ]
+                        openFile();
+                }
+                }]
         };
 
         const menuTemplateDebug = {
@@ -175,6 +133,27 @@ function makeSingleInstance () {
             mainWindow.focus()
         }
     })
+}
+//open and convert datafile
+function openFile () {
+    dialog.showOpenDialog(function (fileNames) {
+        if (fileNames === undefined) return;
+        let fileName = fileNames[0];
+
+        csv()
+            .fromFile(fileName)
+            .then((jsonObj)=>{
+                for(let i = 0; i < jsonObj.length; i++){
+                    let obj = jsonObj[i];
+                    for(let prop in obj){
+                        if(obj.hasOwnProperty(prop) && obj[prop] !== null && !isNaN(obj[prop])){
+                            obj[prop] = +obj[prop];
+                        }
+                    }
+                }
+                mainWindow.webContents.send("file-data", jsonObj)
+            })
+    });
 }
 
 // Require each JS file in the main-process dir
