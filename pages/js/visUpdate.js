@@ -84,7 +84,10 @@ function updateCategoricalColor(attr, item, colors) {
     $(".partition-content").each(function (i,index) {
       if($(index).children("svg").length){
         this.__vis__.setColor(function (d,i) {
-          if(d.data) {
+          if(d.data["name"]){
+            return colors[attr.indexOf(d.data["name"])];
+          }
+          else if(d.data) {
             return colors[attr.indexOf(d.data[item])];
           }
           else{
