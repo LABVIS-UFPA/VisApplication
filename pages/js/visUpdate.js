@@ -59,15 +59,18 @@ function updateColorContinues(attr,item,min,max){
   min_global = min;
   max_global = max;
   let c = d3.scaleLinear()
-    .domain([min,max])
-    .range([color1,color2]);
+      .domain([min,max])
+      .range([color1,color2]);
   $(".partition-content").each(function (i, index) {
     if ($(index).children("svg").length){
       this.__vis__.setColor(function (d, i) {
-        if (d.data)
+        if (d.data[item])
           return c(d.data[item]);
-        else
+        if(d[item])
           return c(d[item]);
+        else{
+          return "grey";
+        }
       });
       this.__vis__.redraw();
       old_Color = this.__vis__.getColor();
@@ -84,15 +87,15 @@ function updateCategoricalColor(attr, item, colors) {
     $(".partition-content").each(function (i,index) {
       if($(index).children("svg").length){
         this.__vis__.setColor(function (d,i) {
-          if(d.data["name"]){
-            return colors[attr.indexOf(d.data["name"])];
-          }
-          else if(d.data) {
+          if(d.data[item]) {
             return colors[attr.indexOf(d.data[item])];
           }
-          else{
+          if(d[item]){
             return colors[attr.indexOf(d[item])];
+          }else{
+            return "grey";
           }
+
         });
         this.__vis__.redraw();
         old_Color = this.__vis__.getColor();
@@ -110,16 +113,16 @@ function filterCategoricalValues(attr,item_name, item_value) {
   $(".partition-content").each(function () {
     $(".partition-content").each(function (i,index) {
       if($(index).children("svg").length){
-          this.__vis__.setColor(function (d,i) {
-              if(d.data && d.data[item_name] != item_value){
-                  return "grey";
-              }else if(!d.data && d[item_name] != item_value) {
-                  return "grey";
-              }else{
-                  return old_Color;
-              }
-          });
-         this.__vis__.redraw();
+        this.__vis__.setColor(function (d,i) {
+          if(d.data && d.data[item_name] != item_value){
+            return "grey";
+          }else if(!d.data && d[item_name] != item_value) {
+            return "grey";
+          }else{
+            return old_Color;
+          }
+        });
+        this.__vis__.redraw();
       }
     });
   });
