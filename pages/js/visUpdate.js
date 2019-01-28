@@ -64,9 +64,9 @@ function updateColorContinues(attr,item,min,max){
   $(".partition-content").each(function (i, index) {
     if ($(index).children("svg").length){
       this.__vis__.setColor(function (d, i) {
-        if (d.data[item])
+        if (d.data)
           return c(d.data[item]);
-        if(d[item])
+        if(d)
           return c(d[item]);
         else{
           return "grey";
@@ -87,10 +87,10 @@ function updateCategoricalColor(attr, item, colors) {
     $(".partition-content").each(function (i,index) {
       if($(index).children("svg").length){
         this.__vis__.setColor(function (d,i) {
-          if(d.data[item]) {
+          if(d.data) {
             return colors[attr.indexOf(d.data[item])];
           }
-          if(d[item]){
+          if(d){
             return colors[attr.indexOf(d[item])];
           }else{
             return "grey";
