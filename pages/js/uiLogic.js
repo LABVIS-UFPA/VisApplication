@@ -1,4 +1,5 @@
 // function update and create dinamic menus
+// function update and create dinamic menus
 function updateInteface () {
   data_prep = new DataPreparation(_data_)
   let dimension = data_prep.data_keys
@@ -382,7 +383,7 @@ let addMenu = (name, parentElement) => {
       .append($("<div/>")
         .addClass("tab-item")
         .attr("id","menuDefault")
-        .text("Default visualization")))
+        .text("Default")))
 
   //menu colors
   let id = $(parentElement).parent().attr('id')

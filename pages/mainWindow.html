@@ -131,8 +131,7 @@
         console.log(data);
         clean_menus();
         updatevis();
-
-      })
+      });
       ipc.on('change-datasample', function(event, data){
         console.log(data);
         _data_ = data;
@@ -181,9 +180,12 @@
 
             return
           }
+          //verificar para abrir apenas um menu de settings
+          $(".partition-content").each(function(i,item){
+              $(item).children(".AddSettings").remove();
+          });
 
           if(!$("#menu_settings").length) {
-
             $(this).children(".partition-content").append($("<button/>")
               .text(" view settings ")
               .addClass("AddSettings")
@@ -214,6 +216,7 @@
               }
 
             });
+
           }
           $(this).children(".partition-content").append($("<button/>")
             .text("Add Visualization")
