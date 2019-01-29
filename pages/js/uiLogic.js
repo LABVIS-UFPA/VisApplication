@@ -338,83 +338,149 @@ function updateInteface () {
     //     .style("fill", "url(#linear-gradient)");
   }
 }
+//menu principal
+
+function clean_menus(){
+
+  let parent = $("#menu_settings").parent();
+
+
+  $("#menu_settings").remove();
+  $(".tab-group").remove();
+  $(".menuColor").remove();
+  $(".menuHie").remove();
+  $(".menuFilter").remove();
+  $(".menuDefault").remove();
+
+  addMenu("",parent);
+  updateInteface();
+}
 
 let addMenu = (name, parentElement) => {
-  console.log($(parentElement).parent().attr('id'))
+  $(parentElement).css("backgroundColor","#f1f1f1");
+  $(parentElement)
+    .append($("<header/>")
+      .addClass("toolbar toolbar-header")
+      .attr("id","menu_settings")
+      .append($("<h1/>").addClass("title")
+        .text("visualization settings")
+        .css("backgroundColor","#f1f1f1")))
+    .append($("<div/>")
+      .addClass("tab-group")
+      .append($("<div/>")
+        .addClass("tab-item")
+        .attr("id","menuColor")
+        .text("Colors"))
+      .append($("<div/>")
+        .addClass("tab-item")
+        .attr("id","menuHie")
+        .text("Hierarchy"))
+      .append($("<div/>")
+        .addClass("tab-item")
+        .attr("id","menuSelection")
+        .text("Selection"))
+      .append($("<div/>")
+        .addClass("tab-item")
+        .attr("id","menuDefault")
+        .text("Default visualization")))
+
+  //menu colors
   let id = $(parentElement).parent().attr('id')
-  switch (name) {
-    case 'Color':
-      $(parentElement).append($('<div/>')
-          .addClass('menuColor')
-          .text('Color')
-          .css({'width': '100%', 'position': 'relative', 'text-align': 'left'})
-          .append($('<select/>')
-            .addClass('form-control')
-            .addClass('colorSelector')
-            .attr('id', id + '-colorSelector'))
-        )
-      break
-    case 'Hierarchy':
-      $(parentElement).append($('<div/>')
-          .addClass('menuHie')
-          .text('Hierarchy')
-          .css({'width': '100%', 'position': 'relative', 'text-align': 'left'})
-          .append($('<select/>')
-            .addClass('form-control')
-            .addClass('selectHierarchy')
-          ))
+  $(parentElement).append($('<div/>')
+    .addClass('menuColor')
+    .text('Color')
+    .css({'width': '100%', 'position': 'relative', 'text-align': 'left'})
+    .append($('<select/>')
+      .addClass('form-control')
+      .addClass('colorSelector')
+      .attr('id', id + '-colorSelector'))
+  )
+//menu hieraquies
+  $(parentElement).append($('<div/>')
+    .addClass('menuHie')
+    .text('Hierarchy')
+    .css({'width': '100%', 'position': 'relative', 'text-align': 'left'})
+    .append($('<select/>')
+      .addClass('form-control')
+      .addClass('selectHierarchy')
+    )
+    .append($('<div>/')
+      .addClass('window-content')
+      .append($('<ul/>')
+        .addClass('list-group')
+        .attr('id', 'sortable'))))
 
-      $(parentElement).children('.menuHie')
-          .append($('<div>/')
-            .addClass('window-content')
-            .append($('<ul/>')
-              .addClass('list-group')
-              .attr('id', 'sortable')))
+$(".menuHie").append($('<div/>')
+    .addClass('menuSize')
+    .text('size')
+    .css({'width': '100%', 'position': 'relative', 'text-align': 'left'})
+    .append($('<select/>')
+      .addClass('form-control')
+      .addClass('selectSize')
+    ))
+  $(parentElement).append($('<div/>')
+    .addClass('menuFilter')
+    .text('Select attribute')
+    .css({'width': '100%', 'position': 'relative', 'text-align': 'left'})
+    .append($('<select/>')
+      .addClass('form-control')
+      .addClass('filter'))
+  )
+//defaul visualizations
+  $(parentElement).append($('<div/>')
+      .addClass('menuDefault')
+      .append($('<div/>')
+        .append($('<label/>')
+          .text('Default color')
+          .css({margin: '.4rem', float: 'initial'})
+          .append($('<input/>')
+            .css({height: '40px', float: 'initial'})
+            .attr('type', 'color')
+            .addClass('setColorDefault')
+            .attr('value', '#006699'))))
+      .append($('<div/>')
+        .append($('<label/>')
+          .text(' Highlight Color')
+          .addClass('HighlightColor')
+          .css({margin: '.4rem', float: 'initial'})
+          .append($('<input/>')
+            .css({height: '40px', float: 'initial'})
+            .attr('type', 'color')
+            .addClass('setHighlightColor')
+            .attr('id', 'setHighlightColor')
+            .attr('value', '#FF1122'))))
+  )
 
-      $(parentElement).append($('<div/>')
-          .addClass('menuSize')
-          .text('size')
-          .css({'width': '100%', 'position': 'relative', 'text-align': 'left'})
-          .append($('<select/>')
-            .addClass('form-control')
-            .addClass('selectSize')
-          ))
-      break
-    case 'Filter':
-      $(parentElement).append($('<div/>')
-          .addClass('menuFilter')
-          .text('Filter attribute')
-          .css({'width': '100%', 'position': 'relative', 'text-align': 'left'})
-          .append($('<select/>')
-            .addClass('form-control')
-            .addClass('filter'))
-        )
+  //hiden and show menus
+  // $(".menuColor").hide();
+  $(".menuHie").hide();
+  $('.menuFilter').hide();
+  $('.menuDefault').hide();
 
-      break
-    case 'Default visualization':
-      $(parentElement).append($('<div/>')
-          .addClass('menuHie')
-          .append($('<div/>')
-            .append($('<label/>')
-              .text('Default color')
-              .css({margin: '.4rem', float: 'initial'})
-              .append($('<input/>')
-                .css({height: '40px', float: 'initial'})
-                .attr('type', 'color')
-                .addClass('setColorDefault')
-                .attr('value', '#006699'))))
-          .append($('<div/>')
-            .append($('<label/>')
-              .text(' Highlight Color')
-              .addClass('HighlightColor')
-              .css({margin: '.4rem', float: 'initial'})
-              .append($('<input/>')
-                .css({height: '40px', float: 'initial'})
-                .attr('type', 'color')
-                .addClass('setHighlightColor')
-                .attr('id', 'setHighlightColor')
-                .attr('value', '#FF1122'))))
-        )
-      break
-  }
+  $("#menuColor").click(function () {
+    $(".menuColor").show();
+    $(".menuHie").hide();
+    $(".menuFilter").hide();
+    $(".menuDefault").hide();
+  })
+  $("#menuHie").click(function () {
+    $(".menuHie").show();
+    $(".menuColor").hide();
+    $(".menuFilter").hide();
+    $(".menuDefault").hide();
+  })
+  $("#menuSelection").click(function () {
+    $(".menuFilter").show();
+    $(".menuHie").hide();
+    $(".menuColor").hide();
+    $(".menuDefault").hide();
+  })
+
+  $("#menuDefault").click(function () {
+    $(".menuDefault").show();
+    $(".menuHie").hide();
+    $(".menuColor").hide();
+    $(".menuFilter").hide();
+  })
+
 }

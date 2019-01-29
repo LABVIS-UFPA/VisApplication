@@ -129,12 +129,15 @@
       ipc.on('file-data',function (event,data) {
         _data_ = data;
         console.log(data);
+        clean_menus();
         updatevis();
+
       })
       ipc.on('change-datasample', function(event, data){
         console.log(data);
         _data_ = data;
         console.log(Object.keys(data[0]).map(key => data[0][key]));
+        clean_menus();
         updatevis();
 
       });
@@ -145,7 +148,6 @@
 
 
       $(document).ready(function() {
-
 
         ipc.send("document-ready");
         let $body = $("body");
@@ -171,50 +173,48 @@
           if(this !== e.target)
             return;
 
-          if(this !== e.target)
-            return;
-
           if($(this).children(".partition-content").children().is("button.btn.btn-large.btn-positive")) {
             $(this).children(".partition-content").children().attr("data-nodeid", $(this).attr("id"));
             return;
           }else
-          if($(this).children(".partition-content").children().is(".menuColor") ||
-            $(this).children(".partition-content").children().is("div")){
+          if($(this).children(".partition-content").children().is("#menu_settings")){
 
             return
           }
 
-          $(this).children(".partition-content").append($("<button/>")
-            .text("view settings")
-            .addClass("AddSettings")
-            .addClass("btn btn-large btn-positive")
-            .attr("data-nodeid", $(this).attr("id"))
-            .css({"float": "right"}));
+          if(!$("#menu_settings").length) {
 
-          $.contextMenu({
-            selector: '.AddSettings',
-            trigger: 'left',
-            callback: function (key) {
-              if(_data_){
-                let content = $("#"+$(this).attr("data-nodeid")).children(".partition-content");
-                // let content = $("#"+$(this).attr("data-nodeVis")).children(".partition-content");
-                let partition = $(this).parents('.partition-node').attr('id');
-                content.empty();
-                addMenu(key,content);
-                ipc.send('update-sampledata', {});
-                updateInteface();
-              }else{
-                alert("You have to link data first");
-                ipc.send('not-data');
+            $(this).children(".partition-content").append($("<button/>")
+              .text(" view settings ")
+              .addClass("AddSettings")
+              .addClass("btn btn-large btn-positive")
+              .addClass("icon icon-cog")
+              .attr("data-nodeid", $(this).attr("id"))
+              .css({ "float": "right" }));
+
+            $.contextMenu({
+              selector: '.AddSettings',
+              trigger: 'left',
+              callback: function (key) {
+                if (_data_) {
+                  let content = $("#" + $(this).attr("data-nodeid")).children(".partition-content");
+                  // let content = $("#"+$(this).attr("data-nodeVis")).children(".partition-content");
+                  let partition = $(this).parents('.partition-node').attr('id');
+                  content.empty();
+                  addMenu(key, content);
+                  ipc.send('update-sampledata', {});
+                  updateInteface();
+                } else {
+                  alert("You have to link data first");
+                  ipc.send('not-data');
+                }
+              },
+              items: {
+                "menu settings visualization": { name: "settings visualization" }
               }
-            },
-            items: {
-              "Color": {name: "Color"},
-              "Hierarchy": {name: "Hierarchy"},
-              "Filter": {name: "Filter"},
-              "Default visualization": {name: "Default visualization"}}
-          });
 
+            });
+          }
           $(this).children(".partition-content").append($("<button/>")
             .text("Add Visualization")
             .addClass("btn btn-large btn-positive")
