@@ -61,6 +61,34 @@ function updateColorContinues(attr,item,min,max){
     let c = d3.scaleLinear()
         .domain([min,max])
         .range([color1,color2]);
+
+    //refazendo a legenda continua
+
+    $("div#legendColor").remove();
+    d3.selectAll("div#legend").append("div").attr("id","legendColor").style("margin-top","10px")
+        .append("svg").attr("class","rectInterpolate").attr("width","100%").attr("height","40px")
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", "100%")
+        .attr("height", "40px")
+        .style("stroke", "white")
+        .style("stroke-width", "1px")
+        .style("fill", "url(#linear-gradient)");
+
+    let svg = d3.selectAll("svg.rectInterpolate");
+    let linearGradient = svg.append("defs")
+        .append("linearGradient")
+        .attr("id", "linear-gradient");
+
+    linearGradient.append("stop")
+        .attr("offset", "0%")
+        .attr("stop-color",$('#getColor1').val());
+
+    linearGradient.append("stop")
+        .attr("offset", "100%")
+        .attr("stop-color",$('#getColor2').val());
+    //update no setcolor
     $(".partition-content").each(function (i, index) {
         if ($(index).children("svg").length){
             this.__vis__.setColor(function (d, i) {

@@ -1,20 +1,20 @@
 // function update and create dinamic menus
 // function update and create dinamic menus
 function updateInteface () {
-  data_prep = new DataPreparation(_data_)
-  let dimension = data_prep.data_keys
-  let d_values = data_prep.data_values
-  let attrs = $('.colorSelector')
-  let attrFilter = $('.filter')
-  let hierarchyAttrs = $('.selectHierarchy')
-  let sizeAttr = $('.selectSize')
+  data_prep = new DataPreparation(_data_);
+  let dimension = data_prep.data_keys;
+  let d_values = data_prep.data_values;
+  let attrs = $('.colorSelector');
+  let attrFilter = $('.filter');
+  let hierarchyAttrs = $('.selectHierarchy');
+  let sizeAttr = $('.selectSize');
 
-  let limit = data_prep.limit_values
+  let limit = data_prep.limit_values;
   // input select set values
 
-  let categorical_values = data_prep.getCategorical_values()
+  let categorical_values = data_prep.getCategorical_values();
   $(hierarchyAttrs).each(function (i, attr) {
-    let items = $(attr).children('.optHie').length
+    let items = $(attr).children('.optHie').length;
     $.each(categorical_values, function (i, item) {
       if ($(attr).length && items < categorical_values.length) {
         $(attr).append($('<option>', {
@@ -23,13 +23,13 @@ function updateInteface () {
         }).addClass('optHie'))
       }
     })
-  })
+  });
 
   // input select set values
   $(sizeAttr).each(function (i, attr) {
-    let items = $(attr).children('.optSize').length
+    let items = $(attr).children('.optSize').length;
 
-    let numeric_value = data_prep.getNumeric_values()
+    let numeric_value = data_prep.getNumeric_values();
     $.each(numeric_value, function (i, item) {
       if ($(attr).length && items < numeric_value.length) {
         $(attr).append($('<option>', {
@@ -38,12 +38,12 @@ function updateInteface () {
         }).addClass('optSize'))
       }
     })
-  })
+  });
 
   // select color attrs
-  dimension.unshift('...')
+  dimension.unshift('...');
   $(attrs).each(function (i, attr) {
-    let items = $(attr).children('.optColor').length
+    let items = $(attr).children('.optColor').length;
     $.each(dimension, function (i, item) {
       if ($(attr).length && items < dimension.length) {
         $(attr).append($('<option>', {
@@ -52,13 +52,13 @@ function updateInteface () {
         }).addClass('optColor'))
       }
     })
-  })
-  dimension.shift()
+  });
+  dimension.shift();
 
   // select filter attrs
-  dimension.unshift('...')
+  dimension.unshift('...');
   $(attrFilter).each(function (i, attr) {
-    let items = $(attr).children('.optFilter').length
+    let items = $(attr).children('.optFilter').length;
     $.each(dimension, function (i, item) {
       if ($(attr).length && items < dimension.length) {
         $(attr).append($('<option>', {
@@ -67,33 +67,33 @@ function updateInteface () {
         }).addClass('optFilter'))
       }
     })
-  })
-  dimension.shift()
+  });
+  dimension.shift();
 
   // input colors dinamicamente
   $('select.colorSelector').change(function () {
-    let valor = $('select.colorSelector').val()
+    let valor = $('select.colorSelector').val();
     for (let i = 0; i < dimension.length; i++) {
       if ((valor == dimension[i] && !isNaN(d_values[i][0])) && d_values[i].length > 10) {
-        let j = limit.indexOf(dimension[i])
-        addColorsSelector(dimension[i], limit[j + 1], limit[j + 2])
+        let j = limit.indexOf(dimension[i]);
+        addColorsSelector(dimension[i], limit[j + 1], limit[j + 2]);
         return
       }
       if (valor == dimension[i]) {
-        addColorCat(d_values[i])
+        addColorCat(d_values[i]);
         return
       }
     }
-  })
+  });
 
   // input filter
   $('select.filter').change(function () {
-    let valor = $('select.filter').val()
+    let valor = $('select.filter').val();
     for (let i = 0; i < dimension.length; i++) {
       if ((valor == dimension[i] && !isNaN(d_values[i][0])) && d_values[i].length > 10) {
-        let j = limit.indexOf(dimension[i])
-        $('div.menuFilter').children('div').remove()
-        $('select.categoricalFilter').remove()
+        let j = limit.indexOf(dimension[i]);
+        $('div.menuFilter').children('div').remove();
+        $('select.categoricalFilter').remove();
 
         $('select.filter').parent()
           .append($('<div/>')
@@ -118,7 +118,7 @@ function updateInteface () {
               .css({'margin-top': '25px',
                 'border': 0,
                 'color': '#0fa0f6',
-                'font-weight': 'bold'})))
+                'font-weight': 'bold'})));
 
         $(function () {
           $('#slider-range').slider({
@@ -127,9 +127,9 @@ function updateInteface () {
             max: limit[j + 2],
             values: [ limit[j + 1], limit[j + 2]],
             slide: function (event, ui) {
-              $('#amount').val('min: ' + ui.values[ 0 ] + ' ~max: ' + ui.values[ 1 ])
-              console.log(ui.values[ 0 ])
-              console.log(ui.values[ 1 ])
+              $('#amount').val('min: ' + ui.values[ 0 ] + ' ~max: ' + ui.values[ 1 ]);
+              console.log(ui.values[ 0 ]);
+              console.log(ui.values[ 1 ]);
               filterColorContinues(
                 valor,
                 limit[j + 1],
@@ -137,56 +137,56 @@ function updateInteface () {
                 , ui.values[ 0 ],
                 ui.values[ 1 ])
             }
-          })
+          });
           $('#amount').val(' ' + $('#slider-range').slider('values', 0) +
             ' ~ ' + $('#slider-range').slider('values', 1))
-        })
+        });
         return
       } else if (valor == dimension[i]) {
-        $('div.menuFilter').children('div').remove()
-        $('select.categoricalFilter').remove()
+        $('div.menuFilter').children('div').remove();
+        $('select.categoricalFilter').remove();
 
         $('select.filter').parent()
           .append($('<select/>')
             .addClass('categoricalFilter')
             .addClass('form-control')
-            .css('marginTop', '10px'))
+            .css('marginTop', '10px'));
 
-        let index = dimension.indexOf(valor)
+        let index = dimension.indexOf(valor);
 
         $('.categoricalFilter')
-          .append($('<option>').text('...'))
+          .append($('<option>').text('...'));
 
         $(d_values[index]).each(function (i, attr) {
           $('.categoricalFilter').append($('<option>', {
             value: d_values[index][i],
             text: d_values[index][i]
-          }).addClass('opt Categorical Filter'))
+          }).addClass('opt Categorical Filter'));
 
           $('.categoricalFilter').change(function () {
             filterCategorcal()
           })
-        })
+        });
         return
       }
     }
-  })
+  });
 
-  $('#sortable').sortable()
-  $('#sortable').disableSelection()
+  $('#sortable').sortable();
+  $('#sortable').disableSelection();
 
   $('select.selectSize').change(function () {
     updateSize()
-  })
+  });
 
   $('select.selectHierarchy').change(function () {
-    let hie = $('select.selectHierarchy').val()
-    let ul = $('.window-content').children('ul')
+    let hie = $('select.selectHierarchy').val();
+    let ul = $('.window-content').children('ul');
 
-    let IDs = []
+    let IDs = [];
     $(ul).find('li').each(function () {
       IDs.push($(this).attr('id'))
-    })
+    });
 
     if (IDs.indexOf(hie) == -1) {
       $('.menuHie').children('.window-content').children('ul')
@@ -204,70 +204,66 @@ function updateInteface () {
               }))
           ))
     }
-  })
+  });
   // mudanças hierarquias dinamicas
   $('ul#sortable').on('DOMSubtreeModified', function (event) {
-    let ul = $('.window-content').children('ul')
-    let IDs = []
+    let ul = $('.window-content').children('ul');
+    let IDs = [];
     $(ul).find('li').each(function () {
       IDs.push($(this).attr('id'))
-    })
+    });
     updateHie(IDs)
-  })
+  });
 
   $('input.setColorDefault').change(function () {
     updatevis()
-  })
+  });
 
   $('input.setHighlightColor').change(function () {
     updatevis()
-  })
+  });
 
   $('input.setHighlightColor').change(function () {
     updatevis()
-  })
+  });
 
   function filterCategorcal () {
-    console.log('entrou aqui')
-    let item_key = $('select.filter').val()
-    let attr_value = $('select.categoricalFilter').val()
+    let item_key = $('select.filter').val();
+    let attr_value = $('select.categoricalFilter').val();
 
-    console.log(item_key)
-    console.log(attr_value)
-
-    let i = dimension.indexOf(item_key)
-    let listItem = d_values[i]
+    let i = dimension.indexOf(item_key);
+    let listItem = d_values[i];
     filterCategoricalValues(listItem, item_key, attr_value)
   }
   // alter menu select color attr
   $('div.menuColor').change(function () {
-    let inputs = $('div.menuColor').children('label').children('input')
-    let dataHeader = $('select.colorSelector').val()
-    let index = (dimension.indexOf(dataHeader))
-    let colors = []
-    let attrs = []
+    let inputs = $('div.menuColor').children('label').children('input');
+    let dataHeader = $('select.colorSelector').val();
+    let index = (dimension.indexOf(dataHeader));
+    let colors = [];
+    let attrs = [];
     $.each(inputs, function (i, item) {
-      attrs.push(inputs.get(i).id)
+      attrs.push(inputs.get(i).id);
       colors.push(inputs.get(i).value)
-    })
+    });
     if (isNaN(d_values[index][0])) {
       return updateCategoricalColor(d_values[index], dataHeader, colors)
     } else if (!isNaN(d_values[index][1]) && d_values[index].length > 10) {
-      let k = limit.indexOf(dataHeader)
+      let k = limit.indexOf(dataHeader);
       return updateColorContinues(d_values[index], dataHeader, limit[k + 1], limit[k + 2])
     } else {
       return updateCategoricalColor(d_values[index], dataHeader, colors)
     }
-  })
+  });
 
-  // itens color pic data categorical
   // itens color pic data categorical
   function addColorCat (values) {
-    $('div.menuColor').children('input').remove()
-    $('div.menuColor').children('label').remove()
-
+    $('div.menuColor').children('div#legend').remove();
+    $('div.menuColor').children('input').remove();
+    $('div.menuColor').children('label').remove();
+    // $("div#legendColor").remove();
     $.each(values, function (i, item) {
-      console.log(i)
+      console.log(i);
       $('div.menuColor')
         .append($('<label/>').text(item)
           .append($('<input/>')
@@ -279,73 +275,46 @@ function updateInteface () {
         )
     })
   }
-  // itens color pic data continuos
+  // itens color selector para  dados continuos
   function addColorsSelector (value, min, max) {
-    $('div.menuColor').children('input').remove()
-    $('div.menuColor').children('label').remove()
-    $('div.menuColor').children('div.legendColor').remove()
+    $('div.menuColor').children('input').remove();
+    $('div.menuColor').children('label').remove();
+    $('div.menuColor').children('div.legendColor').remove();
+    $('div.menuColor').children('div#legend').remove();
 
-    if (!($('.getColor').length)) {
-      $('div.menuColor')
+    $('div.menuColor').append($("<div/>").attr("id","legend"));
+
+    $('div.menuColor')
         .append($('<label/>').text(min)
-        .css({margin: '.4rem', float: 'left'})
-          .append($('<input/>')
-            .css({height: '40px'})
-            .attr('type', 'color')
-            .addClass('getColor')
-            .attr('value', '#f7f9f9')
-            .attr('id', value)
-            .attr('id', 'getColor1')
-          ))
+            .css({margin: '.4rem', float: 'left'})
+            .append($('<input/>')
+                .css({height: '40px'})
+                .attr('type', 'color')
+                .addClass('getColor')
+                .attr('value', '#f7f9f9')
+                .attr('id', value)
+                .attr('id', 'getColor1')
+            ));
       $('div.menuColor')
-        .append($('<label/>').text(max)
-          .css({margin: '.4rem', float: 'right'})
-          .append($('<input/>')
-            .css({height: '40px', float: 'right'})
-            .attr('type', 'color')
-            .addClass('getColor')
-            .attr('value', '#006699')
-            .attr('id', value)
-            .attr('id', 'getColor2')
-          ))
-    }
+          .append($('<label/>').text(max)
+              .css({margin: '.4rem', float: 'right'})
+              .append($('<input/>')
+                  .css({height: '40px', float: 'right'})
+                  .attr('type', 'color')
+                  .addClass('getColor')
+                  .attr('value', '#006699')
+                  .attr('id', value)
+                  .attr('id', 'getColor2')
+              ));
 
-    let color1 = $('#getColor1').val()
-    let color2 = $('#getColor2').val()
-    //   let svg = d3.selectAll("svg.rectInterpolate");
-    //   let linearGradient = svg.append("defs")
-    //     .append("linearGradient")
-    //     .attr("id", "linear-gradient");
-    //
-    //   linearGradient.append("stop")
-    //     .attr("offset", "0%")
-    //     .attr("stop-color", "red");
-    //
-    //   linearGradient.append("stop")
-    //     .attr("offset", "50%")
-    //
-    //     .attr("stop-color","blue");
-    //
-    //
-    //   d3.selectAll("div.menuColor").append("div").attr("id","legendColor")
-    //     .append("svg").attr("class","rectInterpolate").attr("width","100%").attr("height","40px")
-    //     .append("rect")
-    //     .attr("x", 0)
-    //     .attr("y", 0)
-    //     .attr("width", "100%")
-    //     .attr("height", "40px")
-    //     .style("stroke", "black")
-    //     .style("stroke-width",1)
-    //     .style("fill", "url(#linear-gradient)");
   }
+
 }
 //menu principal
 
+//limpar o menu quando mudar uma nova base de dados
 function clean_menus(){
-
   let parent = $("#menu_settings").parent();
-
-
   $("#menu_settings").remove();
   $(".tab-group").remove();
   $(".menuColor").remove();
@@ -383,10 +352,10 @@ let addMenu = (name, parentElement) => {
       .append($("<div/>")
         .addClass("tab-item")
         .attr("id","menuDefault")
-        .text("Default")))
+        .text("Default")));
 
   //menu colors
-  let id = $(parentElement).parent().attr('id')
+  let id = $(parentElement).parent().attr('id');
   $(parentElement).append($('<div/>')
     .addClass('menuColor')
     .text('Color')
@@ -395,7 +364,7 @@ let addMenu = (name, parentElement) => {
       .addClass('form-control')
       .addClass('colorSelector')
       .attr('id', id + '-colorSelector'))
-  )
+  );
 //menu hieraquies
   $(parentElement).append($('<div/>')
     .addClass('menuHie')
@@ -409,7 +378,7 @@ let addMenu = (name, parentElement) => {
       .addClass('window-content')
       .append($('<ul/>')
         .addClass('list-group')
-        .attr('id', 'sortable'))))
+        .attr('id', 'sortable'))));
 
 $(".menuHie").append($('<div/>')
     .addClass('menuSize')
@@ -418,7 +387,7 @@ $(".menuHie").append($('<div/>')
     .append($('<select/>')
       .addClass('form-control')
       .addClass('selectSize')
-    ))
+    ));
   $(parentElement).append($('<div/>')
     .addClass('menuFilter')
     .text('Select attribute')
@@ -426,7 +395,7 @@ $(".menuHie").append($('<div/>')
     .append($('<select/>')
       .addClass('form-control')
       .addClass('filter'))
-  )
+  );
 //defaul visualizations
   $(parentElement).append($('<div/>')
       .addClass('menuDefault')
@@ -450,7 +419,7 @@ $(".menuHie").append($('<div/>')
             .addClass('setHighlightColor')
             .attr('id', 'setHighlightColor')
             .attr('value', '#FF1122'))))
-  )
+  );
 
   //hiden and show menus
   // $(".menuColor").hide();
@@ -463,19 +432,19 @@ $(".menuHie").append($('<div/>')
     $(".menuHie").hide();
     $(".menuFilter").hide();
     $(".menuDefault").hide();
-  })
+  });
   $("#menuHie").click(function () {
     $(".menuHie").show();
     $(".menuColor").hide();
     $(".menuFilter").hide();
     $(".menuDefault").hide();
-  })
+  });
   $("#menuSelection").click(function () {
     $(".menuFilter").show();
     $(".menuHie").hide();
     $(".menuColor").hide();
     $(".menuDefault").hide();
-  })
+  });
 
   $("#menuDefault").click(function () {
     $(".menuDefault").show();
@@ -484,4 +453,4 @@ $(".menuHie").append($('<div/>')
     $(".menuFilter").hide();
   })
 
-}
+};
