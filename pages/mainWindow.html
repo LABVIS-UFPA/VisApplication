@@ -95,7 +95,6 @@
             });
           })
           .on("highlightend",function(d,i){
-            console.log(i, "tem que remover...");
             $(".partition-content").each(function(){
               if(this.__vis__ && this.__vis__ !== pc){
                 this.__vis__.removeHighlight(d,i);
@@ -128,14 +127,11 @@
 
       ipc.on('file-data',function (event,data) {
         _data_ = data;
-        console.log(data);
         clean_menus();
         updatevis();
       });
       ipc.on('change-datasample', function(event, data){
-        console.log(data);
         _data_ = data;
-        console.log(Object.keys(data[0]).map(key => data[0][key]));
         clean_menus();
         updatevis();
 

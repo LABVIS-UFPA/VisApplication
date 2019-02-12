@@ -6,7 +6,8 @@ const glob = require('glob')
 
 const {app, BrowserWindow} = require('electron')
 const debug = /--debug/.test(process.argv[2])
-let websocketmode = false
+let websocketmode = false;
+let websocketport = 0;
 if (process.mas) app.setName('Electron APIs')
 const ipcMain = require('electron').ipcMain
 let mainWindow = null
@@ -171,50 +172,37 @@ ipcMain.on('document-ready', function (evt, msg) {
     for (let arg of process.argv) {
         if (arg === 'websocketmode=on') {
             websocketmode = true
+        }else if (arg.startsWith('port=')) {
+            websocketport = +arg.replace("port=","");
         }
     }
 
     if (websocketmode) {
-        mainWindow.webContents.send('cl', 'websocketmode=' + websocketmode)
+        mainWindow.webContents.send('cl', 'websocketmode=' + websocketmode);
 
-        let WebSocketServer = require('ws').Server
-        let wss = new WebSocketServer({port: 6661})
+        const WebSocket = require('ws');
+        const ws = new WebSocket(`ws://127.0.0.1:${websocketport}/`);
 
-        wss.on('connection', function (socket) {
 
-            mainWindow.webContents.send("cl", "Client Socket Connected");
-            socket.on('message', function (message, flags) {
-                mainWindow.webContents.send('cl', 'WS Message: ' + message)
-                if (message && typeof message === 'string') {
-                    try {
-                        obj = JSON.parse(message)
-                        mainWindow.webContents.send(obj.act, obj.msg)
-                    } catch (e) {
-                        mainWindow.webContents.send('cl', 'WS Error: message is not a JSON')
-                    }
+        ws.on('open', function(){
+            mainWindow.webContents.send('cl', 'WS is open!');
+            ws.send("oi");
+        });
+        ws.on('message', function (message, flags) {
+            mainWindow.webContents.send('cl', 'WS Message: ' + message);
+            if (message && typeof message === 'string') {
+                try {
+                    obj = JSON.parse(message);
+                    mainWindow.webContents.send(obj.act, obj.msg)
+                } catch (e) {
+                    mainWindow.webContents.send('cl', 'WS Error: message is not a JSON')
                 }
-            })
-
-            socket.on('close', function (err) {
-                console.log('closed')
-                console.log(err)
-            })
-        })
-        wss.on('close', function (err) { console.log('closed'); console.log(err) })
-        wss.on('error', function (err) { console.log('error'); console.log(err) })
-
-        wss.broadcast = function (data) {
-            wss.clients.forEach(function (client) {
-                client.send(data)
-            })
-        }
-        setTimeout(function () {
-            if (process.stdout) {
-                process.stdout.cork()
-                process.stdout.write(JSON.stringify({act: 'init', msg: 6661}))
-                process.stdout.uncork()
             }
-        }, 500)
+        });
+        ws.on('close', function (err) {
+            mainWindow.webContents.send('cl', 'WS Closed.');
+            console.log(err);
+        });
     }
 })
 

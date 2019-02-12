@@ -7,6 +7,7 @@ let old_Color = 0;
 //update functions
 
 function updatevis() {
+    console.log("visUpdate.js->updatevis()");
     let colorDefaul = $("input.setColorDefault").val();
     let highlightDefaul = $("input.setHighlightColor").val();
     $(".partition-content").each(function () {
