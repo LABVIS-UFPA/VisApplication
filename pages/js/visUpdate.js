@@ -7,17 +7,16 @@ let old_Color = 0;
 //update functions
 
 function updatevis() {
-    console.log("visUpdate.js->updatevis()");
-    let colorDefaul = $("input.setColorDefault").val();
-    let highlightDefaul = $("input.setHighlightColor").val();
+    let colorDefault = $("input.setColorDefault").val();
+    let highlightDefault = $("input.setHighlightColor").val();
     $(".partition-content").each(function () {
         if (this.__vis__) {
-            if(colorDefaul && colorDefaul !="#006699"){
-                this.__vis__.setColor(colorDefaul);
+            if(colorDefault && colorDefault !="#006699"){
+                this.__vis__.setColor(colorDefault);
                 this.__vis__.getColor();
             }
-            if(highlightDefaul){
-                this.__vis__.settings.highlightColor = highlightDefaul;
+            if(highlightDefault){
+                this.__vis__.settings.highlightColor = highlightDefault;
             }
             this.__vis__.data(_data_);
             this.__vis__.redraw();

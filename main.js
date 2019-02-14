@@ -189,11 +189,12 @@ ipcMain.on('document-ready', function (evt, msg) {
             ws.send("oi");
         });
         ws.on('message', function (message, flags) {
-            mainWindow.webContents.send('cl', 'WS Message: ' + message);
+
             if (message && typeof message === 'string') {
                 try {
                     obj = JSON.parse(message);
-                    mainWindow.webContents.send(obj.act, obj.msg)
+                    mainWindow.webContents.send(obj.act, obj.msg);
+                    mainWindow.webContents.send('cl', `WS Message: ${obj.act}`);
                 } catch (e) {
                     mainWindow.webContents.send('cl', 'WS Error: message is not a JSON')
                 }
