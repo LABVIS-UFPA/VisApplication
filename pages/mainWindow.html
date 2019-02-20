@@ -246,6 +246,45 @@
               "BarChart": {name: "Bar Chart"}
             }
           });
+
+            $(this).children(".partition-content").append($("<button/>")
+                .text("Download Visualizations")
+                .addClass("btn btn-large btn-default")
+                .attr("data-nodeid", $(this).attr("id"))
+                .css({"float": "right"})
+                .click(() => {
+                    let viss = ["ParallelCoordinates", "ScatterplotMatrix", "BeeswarmPlot", "Histogram", "BarChart"];
+                    for(let v of viss){
+                        let element = document.createElement("div");
+                        $(element).css({
+                            "position":"fixed",
+                            "width":"801px",
+                            "height":"601px",
+                            "opacity":"0"
+                        });
+                        document.body.appendChild(element);
+
+                        let pc = new vis[v](element, {
+                            size_type:"absolute",
+                            width: "800px",
+                            height: "600px"
+                        });
+                        pc.data(_data_);
+                        pc.redraw();
+                        let file = new Blob([element.innerHTML], {type: "image/svg+xml"});
+                        let a = document.createElement("a");
+                        let url = URL.createObjectURL(file);
+                        a.href = url;
+                        a.download = v+".svg";
+                        document.body.appendChild(a);
+                        a.click();
+                        setTimeout(function() {
+                            document.body.removeChild(a);
+                            document.body.removeChild(element);
+                            window.URL.revokeObjectURL(url);
+                        }, 0);
+                    }
+                }));
         });
       });
 
