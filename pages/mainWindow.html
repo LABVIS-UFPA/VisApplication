@@ -65,7 +65,8 @@
         }
     </style>
     <script>
-
+      const { exec } = require('child_process');
+      const fs = require('fs');
       let ipc = require('electron').ipcRenderer;
       let vis = require("@labvis-ufpa/vistechlib");
       let d3 = require('d3');
@@ -277,7 +278,26 @@
                         a.href = url;
                         a.download = v+".svg";
                         document.body.appendChild(a);
-                        a.click();
+                        //a.click();
+
+                        let locationFile = __dirname.replace('pages', 'svgExported\\');
+
+                        fs.writeFile(locationFile + v + ".svg", element.innerHTML, function(err) {
+                          if(err) {
+                            return console.log(err);
+                          }
+                          console.log("The file was saved!");
+                        });
+
+                        exec('"C:\\Program Files\\Inkscape\\inkscape.exe" ' + locationFile + v+'.svg' + ' --export-area-page --without-gui --export-pdf=' + locationFile + v+'.pdf', (err, stdout, stderr) => {
+                          if (err) {
+                            console.log(err);
+                            return;
+                          }
+                          console.log(`stdout: ${stdout}`);
+                          console.log(`stderr: ${stderr}`);
+                        });
+
                         setTimeout(function() {
                             document.body.removeChild(a);
                             document.body.removeChild(element);
