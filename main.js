@@ -64,6 +64,27 @@ function initialize () {
                 }]
         };
 
+        const menuTemplateTools = {
+            label: 'Tools',
+            submenu: [
+                {
+                    label: 'Select', submenu: [
+                        { label: 'Click Selection',click (){ } }
+                    ]
+                },
+                {
+                    label: 'Filter',
+                    submenu: [
+                        { label: 'Filter By Data',click (){ } },
+                        { label: 'Filter Selected Data',click (){ } }
+                    ]
+                },
+                { label: 'Zoom', click (){ } },
+                { label: 'Details on Demand',click (){ } },
+                { label: 'Sort',click (){ } },
+            ]
+        };
+
         const menuTemplateDebug = {
             label: 'Debug',
             submenu: [
@@ -78,13 +99,14 @@ function initialize () {
         };
 
         menu.append(new MenuItem(menuTemplateFile));
+        menu.append(new MenuItem(menuTemplateTools));
         menu.append(new MenuItem(menuTemplateDebug));
         mainWindow.setMenu(menu);
 
         //Work on Mac.
         if(process.platform === 'darwin'){
             mainWindow.on("focus", ()=>{
-                const menuTemplate = [menuTemplateFile, menuTemplateVisualize, menuTemplateDebug];
+                const menuTemplate = [menuTemplateFile, menuTemplateTools, menuTemplateDebug];
                 Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
             });
         }
