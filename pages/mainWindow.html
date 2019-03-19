@@ -25,45 +25,8 @@
     <script src="../lib/layout/partition_layout.js"></script>
     <script src="js/visUpdate.js"></script>
     <script src="js/uiLogic.js"></script>
+    <link rel="stylesheet" href="css/main.css">
 
-    <style>
-        svg, text {
-            font: 12px MONOSPACE;
-            fill: black;
-        }
-
-        /*.axis line,*/
-        /*.axis path {*/
-        /*fill: none;*/
-        /*stroke: #000;*/
-        /*shape-rendering: crispEdges;*/
-        /*}*/
-        .axis text {
-            text-shadow: 0 2px 0 #fff, 2px 0 0 #fff, 0 -2px 0 #fff, -2px 0 0 #fff;
-        }
-        path.data {
-            fill: none;
-        }
-
-        .axis,
-        .frame {
-            shape-rendering: crispEdges;
-        }
-        .form-control, label {
-            text-align: center;
-            display: inline-grid;
-            font-size: 13px;
-        }
-
-        .window-content{
-            max-width:200px;
-            max-height: 150px;
-        }
-
-        span.icon-trash:hover{
-            color: mediumvioletred;
-        }
-    </style>
     <script>
       const { exec } = require('child_process');
       const fs = require('fs');
@@ -83,10 +46,11 @@
         "#4DB3FF","#1AB399","#E666B3","#33991A",
         "#CC9999","#B3B31A","#00E680","#4D8066",
         "#809980","#E6FF80","#1AFF33","#999933"];
-
       let addVis
         = (visName, parentElement) => {
         let pc = new vis[visName](parentElement);
+
+        let div = d3.select(parentElement).append("div").attr("class","tooltip")
         pc
           .on("highlightstart",function(d,i){
             $(".partition-content").each(function(){
@@ -103,10 +67,10 @@
             });
           })
           .on("datamouseover",function(d,i){
-            pc.highlight(d,i);
-          })
-          .on("datamouseout",function(d,i){
-            pc.removeHighlight(d,i);
+            pc.detail(d,i);
+
+
+
           })
           .on("dataclick",function(d,i){
             $(".partition-content").each(function(){
@@ -115,9 +79,50 @@
                 let elem = this.__vis__.getHighlightElement(i);
                 // d3.select(elem).selectAll(".lineHighlight").style("stroke", "limegreen");
                 this.__vis__.annotate(elem);
+                let x = event.clientX;
+                let y = event.clientY;
+
+
+                div.transition()
+                  .duration(200)
+                  .style("opacity", .9);
+                div
+                  .text("teste ------")
+                  .style("left", x + "px")
+                  .style("top", y - 28 + "px")
+                  .append("textarea");
               }
             });
           });
+
+        //zoom ainda não funcionando
+        // $(".partition-content").each(function(){
+        //   if(this.__vis__){
+        //     let elem = this.__vis__;
+        //     console.log("element",elem);
+        //
+        //     let g = d3.selectAll("svg")
+        //     d3.selectAll("svg").call(d3.zoom()
+        //       .scaleExtent([1, 5])
+        //       .on("zoom", zoomed))
+        //       .attr("transform", (d)=>{return "translate("+0+","+0+")";});;
+        //
+        //     function zoomed() {
+        //         g.attr("transform", d3.event.transform)
+        //         g.scale(d3.event.transform.k, d3.event.transform.k);
+        //
+        //         // g.save();
+        //         // g.clearRect(0, 0, width, height);
+        //         // g.translate(d3.event.transform.x, d3.event.transform.y);
+        //         // drawPoints();
+        //         // g.restore();
+        //
+        //     }
+        //
+        //
+        //   }
+        // });
+
         // let color = d3.scale.category10();
         // pc.settings.color = (d) =>{ return color(d["bar_size"])};
       };
@@ -309,6 +314,7 @@
       });
 
     </script>
+
 
 
 </head>

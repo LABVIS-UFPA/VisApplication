@@ -308,6 +308,37 @@ function updateInteface () {
               ));
 
   }
+    $("#demmandOnDetails").click(function () {
+      detailsOnDemand();
+
+    });
+
+  function detailsOnDemand() {
+    $("#details").remove();
+
+    $(".menu-interaction").append($("<div/>").attr("id","details")
+      .css({
+        "position": "absolute",
+        "margin-top":"80px",
+        "width": "100%",
+        "background-color": "#ccc"}));
+
+    for (let i = 0; i < dimension.length; i++) {
+      $("#details")
+        .append($("<input/>")
+          .attr("type","checkbox")
+          .attr("value",dimension[i]))
+        .append($("<label/>")
+          .css({
+            "text-align": "center",
+            "display": "initial",
+            "font-size": "13px"})
+          .text(dimension[i]).append($("<br/>")));
+
+    }
+  };
+
+
 
 }
 //menu principal
@@ -321,11 +352,13 @@ function clean_menus(){
   $(".menuHie").remove();
   $(".menuFilter").remove();
   $(".menuDefault").remove();
+  $(".menu-interaction").remove();
 
   addMenu("",parent);
   updateInteface();
 }
 
+//list item menu
 let addMenu = (name, parentElement) => {
   $(parentElement).css("backgroundColor","#f1f1f1");
   $(parentElement)
@@ -347,6 +380,10 @@ let addMenu = (name, parentElement) => {
         .text("Hierarchy"))
       .append($("<div/>")
         .addClass("tab-item")
+        .attr("id","Interaction")
+        .text("Interaction"))
+      .append($("<div/>")
+        .addClass("tab-item")
         .attr("id","menuSelection")
         .text("Selection"))
       .append($("<div/>")
@@ -365,6 +402,8 @@ let addMenu = (name, parentElement) => {
       .addClass('colorSelector')
       .attr('id', id + '-colorSelector'))
   );
+
+
 //menu hieraquies
   $(parentElement).append($('<div/>')
     .addClass('menuHie')
@@ -421,29 +460,74 @@ $(".menuHie").append($('<div/>')
             .attr('value', '#FF1122'))))
   );
 
+  //interaction menus
+  $(parentElement).append($('<div/>')
+    .addClass('menu-interaction')
+      .append("<div/>")
+      .append("<ul/>")
+      .css("display", "inline-flex")
+      .css("list-style-type","none")
+      .append("<li/>")
+      .append($('<img/>')
+        .attr("class","icons")
+        .attr("src","./css/icons/baseline-flip_to_back-24px.svg")
+        .attr("title","selection"))
+
+      .append("<div/>")
+      .append("<li/>")
+      .append($('<img/>')
+        .attr("class","icons")
+        .attr("src","./css/icons/baseline-zoom_in-24px.svg")
+        .attr("title","zoom"))
+
+      .append("<div/>")
+      .append("<li/>")
+      .append($('<img/>')
+        .attr("class","icons")
+        .attr("src","./css/icons/Notification.svg")
+        .attr("title","annotation"))
+
+
+      .append("<div/>")
+      .append("<li/>")
+      .append($('<img/>')
+        .attr("class","icons")
+        .attr("id","demmandOnDetails")
+        .attr("src","./css/icons/document_comment_above.png")
+        .attr("title","details on demand"))
+
+  );
+
+
+
   //hiden and show menus
   // $(".menuColor").hide();
   $(".menuHie").hide();
   $('.menuFilter').hide();
   $('.menuDefault').hide();
+  $(".menu-interaction").hide()
 
   $("#menuColor").click(function () {
     $(".menuColor").show();
     $(".menuHie").hide();
     $(".menuFilter").hide();
     $(".menuDefault").hide();
+    $(".menu-interaction").hide()
   });
   $("#menuHie").click(function () {
     $(".menuHie").show();
     $(".menuColor").hide();
     $(".menuFilter").hide();
     $(".menuDefault").hide();
+    $(".menu-interaction").hide()
   });
   $("#menuSelection").click(function () {
     $(".menuFilter").show();
     $(".menuHie").hide();
     $(".menuColor").hide();
     $(".menuDefault").hide();
+    $(".menu-interaction").hide()
+
   });
 
   $("#menuDefault").click(function () {
@@ -451,6 +535,18 @@ $(".menuHie").append($('<div/>')
     $(".menuHie").hide();
     $(".menuColor").hide();
     $(".menuFilter").hide();
-  })
+    $(".menu-interaction").hide()
+  });
+
+  $("#Interaction").click(function () {
+    $(".menuDefault").hide();
+    $(".menuHie").hide();
+    $(".menuColor").hide();
+    $(".menuFilter").hide();
+    $(".menu-interaction").show();
+  });
+
+
+
 
 };

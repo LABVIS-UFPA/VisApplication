@@ -1,0 +1,64 @@
+svg, text {
+    font: 12px MONOSPACE;
+    fill: black;
+}
+
+/*.axis line,*/
+/*.axis path {*/
+/*fill: none;*/
+/*stroke: #000;*/
+/*shape-rendering: crispEdges;*/
+/*}*/
+.axis text {
+    text-shadow: 0 2px 0 #fff, 2px 0 0 #fff, 0 -2px 0 #fff, -2px 0 0 #fff;
+}
+path.data {
+    fill: none;
+}
+
+.axis,
+.frame {
+    shape-rendering: crispEdges;
+}
+.form-control, label {
+    text-align: center;
+    display: inline-grid;
+    font-size: 13px;
+}
+
+.window-content{
+    max-width:200px;
+    max-height: 150px;
+}
+
+/*icon delete over*/
+span.icon-trash:hover{
+    color: mediumvioletred;
+}
+
+/*icons menu interactions*/
+.icons{
+    margin: 12px;
+    width: 30px;
+    height: 30px;
+}
+
+.icons:hover{
+    background-color: #cdcdcd;
+    margin: 12px;
+    width: 32px;
+    height: 32px;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 60px;
+    height: 28px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
