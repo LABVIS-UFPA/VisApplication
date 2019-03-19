@@ -67,7 +67,9 @@
             });
           })
           .on("datamouseover",function(d,i){
-            pc.detail(d,i);
+            // pc.detail(d,i);
+            pc.highlight(d,i);
+            // pc.setLabel((d)=>{ return d.name; });
 
 
 
@@ -79,23 +81,12 @@
                 let elem = this.__vis__.getHighlightElement(i);
                 // d3.select(elem).selectAll(".lineHighlight").style("stroke", "limegreen");
                 this.__vis__.annotate(elem);
-                let x = event.clientX;
-                let y = event.clientY;
 
-
-                div.transition()
-                  .duration(200)
-                  .style("opacity", .9);
-                div
-                  .text("teste ------")
-                  .style("left", x + "px")
-                  .style("top", y - 28 + "px")
-                  .append("textarea");
               }
             });
           });
 
-        //zoom ainda não funcionando
+
         // $(".partition-content").each(function(){
         //   if(this.__vis__){
         //     let elem = this.__vis__;
@@ -107,22 +98,21 @@
         //       .on("zoom", zoomed))
         //       .attr("transform", (d)=>{return "translate("+0+","+0+")";});;
         //
-        //     function zoomed() {
-        //         g.attr("transform", d3.event.transform)
-        //         g.scale(d3.event.transform.k, d3.event.transform.k);
-        //
-        //         // g.save();
-        //         // g.clearRect(0, 0, width, height);
-        //         // g.translate(d3.event.transform.x, d3.event.transform.y);
-        //         // drawPoints();
-        //         // g.restore();
-        //
-        //     }
+        //     // function zoomed() {
+        //     //     g.attr("transform", d3.event.transform)
+        //     //     g.scale(d3.event.transform.k, d3.event.transform.k);
+        //     //
+        //     //     // g.save();
+        //     //     // g.clearRect(0, 0, width, height);
+        //     //     // g.translate(d3.event.transform.x, d3.event.transform.y);
+        //     //     // drawPoints();
+        //     //     // g.restore();
+        //     //
+        //     // }
         //
         //
         //   }
         // });
-
         // let color = d3.scale.category10();
         // pc.settings.color = (d) =>{ return color(d["bar_size"])};
       };

@@ -308,10 +308,24 @@ function updateInteface () {
               ));
 
   }
+    detailsOnDemand();
+    $("#details").hide();
     $("#demmandOnDetails").click(function () {
-      detailsOnDemand();
+      $("#details").toggle()
 
     });
+
+    let check_details = [];
+    $(".myCheckbox").change(function () {
+      $(".myCheckbox").each(function(i,item){
+        if($(item).get(0).checked == true){
+          console.log($(item).val());
+          check_details.append($(item).val());
+        };
+      });
+    });
+
+
 
   function detailsOnDemand() {
     $("#details").remove();
@@ -326,6 +340,7 @@ function updateInteface () {
     for (let i = 0; i < dimension.length; i++) {
       $("#details")
         .append($("<input/>")
+          .attr("class","myCheckbox")
           .attr("type","checkbox")
           .attr("value",dimension[i]))
         .append($("<label/>")
@@ -337,8 +352,6 @@ function updateInteface () {
 
     }
   };
-
-
 
 }
 //menu principal
