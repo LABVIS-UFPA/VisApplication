@@ -23,8 +23,8 @@
     <script src="../lib/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="../lib/jquery-ui.css">
     <script src="../lib/layout/partition_layout.js"></script>
-    <script src="js/visUpdate.js"></script>
     <script src="js/uiLogic.js"></script>
+    <script src="js/visUpdate.js"></script>
     <link rel="stylesheet" href="css/main.css">
 
     <script>
@@ -67,12 +67,12 @@
             });
           })
           .on("datamouseover",function(d,i){
-            // pc.detail(d,i);
             pc.highlight(d,i);
-            // pc.setLabel((d)=>{ return d.name; });
+            detail_on(pc);
 
-
-
+          })
+          .on("datamouseout",function(d,i){
+            pc.removeHighlight(d,i);
           })
           .on("dataclick",function(d,i){
             $(".partition-content").each(function(){

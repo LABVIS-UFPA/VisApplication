@@ -310,28 +310,19 @@ function updateInteface () {
   }
     detailsOnDemand();
     $("#details").hide();
+
     $("#demmandOnDetails").click(function () {
       $("#details").toggle()
-
-    });
-
-    let check_details = [];
-    $(".myCheckbox").change(function () {
-      $(".myCheckbox").each(function(i,item){
-        if($(item).get(0).checked == true){
-          console.log($(item).val());
-          check_details.append($(item).val());
-        };
-      });
     });
 
 
-
+//interface detalhes sobre demanda
   function detailsOnDemand() {
     $("#details").remove();
-
     $(".menu-interaction").append($("<div/>").attr("id","details")
       .css({
+        "height": "400px",
+        "overflow-y": "scroll",
         "position": "absolute",
         "margin-top":"80px",
         "width": "100%",
@@ -349,7 +340,6 @@ function updateInteface () {
             "display": "initial",
             "font-size": "13px"})
           .text(dimension[i]).append($("<br/>")));
-
     }
   };
 

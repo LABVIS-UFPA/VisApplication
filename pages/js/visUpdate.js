@@ -175,3 +175,42 @@ function filterColorContinues(item,min,max,min_select,max_select){
     });
 
 }
+
+//detalhes sobre demanda setar os itens
+function details_on_demand(element,items) {
+    $(".partition-content").each(function (i, index) {
+        if ($(index).children("svg").length) {
+            this.__vis__.on("datamouseover",function(d,i){
+                element.detail(d,i,items);
+            });
+        }
+    });
+}
+
+function get_values_details(){
+    let check_details = [];
+    $(".myCheckbox").each(function(i,item){
+        if($(item).get(0).checked == true) {
+            check_details.push($(item).val());
+        }
+    });
+    return check_details;
+}
+//ativar detalhes sob demanda
+function detail_on(element){
+    //verifica os checkbox
+    $(".myCheckbox").each(function(i,item){
+        if($(item).get(0).checked == true) {
+            let items = get_values_details();
+            return details_on_demand(element,items);
+        }
+    });
+    $("#details").change(function () {
+    let items = get_values_details();
+        return details_on_demand(element,items);
+    });
+}
+
+
+
+
