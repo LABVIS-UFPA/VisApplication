@@ -44,10 +44,10 @@ span.icon-trash:hover{
 }
 
 .icons:hover{
-    background-color: #cdcdcd;
+    background-color: #999999;
     margin: 12px;
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
 }
 
 div.tooltip {
@@ -62,3 +62,38 @@ div.tooltip {
     border-radius: 8px;
     pointer-events: none;
 }
+
+div.menuColor{
+    background-color:#ccc;
+    padding-top: 15px;
+    padding-bottom: 10px;
+}
+
+div.menuHie{
+    background-color: #ccc;
+    padding-top: 15px;
+    padding-bottom: 10px;
+}
+
+
+div.menuFilter{
+    background-color:#ccc;
+    padding-top: 15px;
+    padding-bottom: 10px;
+}
+
+div.menuDefault{
+    background-color:#ccc;
+    padding-top: 15px;
+    padding-bottom: 10px;
+}
+
+div#details{
+    background-color:#ccc;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+}
+
+
+
