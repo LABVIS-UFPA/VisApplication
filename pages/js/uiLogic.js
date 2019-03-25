@@ -314,10 +314,6 @@ function updateInteface () {
   function detailsOnDemand() {
     $("#details").remove();
     $(".menuDetails")
-      .append($("<div/>")
-        .css({"backgroundColor":"#ccc",
-              "margin-top":'10px'
-        })
       .append($("<button/>").text("Details on demand")
         .addClass("btn btn-primary")
         .css({
@@ -331,8 +327,19 @@ function updateInteface () {
           "font-size": "15px",
           "transition": "0.4s"
         })
+        .append($("<span/>")
+          .addClass("icon icon-minus")
+          .attr("id","plus-minus")
+          .css("float","right"))
         .click(function () {
-          $("#details").toggle();
+          $(".menuDetails").children("button").children("#plus-minus").remove();
+          if($("#details").is(':visible')){
+            $(".menuDetails").children("button").append($("<span/>").addClass("icon icon-plus").attr("id","plus-minus").css("float","right"))
+            $("#details").hide();
+          }else{
+            $(".menuDetails").children("button").append($("<span/>").addClass("icon icon-minus").attr("id","plus-minus").css("float","right"))
+            $("#details").show();
+          }
         })
       )
       .append($("<div/>")
@@ -343,7 +350,7 @@ function updateInteface () {
         "position": "absolute",
         "width": "100%",
         "background-color": "#ccc"})
-      ));
+      );
 
     for (let i = 0; i < dimension.length; i++) {
       $("#details")
@@ -366,13 +373,6 @@ function updateInteface () {
 function clean_menus(){
   let parent = $("#menu_settings").parent();
   $("#menu_settings").remove();
-  // $(".tab-group").remove();
-  // $(".menuColor").remove();
-  // $(".menuHie").remove();
-  // $(".menuFilter").remove();
-  // $(".menuDefault").remove();
-  // $(".menuDetails").remove()
-  // $(".main-menu").remove();
 
   parent.empty();
   addMenu("",parent);
@@ -400,7 +400,6 @@ let addMenu = (name, parentElement) => {
       .append("<div/>")
       .css("width","100%")
       .css("backgroundColor","#ccc")
-
       .css("list-style-type","none")
 
     .append($('<img/>')
@@ -478,9 +477,20 @@ let addMenu = (name, parentElement) => {
         "margin-top":"10px",
         "font-size": "15px",
         "transition": "0.4s"
-      }))
+      })
+        .append($("<span/>")
+          .addClass("icon icon-minus")
+          .attr("id","plus-minus")
+          .css("float","right")))
     .click(function () {
-      $(".menuColor").toggle();
+      $(".color-header").children("button").children("#plus-minus").remove();
+      if($(".menuColor").is(':visible')){
+        $(".menuColor").hide();
+        $(".color-header").children("button").append($("<span/>").addClass("icon icon-plus").attr("id","plus-minus").css("float","right"))
+      }else{
+        $(".color-header").children("button").append($("<span/>").addClass("icon icon-minus").attr("id","plus-minus").css("float","right"))
+        $(".menuColor").show();
+      }
     }))
 
   $(parentElement).append($('<div/>')
@@ -507,12 +517,23 @@ let addMenu = (name, parentElement) => {
           "border": "none",
           "text-align": 'center',
           "outline": "none",
-          "margin-top":"10px",
           "font-size": "15px",
           "transition": "0.4s"
-        }))
-      .click(function () {
-        $(".menuHie").toggle();
+        })
+        .append($("<span/>")
+          .addClass("icon icon-minus")
+          .attr("id","plus-minus")
+          .css("float","right")))
+    .click(function () {
+        $(".hierarchy-header").children("button").children("#plus-minus").remove();
+        if($(".menuHie").is(':visible')){
+          $(".hierarchy-header").children("button").append($("<span/>").addClass("icon icon-plus").attr("id","plus-minus").css("float","right"))
+          $(".menuHie").hide();
+        }else {
+          $(".hierarchy-header").children("button").append($("<span/>").addClass("icon icon-minus").attr("id", "plus-minus").css("float", "right"))
+          $(".menuHie").show();
+        }
+
       }))
 //sunmenu hieraquies
   $(parentElement).append($('<div/>')
@@ -551,12 +572,22 @@ $(".menuHie").append($('<div/>')
           "border": "none",
           "text-align": 'center',
           "outline": "none",
-          "margin-top":"10px",
           "font-size": "15px",
           "transition": "0.4s"
-        }))
+        })
+        .append($("<span/>")
+          .addClass("icon icon-minus")
+          .attr("id","plus-minus")
+          .css("float","right")))
       .click(function () {
-        $(".menuFilter").toggle();
+        $(".filter-header").children("button").children("#plus-minus").remove();
+        if($(".menuFilter").is(':visible')){
+          $(".filter-header").children("button").append($("<span/>").addClass("icon icon-plus").attr("id","plus-minus").css("float","right"))
+          $(".menuFilter").hide();
+        }else{
+          $(".filter-header").children("button").append($("<span/>").addClass("icon icon-minus").attr("id","plus-minus").css("float","right"))
+          $(".menuFilter").show();
+        }
       }))
   //sub menu filtro
   $(parentElement).append($('<div/>')
@@ -581,12 +612,22 @@ $(".menuHie").append($('<div/>')
           "border": "none",
           "text-align": 'center',
           "outline": "none",
-          "margin-top":"10px",
           "font-size": "15px",
           "transition": "0.4s"
-        }))
+        })
+        .append($("<span/>")
+          .addClass("icon icon-minus")
+          .attr("id","plus-minus")
+          .css("float","right")))
       .click(function () {
-        $(".menuDefault").toggle();
+        $(".default-header").children("button").children("#plus-minus").remove();
+        if($(".menuDefault").is(':visible')){
+          $(".default-header").children("button").append($("<span/>").addClass("icon icon-plus").attr("id","plus-minus").css("float","right"))
+          $(".menuDefault").hide();
+        }else {
+          $(".default-header").children("button").append($("<span/>").addClass("icon icon-minus").attr("id", "plus-minus").css("float", "right"))
+          $(".menuDefault").show();
+        }
       }))
   //sub menu defaul
   $(parentElement).append($('<div/>')
