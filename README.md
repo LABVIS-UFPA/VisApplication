@@ -1,2 +1,2 @@
-# VisAplication
+# VisApplication
 
