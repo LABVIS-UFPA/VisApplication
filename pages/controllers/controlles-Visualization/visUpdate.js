@@ -211,6 +211,28 @@ function detail_on(element){
     });
 }
 
+function updateFilter_by_dimension(){
+    const dimension_select = get_values_Filter_by_dimension();
+        $(".partition-content").each(function () {
+            if (this.__vis__) {
+                this.__vis__.filterByDimension(dimension_select)
+                this.__vis__.data(_data_);
+                this.__vis__.redraw();
+            }});
+
+
+}
+
+function get_values_Filter_by_dimension(){
+    let check_details = [];
+    $(".myCheckboxDimension").each(function(i,item){
+        if($(item).get(0).checked == true) {
+            check_details.push($(item).val());
+        }
+    });
+    return check_details;
+}
+
 
 
 
