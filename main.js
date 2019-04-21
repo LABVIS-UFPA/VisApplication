@@ -1,21 +1,21 @@
 const electron = require('electron');
 const dialog = electron.dialog;
 
-const path = require('path')
-const glob = require('glob')
+const path = require('path');
+const glob = require('glob');
 
-const {app, BrowserWindow} = require('electron')
-const debug = /--debug/.test(process.argv[2])
+const {app, BrowserWindow} = require('electron');
+const debug = /--debug/.test(process.argv[2]);
 let websocketmode = false;
 let websocketport = 0;
-if (process.mas) app.setName('Electron APIs')
-const ipcMain = require('electron').ipcMain
-let mainWindow = null
+if (process.mas) app.setName('Electron APIs');
+const ipcMain = require('electron').ipcMain;
+let mainWindow = null;
 
 const Menu = electron.Menu;
 const MenuItem = electron.MenuItem;
-const fs = require('fs')
-const csv = require('csvtojson')
+const fs = require('fs');
+const csv = require('csvtojson');
 
 // only add update server if it's not being run from cli
 if (require.main !== module) {
@@ -25,7 +25,7 @@ if (require.main !== module) {
 }
 
 function initialize () {
-    makeSingleInstance()
+    makeSingleInstance();
 
     function createWindow () {
         const windowOptions = {
@@ -33,7 +33,7 @@ function initialize () {
             minWidth: 680,
             height: 840,
             title: app.getName()
-        }
+        };
         // if (process.platform === 'linux') {
         //   windowOptions.icon = path.join(__dirname, '/assets/app-icon/png/512.png')
         // }
@@ -46,12 +46,12 @@ function initialize () {
             }
         });
 
-        mainWindow = new BrowserWindow(windowOptions)
-        mainWindow.loadURL(path.join('file://', __dirname, '/pages/mainWindow.html'))
+        mainWindow = new BrowserWindow(windowOptions);
+        mainWindow.loadURL(path.join('file://', __dirname, '/pages/mainWindow.html'));
 
         mainWindow.on('closed', () => {
             mainWindow = null
-        })
+        });
 
         const menu = new Menu();
 
@@ -146,9 +146,9 @@ function initialize () {
 // Returns true if the current version of the app should quit instead of
 // launching.
 function makeSingleInstance () {
-    if (process.mas) return
+    if (process.mas) return;
 
-    app.requestSingleInstanceLock()
+    app.requestSingleInstanceLock();
 
     app.on('second-instance', () => {
         if (mainWindow) {
@@ -185,7 +185,7 @@ function loadDemos () {
     files.forEach((file) => { require(file) })
 }
 
-initialize()
+initialize();
 
 ipcMain.on('document-ready', function (evt, msg) {
     mainWindow.webContents.send('cl', 'APP is ready')
@@ -227,7 +227,7 @@ ipcMain.on('document-ready', function (evt, msg) {
             console.log(err);
         });
     }
-})
+});
 
 process.on('message', (message) => {
     mainWindow.webContents.send('cl', 'foi de uma vcez')
@@ -236,5 +236,5 @@ process.on('message', (message) => {
     // process.send("message in: " + message);
     // if(mainWindow)
     //     mainWindow.webContents.send('add-vis', message);
-})
+});
 

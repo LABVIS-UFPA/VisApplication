@@ -1,11 +1,10 @@
 const { exec } = require('child_process');
 const fs = require('fs');
-let ipc = require('electron').ipcRenderer;
+//let ipc = require('electron').ipcRenderer;
 let vis = require("@labvis-ufpa/vistechlib");
 let d3 = require('d3');
 let DataPreparation = require("./models/DataPreparation.js");
-console.log(vis);
-console.log(ipc);
+
 
 let _data_;
 let data_prep;
@@ -21,6 +20,17 @@ let addVis
   let pc = new vis[visName](parentElement);
 
   pc
+      .on("datacanvasmousedown",function(d){
+          console.log(d,this);
+          pc.removeSelect();
+          let s = new vis.selection.LineSelection(0,0,d.innerX,d.innerY);
+          pc.overlay.selectAll("line").remove();
+          let selSVGElem = s.getSVGElement();
+          selSVGElem.classList.add("svgSelectionElement");
+          pc.overlay.node().appendChild(s.getSVGElement());
+          let selected = pc.select(s);
+          console.log(selected);
+      })
     .on("highlightstart",function(d,i){
       $(".partition-content").each(function(){
         if(this.__vis__ && this.__vis__ !== pc){

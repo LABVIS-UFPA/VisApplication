@@ -3,3 +3,4 @@ out
 npm-debug.log
 .idea/*
 lib/.idea/encodings.xml
+svgExported/*

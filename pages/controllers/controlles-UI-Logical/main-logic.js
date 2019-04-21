@@ -1,3 +1,6 @@
+
+let ipc = require('electron').ipcRenderer;
+
 $(document).ready(function() {
 
   ipc.send("document-ready");
