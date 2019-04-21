@@ -83,6 +83,14 @@ div.menuDefault{
     padding-bottom: 10px;
 }
 
+
+div.menu-filter_dimension{
+    background-color:#ccc;
+    padding-top: 15px;
+    padding-bottom: 10px;
+}
+
+
 div#details{
     background-color:#ccc;
     padding-top: 15px;

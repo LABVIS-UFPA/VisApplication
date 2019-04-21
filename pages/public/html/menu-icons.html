@@ -20,7 +20,7 @@
 
             <img class='icons Default' src='./public/css/icons/color_picker_default.png' title='Default color'>
 
-            <!--<img class='icons Selection' src='./public/css/icons/select_by_adding_to_selection.png' title='Selection'>-->
+            <img class='icons Filter_Dimension' src='./public/css/icons/select_by_adding_to_selection.png' title='Filter_Dimension'>
 
             <!--<img class='icons Zoom' src='./public/css/icons/zoom_selection.png' title='Zoom'>-->
 
@@ -107,6 +107,16 @@
         </div>
     </div>
 </div>
+    <div class="filter_dimension-header" style="display:none;">
+        <button class="filter_dimension-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+            filter by dimension
+            <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
+        </button>
+
+        <div class="menu-filter_dimension menu-acordion"  style="height: 400px; overflow-y: scroll; position: absolute; width: 100%; background-color: rgb(204, 204, 204);">
+        </div>
+    </div>
+
     <div class="Details-header" style="display:none;">
         <button class="Details-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
             Details on demand
@@ -116,5 +126,7 @@
         <div class="menu-details menu-acordion"  style="height: 400px; overflow-y: scroll; position: absolute; width: 100%; background-color: rgb(204, 204, 204);">
         </div>
     </div>
+
+
 
 </div>
