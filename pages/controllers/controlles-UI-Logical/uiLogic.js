@@ -120,6 +120,7 @@ $(document).ready(function() {
     });
   });
 
+  //resize menus ------------------------------------------
   $body.on("layout:resize", ".partition-node", function(e){
     let content = $(this).children(".partition-content").get(0);
 
@@ -127,26 +128,33 @@ $(document).ready(function() {
       content.__vis__.resize();
     }
   });
+
   $body.on("layout:created", ".partition-node", function(e){
 
     console.log("layout:created", this);
     if(this !== e.target)
       return;
-
+    //verificação para criação dos butões
     if($(this).children(".partition-content").children().is("button.btn.btn-large.btn-positive")) {
       $(this).children(".partition-content").children().attr("data-nodeid", $(this).attr("id"));
       return;
-    }else
-    if($(this).children(".partition-content").children().is("#menu_settings")){
+    }
+    else
+    //não fazer nada caso existam menus
+    if($(this).children(".partition-content").children(".partition-content").children().is("#menu_settings")
+      || $(this).children(".partition-content").children(".partition-content").children().is("#menu_tools") ){
 
       return
     }
     //verificar para abrir apenas um menu de settings
     $(".partition-content").each(function(i,item){
-      $(item).children(".AddSettings").remove();
+        $(item).children(".AddSettings").remove();
+        $(item).children(".tools").remove();
+
     });
 
     if(!$("#menu_settings").length) {
+
       $(this).children(".partition-content").append($("<button/>")
         .text(" view settings ")
         .addClass("AddSettings")
@@ -179,10 +187,61 @@ $(document).ready(function() {
       });
 
     }
+
+    //tools button
+    if(!$("#menu_tools").length) {
+      $(this).children(".partition-content").append($("<button/>")
+        .text("tools interaction")
+        .addClass("btn btn-large btn-primary")
+        .addClass("tools")
+        .attr("data-node", $(this).attr("id"))
+        .css({ "float": "right" })
+        .click(function () {
+          if (_data_) {
+            let content = $("#" + $(this).attr("data-node")).children(".partition-content");
+            menu_tools(content);
+            ipc.send('update-sampledata', {});
+          } else {
+            alert("You have to link data first");
+            ipc.send('not-data');
+          }
+
+        }));
+
+    //   $.contextMenu({
+    //     selector: '.tools',
+    //     trigger: 'left',
+    //     callback: function (key) {
+    //       if (_data_) {
+    //         let content = $("#" + $(this).attr("data-nodeid")).children(".partition-content");
+    //         // let content = $("#"+$(this).attr("data-nodeVis")).children(".partition-content");
+    //         let partition = $(this).parents('.partition-node').attr('id');
+    //         content.empty();
+    //         // addMenu(content);
+    //         // updateInteface();
+    //         ipc.send('update-sampledata', {});
+    //       } else {
+    //         alert("You have to link data first");
+    //         ipc.send('not-data');
+    //       }
+    //     },
+    //     items: {
+    //       "menu settings visualization": {  }
+    //     }
+    //
+    //   });
+    }
+
     $(this).children(".partition-content").append($("<button/>")
       .text("Add Visualization")
       .addClass("btn btn-large btn-positive")
       .attr("data-nodeid", $(this).attr("id"))
+      .css({"float": "right"}));
+
+    $(this).children(".partition-content").append($("<button/>")
+      .text("Maps")
+      .addClass("btn btn-large btn-default")
+      // .attr("data-nodeid", $(this).attr("id"))
       .css({"float": "right"}));
 
     $.contextMenu({
@@ -212,6 +271,7 @@ $(document).ready(function() {
       }
     });
 
+    //Download Visualizations ------------------------------------------------------
     $(this).children(".partition-content").append($("<button/>")
       .text("Download Visualizations")
       .addClass("btn btn-large btn-default")
@@ -274,6 +334,28 @@ $(document).ready(function() {
 
 
 //-------------------------atualizar interface -------------------------------------------------------------------------------------------
+let menu_tools = (parentElement)=> {
+  $(parentElement).load("public/html/menu-tools.html")
+
+  $(document).ready(function() {
+
+  $(".demmandDetails").click(function () {
+    $(".Details-header").children("button").children("#plus-minus").remove();
+    if ($(".Details-header").is(':visible')) {
+      $(".Details-header").hide();
+    } else {
+      $("button.Details-header").append($("<span/>").addClass("icon icon-minus").attr("id", "plus-minus").css("float", "right"))
+      $(".Details-header").show();
+      $(".menu-details").show();
+    }
+
+  });
+
+    updateInteface();
+  });
+
+
+}
 
 function updateInteface () {
   data_prep = new DataPreparation(_data_);
@@ -730,18 +812,6 @@ let addMenu = (parentElement) => {
         $(".menuDefault").show();
       }
     })
-
-    $(".demmandDetails").click(function () {
-      $(".Details-header").children("button").children("#plus-minus").remove();
-      if ($(".Details-header").is(':visible')) {
-        $(".Details-header").hide();
-      } else {
-        $("button.Details-header").append($("<span/>").addClass("icon icon-minus").attr("id", "plus-minus").css("float", "right"))
-        $(".Details-header").show();
-        $(".menu-details").show();
-      }
-
-    });
 
     $(".Filter_Dimension").click(function () {
       $(".filter_dimension-header").children("button").children("#plus-minus").remove();

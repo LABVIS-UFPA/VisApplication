@@ -205,7 +205,7 @@ function detail_on(element){
             return details_on_demand(element,items);
         }
     });
-    $("#details").change(function () {
+    $(".myCheckbox").change(function () {
     let items = get_values_details();
         return details_on_demand(element,items);
     });
@@ -219,8 +219,6 @@ function updateFilter_by_dimension(){
                 this.__vis__.data(_data_);
                 this.__vis__.redraw();
             }});
-
-
 }
 
 function get_values_Filter_by_dimension(){
