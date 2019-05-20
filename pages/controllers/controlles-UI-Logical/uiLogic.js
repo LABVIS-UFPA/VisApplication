@@ -55,7 +55,6 @@ let addVis
       });
     });
 
-
   // $(".partition-content").each(function(){
   //   if(this.__vis__){
   //     let elem = this.__vis__;
@@ -189,7 +188,7 @@ $(document).ready(function() {
     }
 
     //tools button
-    if(!$("#menu_tools").length) {
+    if(!$("#menu_tools").length) {' '
       $(this).children(".partition-content").append($("<button/>")
         .text("tools interaction")
         .addClass("btn btn-large btn-primary")
@@ -238,11 +237,11 @@ $(document).ready(function() {
       .attr("data-nodeid", $(this).attr("id"))
       .css({"float": "right"}));
 
-    $(this).children(".partition-content").append($("<button/>")
-      .text("Maps")
-      .addClass("btn btn-large btn-default")
-      // .attr("data-nodeid", $(this).attr("id"))
-      .css({"float": "right"}));
+    // $(this).children(".partition-content").append($("<button/>")
+    //   .text("Maps")
+    //   .addClass("btn btn-large btn-default")
+    //   // .attr("data-nodeid", $(this).attr("id"))
+    //   .css({"float": "right"}));
 
     $.contextMenu({
       selector: '.btn.btn-large.btn-positive',
@@ -332,15 +331,54 @@ $(document).ready(function() {
   });
 });
 
-
 //-------------------------atualizar interface -------------------------------------------------------------------------------------------
 let menu_tools = (parentElement)=> {
   $(parentElement).load("public/html/menu-tools.html")
 
   $(document).ready(function() {
 
-  $(".demmandDetails").click(function () {
-    $(".Details-header").children("button").children("#plus-minus").remove();
+    $(".Anottation").click(function () {
+
+    });
+
+    $(".selection").click(function () {
+
+    });
+
+    $(".zoom").click(function () {
+
+    });
+
+    $(".highlight_off").click(function () {''
+      $(".partition-content").each(function () {
+        if (this.__vis__) {
+          this.__vis__.setInteractionMode(true);
+          $(".highlight_on").show();
+          $(".highlight_off").hide();
+
+        }
+      });
+    });
+
+    $(".highlight_on").click(function () {
+      $(".partition-content").each(function () {
+        if (this.__vis__) {
+          this.__vis__.setInteractionMode(false);
+          $(".highlight_on").hide();
+          $(".highlight_off").show();
+        }
+      });
+    });
+
+    $(".highlighted").click(function () {
+      $(".high-header").show();
+      $(".highlight_on").show();
+      $(".highlight_off").hide();
+
+    });
+
+    $(".demmandDetails").click(function () {
+      $(".Details-header").children("button").children("#plus-minus").remove();
     if ($(".Details-header").is(':visible')) {
       $(".Details-header").hide();
     } else {
@@ -353,7 +391,6 @@ let menu_tools = (parentElement)=> {
 
     updateInteface();
   });
-
 
 }
 
@@ -762,7 +799,7 @@ function clean_menus(){
 
 //----------------list item menu----------------------------------------------------------------------------------
 let addMenu = (parentElement) => {
-  $(parentElement).load("public/html/menu-icons.html")
+  $(parentElement).load("public/html/menu-settings-vis.html")
 
   $(document).ready(function() {
 
