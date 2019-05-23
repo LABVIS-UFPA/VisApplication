@@ -21,6 +21,7 @@ let addVis
   = (visName, parentElement) => {
   let pc = new vis[visName](parentElement);
 
+  layer(false);
   pc
     .on("highlightstart",function(d,i){
       $(".partition-content").each(function(){
@@ -104,6 +105,14 @@ ipc.on('change-datasample', function(event, data){
 ipc.on('cl', function(event, arg){
   console.log("from_main: ", arg);
 });
+
+const layer = (boolean) => {
+  $(".partition-content").each(function () {
+    if (this.__vis__) {
+      this.__vis__.setInteractionMode(boolean);
+    }
+  });
+}
 
 //--------------------------interface tela inicial---------------------------------------------------------------------------------------
 $(document).ready(function() {
@@ -331,7 +340,7 @@ $(document).ready(function() {
   });
 });
 
-//-------------------------atualizar interface -------------------------------------------------------------------------------------------
+//--atualizar interface tools ferramentas de interação -------------------------------------------------------------------------------------------
 let menu_tools = (parentElement)=> {
   $(parentElement).load("public/html/menu-tools.html")
 
@@ -349,36 +358,8 @@ let menu_tools = (parentElement)=> {
 
     });
 
-    $(".highlight_off").click(function () {''
-      $(".partition-content").each(function () {
-        if (this.__vis__) {
-          this.__vis__.setInteractionMode(true);
-          $(".highlight_on").show();
-          $(".highlight_off").hide();
-
-        }
-      });
-    });
-
-    $(".highlight_on").click(function () {
-      $(".partition-content").each(function () {
-        if (this.__vis__) {
-          this.__vis__.setInteractionMode(false);
-          $(".highlight_on").hide();
-          $(".highlight_off").show();
-        }
-      });
-    });
-
-    $(".highlighted").click(function () {
-      $(".high-header").show();
-      $(".highlight_on").show();
-      $(".highlight_off").hide();
-
-    });
-
-    $(".demmandDetails").click(function () {
-      $(".Details-header").children("button").children("#plus-minus").remove();
+  $(".demmandDetails").click(function () {
+    $(".Details-header").children("button").children("#plus-minus").remove();
     if ($(".Details-header").is(':visible')) {
       $(".Details-header").hide();
     } else {
@@ -386,11 +367,65 @@ let menu_tools = (parentElement)=> {
       $(".Details-header").show();
       $(".menu-details").show();
     }
-
   });
 
-    updateInteface();
+    $(".highlighted").click(function () {
+      $(".highlight-header").children("button").children("#plus-minus").remove();
+      if ($(".highlight-header").is(':visible')) {
+        $(".highlight-header").hide();
+      } else {
+        $("button.highlight-header").append($("<span/>").addClass("icon icon-minus").attr("id", "plus-minus").css("float", "right"))
+        $(".highlight-header").show();
+        $(".menu-highlight").show();
+      }
+    });
+
+    $("#highlight_selection").change(function () {
+      console.log($("#highlight_selection").is(':checked'));
+
+      if($("#highlight_selection").is(':checked')){
+        layer(false);
+      }else{
+          layer(true);
+      }
+    });
+    $("button.Details-header,button.highlight-header").click(function () {
+      let acordion =  $(this).parent().children(".menu-acordion");
+      $(this).children("#plus-minus").remove();
+      if($(acordion).is(':visible')){
+        $(this).append($("<span/>").addClass("icon icon-plus").attr("id","plus-minus").css("float","right"))
+        $(acordion).hide();
+      }else {
+        $(this).append($("<span/>").addClass("icon icon-minus").attr("id", "plus-minus").css("float", "right"))
+        $(acordion).show();
+      }
+    });
+
+    updateTools();
   });
+
+}
+
+function updateTools () {
+  const details= () => {
+    data_prep = new DataPreparation(_data_);
+    const dimension = data_prep.data_keys;
+
+    for (let i = 0; i < dimension.length; i++) {
+      $("div.menu-details")
+        .append($("<input/>")
+          .attr("class","myCheckbox")
+          .attr("type","checkbox")
+          .attr("value",dimension[i]))
+        .append($("<label/>")
+          .css({
+            "text-align": "center",
+            "display": "initial",
+            "font-size": "13px"})
+          .text(dimension[i]).append($("<br/>")));
+    }
+  };
+  details();
 
 }
 
@@ -511,8 +546,6 @@ function updateInteface () {
     let d_values = data_prep.data_values;
     let attrFilter = $('.filter');
     let limit = data_prep.limit_values;
-
-
 
     dimension.unshift('...');
     $(attrFilter).each(function (i, attr) {
@@ -728,27 +761,6 @@ function updateInteface () {
     });
   }
 
-//-----------------detalhes----------------------------------------
-  const details= () => {
-    data_prep = new DataPreparation(_data_);
-    const dimension = data_prep.data_keys;
-
-    for (let i = 0; i < dimension.length; i++) {
-      $("div.menu-details")
-        .append($("<input/>")
-          .attr("class","myCheckbox")
-          .attr("type","checkbox")
-          .attr("value",dimension[i]))
-        .append($("<label/>")
-          .css({
-            "text-align": "center",
-            "display": "initial",
-            "font-size": "13px"})
-          .text(dimension[i]).append($("<br/>")));
-    }
-
-  };
-
 //-------filtro nas dimensões--------------------------------------------------
   const filter_by_dimension = () => {
     data_prep = new DataPreparation(_data_);
@@ -782,7 +794,6 @@ function updateInteface () {
   size();
   filter();
   defaultMenu();
-  details();
   filter_by_dimension();
 
 }
@@ -850,6 +861,8 @@ let addMenu = (parentElement) => {
       }
     })
 
+
+
     $(".Filter_Dimension").click(function () {
       $(".filter_dimension-header").children("button").children("#plus-minus").remove();
       if ($(".filter_dimension-header").is(':visible')) {
@@ -861,7 +874,6 @@ let addMenu = (parentElement) => {
       }
 
     });
-
 
     $("button.color-header , button.hierarchy-header,button.default-header,button.filter-header, button.Details-header,button.filter_dimension-header").click(function () {
       let acordion =  $(this).parent().children(".menu-acordion");
