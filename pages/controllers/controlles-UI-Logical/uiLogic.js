@@ -1,10 +1,11 @@
 //controle e criação das interfaces ini
 const { exec } = require('child_process');
 const fs = require('fs');
-let ipc = require('electron').ipcRenderer;
-let vis = require("@labvis-ufpa/vistechlib");
-let d3 = require('d3');
-let DataPreparation = require("./models/DataPreparation.js");
+const ipc = require('electron').ipcRenderer;
+const vis = require("@labvis-ufpa/vistechlib");
+const d3 = require('d3');
+const DataPreparation = require("./models/DataPreparation.js");
+const Interaction_Chosen = require("./models/Interaction_Chosen.js");
 console.log(vis);
 console.log(ipc);
 
@@ -20,6 +21,8 @@ let defautColor =["#006699","#24d068","#C53A10","#ff27ac",
 let addVis
   = (visName, parentElement) => {
   let pc = new vis[visName](parentElement);
+  let interaction = new Interaction_Chosen(pc);
+
 
   layer(false);
   pc
@@ -38,9 +41,9 @@ let addVis
       });
     })
     .on("datamouseover",function(d,i){
-      pc.highlight(d,i);
-      detail_on(pc);
 
+      interaction.setType(selectButton());
+      interaction.chosen(d,i);
     })
     .on("datamouseout",function(d,i){
       pc.removeHighlight(d,i);
@@ -54,7 +57,17 @@ let addVis
 
         }
       });
+
+
     });
+
+  function selectButton(){
+    $(".chosen").onclick(function () {
+      console.log("teste:", $(this).attr("value"))
+      return this.type = type;
+    });
+  }
+
 
   // $(".partition-content").each(function(){
   //   if(this.__vis__){
@@ -197,7 +210,7 @@ $(document).ready(function() {
     }
 
     //tools button
-    if(!$("#menu_tools").length) {' '
+    if(!$("#menu_tools").length) {
       $(this).children(".partition-content").append($("<button/>")
         .text("tools interaction")
         .addClass("btn btn-large btn-primary")
@@ -216,28 +229,6 @@ $(document).ready(function() {
 
         }));
 
-    //   $.contextMenu({
-    //     selector: '.tools',
-    //     trigger: 'left',
-    //     callback: function (key) {
-    //       if (_data_) {
-    //         let content = $("#" + $(this).attr("data-nodeid")).children(".partition-content");
-    //         // let content = $("#"+$(this).attr("data-nodeVis")).children(".partition-content");
-    //         let partition = $(this).parents('.partition-node').attr('id');
-    //         content.empty();
-    //         // addMenu(content);
-    //         // updateInteface();
-    //         ipc.send('update-sampledata', {});
-    //       } else {
-    //         alert("You have to link data first");
-    //         ipc.send('not-data');
-    //       }
-    //     },
-    //     items: {
-    //       "menu settings visualization": {  }
-    //     }
-    //
-    //   });
     }
 
     $(this).children(".partition-content").append($("<button/>")

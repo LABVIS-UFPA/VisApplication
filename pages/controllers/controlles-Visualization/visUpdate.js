@@ -187,6 +187,7 @@ function details_on_demand(element,items) {
     });
 }
 
+//pegar os valores input
 function get_values_details(){
     let check_details = [];
     $(".myCheckbox").each(function(i,item){
@@ -196,7 +197,8 @@ function get_values_details(){
     });
     return check_details;
 }
-//ativar detalhes sob demanda
+
+// ativar detalhes sob demanda
 function detail_on(element){
     //verifica os checkbox
     $(".myCheckbox").each(function(i,item){
@@ -205,6 +207,7 @@ function detail_on(element){
             return details_on_demand(element,items);
         }
     });
+
     $(".myCheckbox").change(function () {
     let items = get_values_details();
         return details_on_demand(element,items);

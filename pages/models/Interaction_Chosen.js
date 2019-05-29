@@ -1,28 +1,44 @@
-class Interaction_Chosen {
-  constructor(type,visualization){
-    switch(type) {
-      case "highlight":
-        this.strategy = new HighlightStategy()
+module.exports = class Interaction_Chosen {
+  constructor(element) {
+    this.element = element;
+    this.type = "";
+
+  }
+
+  setType(type){
+      this.type = type;
+
+
+  }
+
+  chosen(type,d,i) {
+    switch (this.type) {
+      case "highlighted":
+        this.strategy = new HighlightStategy(this.element, d, i);
         break
-      case "detail_on_demand":
-        this.strategy = new DetaionsOnStrategy()
+      case "Detail on Demand":
+        this.strategy = new DetaionsOnStrategy(this.element, d, i);
         break
-      case "zoom":
+      case "Zoom":
+        // this.strategy = new ConcreteStrategyB()
+        break
+      case "Anottation":
         // this.strategy = new ConcreteStrategyB()
         break
       case "drilldown":
         // this.strategy = new ConcreteStrategyB()
         break
-      case "selection":
+      case "Selection by attribute":
         // this.strategy = new ConcreteStrategyB()
         break
       case "filter":
         // this.strategy = new ConcreteStrategyB()
         break
       default:
-        this.strategy = new ConcreteStrategyA()
+      // this.strategy = new HighlightStategy(element,d,i);
     }
   }
+
 
   ContextInterface (){
 
@@ -39,8 +55,9 @@ class Strategy {
 }
 
 class HighlightStategy extends Strategy{
-  constructor() {
+  constructor(element,d,i) {
     super()
+    element.highlight(d,i);
     console.log('ConcreteStrategyA created')
   }
 
@@ -50,9 +67,10 @@ class HighlightStategy extends Strategy{
 }
 
 class DetaionsOnStrategy extends Strategy{
-  constructor() {
+  constructor(element) {
     super()
-    console.log('ConcreteStrategyB created')
+    detail_on(element);
+    console.log('ConcreteStrategyB created');
   }
 
   AlgorithmInterface (){

@@ -1,6 +1,6 @@
 const electron = require('electron');
 const dialog = electron.dialog;
-
+const Tray = electron.Tray;
 const path = require('path');
 const glob = require('glob');
 
@@ -28,11 +28,13 @@ function initialize () {
     makeSingleInstance();
 
     function createWindow () {
+        const appIcon = new Tray(__dirname+'/pages/public/css/icons/home.png');
         const windowOptions = {
             width: 1080,
             minWidth: 680,
             height: 840,
-            title: app.getName()
+            title: app.getName(),
+            icon:__dirname+'/pages/public/css/icons/home.png'
         };
         // if (process.platform === 'linux') {
         //   windowOptions.icon = path.join(__dirname, '/assets/app-icon/png/512.png')
