@@ -18,11 +18,11 @@ let defautColor =["#006699","#24d068","#C53A10","#ff27ac",
   "#4DB3FF","#1AB399","#E666B3","#33991A",
   "#CC9999","#B3B31A","#00E680","#4D8066",
   "#809980","#E6FF80","#1AFF33","#999933"];
+let interaction = new Interaction_Chosen();
 let addVis
   = (visName, parentElement) => {
   let pc = new vis[visName](parentElement);
-  let interaction = new Interaction_Chosen(pc);
-
+  interaction.setElemt(pc);
 
   layer(false);
   pc
@@ -41,9 +41,7 @@ let addVis
       });
     })
     .on("datamouseover",function(d,i){
-
-      interaction.setType(selectButton());
-      interaction.chosen(d,i);
+      // interaction.chosen();
     })
     .on("datamouseout",function(d,i){
       pc.removeHighlight(d,i);
@@ -61,42 +59,6 @@ let addVis
 
     });
 
-  function selectButton(){
-    $(".chosen").onclick(function () {
-      console.log("teste:", $(this).attr("value"))
-      return this.type = type;
-    });
-  }
-
-
-  // $(".partition-content").each(function(){
-  //   if(this.__vis__){
-  //     let elem = this.__vis__;
-  //     console.log("element",elem);
-  //
-  //     let g = d3.selectAll("svg")
-  //     d3.selectAll("svg").call(d3.zoom()
-  //       .scaleExtent([1, 5])
-  //       .on("zoom", zoomed))
-  //       .attr("transform", (d)=>{return "translate("+0+","+0+")";});
-  //
-  //     function zoomed() {
-  //       g.attr("transform", d3.event.transform)
-  //       g.translate(d3.event.transform.x, d3.event.transform.y);
-  //       // g.scale(zoom.transform, d3.zoomIdentity);
-  //
-  //       // g.save();
-  //       // g.clearRect(0, 0, width, height);
-  //       // drawPoints();
-  //       // g.restore();
-  //
-  //     }
-  //
-  //     //
-  //   }
-  // });
-  // let color = d3.scale.category10();
-  // pc.settings.color = (d) =>{ return color(d["bar_size"])};
 };
 
 ipc.on('add-vis', function(event, arg){
@@ -336,6 +298,13 @@ let menu_tools = (parentElement)=> {
   $(parentElement).load("public/html/menu-tools.html")
 
   $(document).ready(function() {
+
+      //strategia alteração da interação com mouse
+      $(".chosen").click(function () {
+          return interaction.selectInteraction($(this).attr("value"))
+      });
+
+
 
     $(".Anottation").click(function () {
 
