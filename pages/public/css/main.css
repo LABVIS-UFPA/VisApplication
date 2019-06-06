@@ -31,6 +31,23 @@ span.icon-trash:hover{
     color: mediumvioletred;
 }
 
+span.icon-cancel{
+    margin: 10px;
+}
+
+span.icon-cancel:hover{
+    color: mediumvioletred;
+}
+
+span.icon-minus:hover{
+    color: #ffffff;
+}
+
+span.icon-plus:hover{
+    color: #1eed12;
+}
+
+
 /*icons menu interactions*/
 .icons{
     margin: 12px;
@@ -40,9 +57,7 @@ span.icon-trash:hover{
 
 .icons:hover{
     background-color: #999999;
-    margin: 12px;
-    width: 30px;
-    height: 30px;
+
 }
 
 div.tooltip {
@@ -58,52 +73,16 @@ div.tooltip {
     pointer-events: none;
 }
 
-div.menuColor{
-    background-color:#ccc;
-    padding-top: 15px;
-    padding-bottom: 10px;
-}
-
-div.menuHie{
+div.menu-acordion{
     background-color: #ccc;
     padding-top: 15px;
     padding-bottom: 10px;
 }
 
-
-div.menuFilter{
-    background-color:#ccc;
-    padding-top: 15px;
-    padding-bottom: 10px;
-}
-
-div.menuDefault{
-    background-color:#ccc;
-    padding-top: 15px;
-    padding-bottom: 10px;
-}
-
-
-div.menu-filter_dimension{
-    background-color:#ccc;
-    padding-top: 15px;
-    padding-bottom: 10px;
-}
-
-
-div#details{
-    background-color:#ccc;
-    padding-top: 15px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-}
-
-/*menus retrateis*/
-
+/*!*menus retrateis*!*/
 
 #sortable {
     padding: 0px;
-
 }
 
 li.list-group-item {

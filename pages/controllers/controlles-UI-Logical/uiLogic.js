@@ -24,7 +24,7 @@ let addVis
     let pc = new vis[visName](parentElement)
     interaction.setElemt(pc)
 
-    layer(false)
+    layer(false);
     pc
     .on('highlightstart', function (d, i) {
       $('.partition-content').each(function () {
@@ -118,14 +118,13 @@ $(document).ready(function () {
       return
     } else
     // não fazer nada caso existam menus
-    if ($(this).children('.partition-content').children('.partition-content').children().is('#menu_settings')
-      || $(this).children('.partition-content').children('.partition-content').children().is('#menu_tools')) {
+    if ($(this).children('.partition-content').children('.partition-content').children().is('#menu_settings')) {
       return
     }
     // verificar para abrir apenas um menu de settings
     $('.partition-content').each(function (i, item) {
       $(item).children('.AddSettings').remove()
-      $(item).children('.tools').remove()
+
     })
 
     if (!$('#menu_settings').length) {
@@ -159,26 +158,6 @@ $(document).ready(function () {
         }
 
       })
-    }
-
-    // tools button
-    if (!$('#menu_tools').length) {
-      $(this).children('.partition-content').append($('<button/>')
-        .text('tools interaction')
-        .addClass('btn btn-large btn-primary')
-        .addClass('tools')
-        .attr('data-node', $(this).attr('id'))
-        .css({ 'float': 'right' })
-        .click(function () {
-          if (_data_) {
-            let content = $('#' + $(this).attr('data-node')).children('.partition-content')
-            menu_tools(content)
-            ipc.send('update-sampledata', {})
-          } else {
-            alert('You have to link data first')
-            ipc.send('not-data')
-          }
-        }))
     }
 
     $(this).children('.partition-content').append($('<button/>')
@@ -287,77 +266,6 @@ let menu_tools = (parentElement) => {
 
   $(document).ready(function () {
       // strategia alteração da interação com mouse
-    $('.chosen').click(function () {
-      return interaction.selectInteraction($(this).attr('value'))
-    })
-
-    $('.Anottation').click(function () {
-
-    })
-
-    $('.selection').click(function () {
-
-    })
-
-    $('.zoom').click(function () {
-
-    })
-
-    $('.Selection').click(function () {
-      $('.selection-header').children('button').children('#plus-minus').remove()
-      if ($('.selection-header').is(':visible')) {
-        $('.selection-header').hide()
-      } else {
-        $('button.selection-header').append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
-        $('.selection-header').show()
-        $('.menuSelection').show()
-      }
-    })
-
-    $('.demmandDetails').click(function () {
-      $('.Details-header').children('button').children('#plus-minus').remove()
-      if ($('.Details-header').is(':visible')) {
-        $('.Details-header').hide()
-      } else {
-        $('button.Details-header').append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
-        $('.Details-header').show()
-        $('.menu-details').show()
-      }
-    })
-
-    $('.highlighted').click(function () {
-      $('.highlight-header').children('button').children('#plus-minus').remove()
-      if ($('.highlight-header').is(':visible')) {
-        $('.highlight-header').hide()
-      } else {
-        $('button.highlight-header').append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
-        $('.highlight-header').show()
-        $('.menu-highlight').show()
-      }
-    })
-
-    $('#highlight_selection').change(function () {
-      console.log($('#highlight_selection').is(':checked'))
-
-      if ($('#highlight_selection').is(':checked')) {
-        layer(false)
-      } else {
-        layer(true)
-      }
-    })
-    $('button.Details-header,button.highlight-header').click(function () {
-      let acordion = $(this).parent().children('.menu-acordion')
-      $(this).children('#plus-minus').remove()
-      if ($(acordion).is(':visible')) {
-        $(this).append($('<span/>').addClass('icon icon-plus').attr('id', 'plus-minus').css('float', 'right'))
-        $(acordion).hide()
-      } else {
-        $(this).append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
-        $(acordion).show()
-      }
-    })
-
-    updateTools()
   })
 }
 
@@ -739,17 +647,17 @@ function updateInteface () {
 
 // -----------------limpar o menu quando mudar uma nova base de dados------------------------------------------------------------
 function clean_menus () {
-  let parent = $('#menu_settings').parent()
-  $('#menu_settings').remove()
+  let parent = $('#menu_settings').parent().parent();
+  $('#menu_settings').remove();
 
-  parent.empty()
+  parent.empty();
   addMenu(parent)
   updateInteface()
 }
 
 // ----------------list item menu----------------------------------------------------------------------------------
-let addMenu = (parentElement) => {
-  $(parentElement).load('public/html/menu-settings-vis.html')
+let addMenu = async(parentElement) => {
+  await $(parentElement).load('public/html/menu-settings-vis.html')
 
   $(document).ready(function () {
     $('.Color').click(function () {
@@ -810,7 +718,7 @@ let addMenu = (parentElement) => {
       }
     })
 
-    $('button.color-header , button.hierarchy-header,button.default-header,button.filter-header, button.Details-header,button.filter_dimension-header').click(function () {
+    $('button.color-header , button.hierarchy-header,button.default-header,button.filter-header, button.Details-header,button.filter_dimension-header,button.Details-header,button.highlight-header,button.selection-header').click(function () {
       let acordion = $(this).parent().children('.menu-acordion')
       $(this).children('#plus-minus').remove()
       if ($(acordion).is(':visible')) {
@@ -822,6 +730,70 @@ let addMenu = (parentElement) => {
       }
     })
 
+    $(".cancel").click(function () {
+      $(this).parent().parent().hide();
+    });
+
+    $('.chosen').click(function () {
+      return interaction.selectInteraction($(this).attr('value'))
+    })
+
+    $('.Anottation').click(function () {
+
+    })
+
+    $('.selection').click(function () {
+
+    })
+
+    $('.zoom').click(function () {
+
+    })
+
+    $('.Selection').click(function () {
+      $('.selection-header').children('button').children('#plus-minus').remove()
+      if ($('.selection-header').is(':visible')) {
+        $('.selection-header').hide()
+      } else {
+        $('button.selection-header').append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
+        $('.selection-header').show()
+        $('.menuSelection').show()
+      }
+    })
+
+    $('.demmandDetails').click(function () {
+      $('.Details-header').children('button').children('#plus-minus').remove()
+      if ($('.Details-header').is(':visible')) {
+        $('.Details-header').hide()
+      } else {
+        $('button.Details-header').append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
+        $('.Details-header').show()
+        $('.menu-details').show()
+      }
+    })
+
+    $('.highlighted').click(function () {
+      $('.highlight-header').children('button').children('#plus-minus').remove()
+      if ($('.highlight-header').is(':visible')) {
+        $('.highlight-header').hide()
+      } else {
+        $('button.highlight-header').append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
+        $('.highlight-header').show()
+        $('.menu-highlight').show()
+      }
+    })
+
+    $('#highlight_selection').change(function () {
+      console.log($('#highlight_selection').is(':checked'))
+
+      if ($('#highlight_selection').is(':checked')) {
+        layer(false)
+      } else {
+        layer(true)
+      }
+    })
+
+    updateTools()
     updateInteface()
   })
 }

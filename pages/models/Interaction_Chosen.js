@@ -30,9 +30,15 @@ module.exports = class Interaction_Chosen {
         this.strategy = new ZoomOnStrategy(this.element);
         break
       case "Anottation":
+        this.strategy = new LineStategy();
+        break
+      case "Line":
         // this.strategy = new ConcreteStrategyB()
         break
-      case "drilldown":
+      case "Rect":
+        // this.strategy = new ConcreteStrategyB()
+        break
+      case "handFree":
         // this.strategy = new ConcreteStrategyB()
         break
       case "Selection by attribute":
@@ -42,7 +48,7 @@ module.exports = class Interaction_Chosen {
         // this.strategy = new ConcreteStrategyB()
         break
       default:
-        // this.strategy = new HighlightStategy(element,d,i);
+        this.strategy = new HighlightStategy(this.element);
     }
   }
 
@@ -127,3 +133,42 @@ class ZoomOnStrategy extends Strategy{
 
 }
 
+class LineStategy extends Strategy{
+  constructor(element) {
+    super()
+    var stage = new createjs.Stage("canvas");
+    createjs.Ticker.on("tick", tick);
+
+    var selection = new createjs.Shape(),
+        g = selection.graphics.setStrokeStyle(1).beginStroke("#000").beginFill("rgba(0,0,0,0.05)"),
+        sd = g.setStrokeDash([10,5], 0).command,
+        r = g.drawRect(0,0,100,100).command,
+        moveListener;
+
+
+    stage.on("stagemousedown", dragStart);
+    stage.on("stagemouseup", dragEnd);
+
+    function dragStart(event) {
+      stage.addChild(selection).set({x:event.stageX, y:event.stageY});
+      r.w = 0; r.h = 0;
+      moveListener = stage.on("stagemousemove", drag);
+    };
+
+    function drag(event) {
+      r.w = event.stageX - selection.x;
+      r.h = event.stageY - selection.y;
+    }
+
+    function dragEnd(event) {
+      stage.off("stagemousemove", moveListener);
+    }
+
+    function tick(event) {
+      stage.update(event);
+      sd.offset--;
+    }
+
+  }
+
+}
