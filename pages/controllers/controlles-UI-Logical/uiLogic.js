@@ -735,7 +735,8 @@ let addMenu = async(parentElement) => {
     });
 
     $('.chosen').click(function () {
-      return interaction.selectInteraction($(this).attr('value'))
+      interaction.selectInteraction($(this).attr('value'))
+      return interaction.strategy.test();
     })
 
     $('.Anottation').click(function () {

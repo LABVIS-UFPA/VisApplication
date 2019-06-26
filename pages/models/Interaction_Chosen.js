@@ -18,7 +18,7 @@ module.exports = class Interaction_Chosen {
     this.chosen();
   }
 
-  chosen(d,i) {
+  chosen() {
     switch (this.type) {
       case "highlighted":
         this.strategy = new HighlightStategy(this.element);
@@ -70,8 +70,11 @@ class Strategy {
 class HighlightStategy extends Strategy{
   constructor(element) {
     super()
+     this.element = element;
+  }
 
-    element.on("datamouseover",function(d,i){
+  test(){
+    this.element.on("datamouseover",function(d,i){
       $(".partition-content").each(function(){
         if(this.__vis__){
           console.log("clicou", d, i);
@@ -83,21 +86,27 @@ class HighlightStategy extends Strategy{
     });
     console.log('StrategyA highlight created')
   }
+  }
 
-}
 
 class DetaionsOnStrategy extends Strategy{
   constructor(element) {
     super()
-    detail_on(element);
-    console.log(' DetaionsOnStrategy created');
-  }
+    this.element = element;
 
+  }
+    test(){
+      detail_on(this.element);
+      console.log(' DetaionsOnStrategy created');
+    }
 }
 
 class ZoomOnStrategy extends Strategy{
   constructor(element) {
     super()
+    this.element = element
+  }
+    test(){
     layer(true);
 
     $(".partition-content").each(function(){
@@ -125,6 +134,7 @@ class ZoomOnStrategy extends Strategy{
 
         //
       }
+
     });
 
 

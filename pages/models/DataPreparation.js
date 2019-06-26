@@ -1,5 +1,3 @@
-
-
 module.exports = class DataPreparation{
   constructor(data) {
     this.data = data;
