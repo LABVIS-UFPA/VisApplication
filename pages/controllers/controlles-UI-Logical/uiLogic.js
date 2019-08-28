@@ -6,31 +6,25 @@ const vis = require('@labvis-ufpa/vistechlib')
 const d3 = require('d3')
 const DataPreparation = require('./models/DataPreparation.js')
 const Interaction_Chosen = require('./models/Interaction_Chosen.js')
-console.log(vis)
-console.log(ipc)
-
+// console.log(vis)
+// console.log(ipc)
 let _data_
 let data_prep
-let defautColor = ['#006699', '#24d068', '#C53A10', '#ff27ac',
-  '#DBE70D', '#08821e', '#1135b2', '#ff7043',
-  '#78909c', '#ECEDF0', '#4D8000', '#B33300',
-  '#CC80CC', '#66664D', '#991AFF', '#E666FF',
-  '#4DB3FF', '#1AB399', '#E666B3', '#33991A',
-  '#CC9999', '#B3B31A', '#00E680', '#4D8066',
-  '#809980', '#E6FF80', '#1AFF33', '#999933']
-let interaction = new Interaction_Chosen()
-let addVis
-  = (visName, parentElement) => {
-    let pc = new vis[visName](parentElement)
-    interaction.setElemt(pc)
 
-    layer(false);
-    pc
-    .on('highlightstart', function (d, i) {
+let defautColor = d3.scaleOrdinal(d3.schemeCategory10);
+let interaction = new Interaction_Chosen();
+let inputVis = ''
+
+let addVis = (visName, parentElement) => {
+    let pc = new vis[visName](parentElement)
+
+    layer(false)
+
+  pc.on('highlightstart', function (d, i) {
       $('.partition-content').each(function () {
-        if (this.__vis__ && this.__vis__ !== pc) {
-          this.__vis__.highlight(d, i)
-        }
+        // if (this.__vis__ && this.__vis__ !== pc) {
+          // this.__vis__.highlight(d, i);
+        // }
       })
     })
     .on('highlightend', function (d, i) {
@@ -41,20 +35,28 @@ let addVis
       })
     })
     .on('datamouseover', function (d, i) {
-      // interaction.chosen();
+
     })
     .on('datamouseout', function (d, i) {
       pc.removeHighlight(d, i)
     })
     .on('dataclick', function (d, i) {
       $('.partition-content').each(function () {
-        if (this.__vis__) {
-          console.log('clicou', d, i)
-          let elem = this.__vis__.getHighlightElement(i)
-          this.__vis__.annotate(elem)
-        }
+        // if (this.__vis__) {
+          // console.log('clicou', d, i)
+            // this.__vis__.comments(event.clientX,event.clientY);
+          // let elem = this.__vis__.getHighlightElement(i)
+          // this.__vis__.annotate(elem)
+        // }
       })
     })
+
+  interaction.setElemt(pc)
+  interaction.selectInteraction(inputVis);
+  console.log("teste aqui:",inputVis)
+  interaction.strategy.start();
+  console.log("aqui");
+
   }
 
 ipc.on('add-vis', function (event, arg) {
@@ -63,11 +65,13 @@ ipc.on('add-vis', function (event, arg) {
 
 ipc.on('file-data', function (event, data) {
   _data_ = data
+  data_prep = new DataPreparation(_data_);
   clean_menus()
   updatevis()
 })
-ipc.on('change-datasample', function (event, data) {
+ipc.on('file-data', function (event, data) {
   _data_ = data
+  data_prep = new DataPreparation(_data_);
   clean_menus()
   updatevis()
 })
@@ -271,7 +275,6 @@ let menu_tools = (parentElement) => {
 
 function updateTools () {
   const details = () => {
-    data_prep = new DataPreparation(_data_)
     const dimension = data_prep.data_keys
 
     for (let i = 0; i < dimension.length; i++) {
@@ -338,12 +341,12 @@ function updateInteface () {
         colors.push(inputs.get(i).value)
       })
       if (isNaN(d_values[index][0])) {
-        return updateCategoricalColor(d_values[index], dataHeader, colors)
+        updateCategoricalColor(d_values[index], dataHeader, colors)
       } else if (!isNaN(d_values[index][1]) && d_values[index].length > 10) {
         let k = limit.indexOf(dataHeader)
-        return updateColorContinues(d_values[index], dataHeader, limit[k + 1], limit[k + 2])
+        updateColorContinues(d_values[index], dataHeader, limit[k + 1], limit[k + 2])
       } else {
-        return updateCategoricalColor(d_values[index], dataHeader, colors)
+        updateCategoricalColor(d_values[index], dataHeader, colors)
       }
     })
 
@@ -354,14 +357,13 @@ function updateInteface () {
       $('div.menuColor').children('label').remove()
       // $("div#legendColor").remove();
       $.each(values, function (i, item) {
-        console.log(i)
         $('div.menuColor')
           .append($('<label/>').text(item)
             .append($('<input/>')
               .css({margin: '.4rem', height: '40px'})
               .attr('type', 'color')
               .addClass('getColor')
-              .attr('value', defautColor[i])
+              .attr('value', defautColor(i))
               .attr('id', item))
           )
       })
@@ -464,8 +466,6 @@ function updateInteface () {
               values: [ limit[j + 1], limit[j + 2]],
               slide: function (event, ui) {
                 $('#amount').val('min: ' + ui.values[ 0 ] + ' ~max: ' + ui.values[ 1 ])
-                console.log(ui.values[ 0 ])
-                console.log(ui.values[ 1 ])
                 filterColorContinues(
                   valor,
                   limit[j + 1],
@@ -658,8 +658,9 @@ function clean_menus () {
 // ----------------list item menu----------------------------------------------------------------------------------
 let addMenu = async(parentElement) => {
   await $(parentElement).load('public/html/menu-settings-vis.html')
-
   $(document).ready(function () {
+
+    //resumir essa parte
     $('.Color').click(function () {
       $('.color-header').children('button').children('#plus-minus').remove()
       if ($('.color-header').is(':visible')) {
@@ -718,7 +719,7 @@ let addMenu = async(parentElement) => {
       }
     })
 
-    $('button.color-header , button.hierarchy-header,button.default-header,button.filter-header, button.Details-header,button.filter_dimension-header,button.Details-header,button.highlight-header,button.selection-header').click(function () {
+    $('button.color-header , button.hierarchy-header,button.default-header,button.filter-header, button.Details-header,button.filter_dimension-header,button.Details-header,button.highlight-header,button.selection-header,button.anottation-header').click(function () {
       let acordion = $(this).parent().children('.menu-acordion')
       $(this).children('#plus-minus').remove()
       if ($(acordion).is(':visible')) {
@@ -735,8 +736,9 @@ let addMenu = async(parentElement) => {
     });
 
     $('.chosen').click(function () {
-      interaction.selectInteraction($(this).attr('value'))
-      return interaction.strategy.test();
+      inputVis = $(this).attr('value');
+      interaction.selectInteraction(inputVis);
+      return interaction.strategy.start();
     })
 
     $('.Anottation').click(function () {
@@ -759,6 +761,17 @@ let addMenu = async(parentElement) => {
         $('button.selection-header').append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
         $('.selection-header').show()
         $('.menuSelection').show()
+      }
+    })
+
+    $('.Anottation').click(function () {
+      $('.anottation-header').children('button').children('#plus-minus').remove()
+      if ($('.anottation-header').is(':visible')) {
+        $('.anottation-header').hide()
+      } else {
+        $('button.anottation-header').append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
+        $('.anottation-header').show()
+        $('.menuAnottation').show()
       }
     })
 
@@ -785,8 +798,6 @@ let addMenu = async(parentElement) => {
     })
 
     $('#highlight_selection').change(function () {
-      console.log($('#highlight_selection').is(':checked'))
-
       if ($('#highlight_selection').is(':checked')) {
         layer(false)
       } else {
@@ -799,6 +810,10 @@ let addMenu = async(parentElement) => {
   })
 }
 // ------gerar conteudo do input dinamicamente------------------------------------------------------------------------------
+
+const comentclear=()=>{
+  $('.boxComment').remove();
+}
 
 const elements = {
   'filter_by_dimension': [

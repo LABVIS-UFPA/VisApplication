@@ -149,7 +149,7 @@
     </div>
 
 
-    <div class="zoom-header" style="display:none;">
+    <div class="zoom-header" style="display:none">
         <button class="selection-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
             Anottation
             <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
@@ -247,14 +247,14 @@
         <button class="anottation-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
             Anottation
             <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
-            <span class="icon plus-cancel cancel"  style="float: right;"></span>
+            <span class="icon icon-cancel cancel" style="float: right;"></span>
         </button>
 
         <div class="menuAnottation menu-acordion" style="width: 100%; position: relative; text-align: left;">
-            Select attribute
-            <select class="form-control filter">
-                <option value="..." class="optFilter">...</option>
-            </select>
+
+            <button id="clearComment" onclick="comentclear()">
+                clean
+            </button>
         </div>
     </div>
 

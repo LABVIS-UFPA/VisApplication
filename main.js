@@ -192,7 +192,6 @@ initialize();
 ipcMain.on('document-ready', function (evt, msg) {
     mainWindow.webContents.send('cl', 'APP is ready')
 
-    console.log(process.argv)
     for (let arg of process.argv) {
         if (arg === 'websocketmode=on') {
             websocketmode = true

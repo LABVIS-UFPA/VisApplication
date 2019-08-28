@@ -178,13 +178,12 @@ function filterColorContinues(item,min,max,min_select,max_select){
 
 //detalhes sobre demanda setar os itens
 function details_on_demand(element,items) {
-    $(".partition-content").each(function (i, index) {
-        if ($(index).children("svg").length) {
-            this.__vis__.on("datamouseover",function(d,i){
-                element.detail(d,i,items);
-            });
-        }
-    });
+    let parentElement = element.parentElement;
+    element.on("datamouseover",function(d,i){
+        parentElement.__vis__.detail(d,i,items);
+          
+    
+      });
 }
 
 //pegar os valores input
@@ -204,7 +203,7 @@ function detail_on(element){
     $(".myCheckbox").each(function(i,item){
         if($(item).get(0).checked == true) {
             let items = get_values_details();
-            return details_on_demand(element,items);
+            details_on_demand(element,item);
         }
     });
 
