@@ -6,8 +6,8 @@ const vis = require('@labvis-ufpa/vistechlib')
 const d3 = require('d3')
 const DataPreparation = require('./models/DataPreparation.js')
 const Interaction_Chosen = require('./models/Interaction_Chosen.js')
-// console.log(vis)
-// console.log(ipc)
+console.log(vis)
+console.log(ipc)
 let _data_
 let data_prep
 
@@ -53,11 +53,10 @@ let addVis = (visName, parentElement) => {
 
   interaction.setElemt(pc)
   interaction.selectInteraction(inputVis);
-  console.log("teste aqui:",inputVis)
   interaction.strategy.start();
-  console.log("aqui");
 
   }
+
 
 ipc.on('add-vis', function (event, arg) {
   addVis(arg, $('.partition-content').get(0))
@@ -69,9 +68,9 @@ ipc.on('file-data', function (event, data) {
   clean_menus()
   updatevis()
 })
-ipc.on('file-data', function (event, data) {
+
+ipc.on('change-datasample', function (event, data) {
   _data_ = data
-  data_prep = new DataPreparation(_data_);
   clean_menus()
   updatevis()
 })
