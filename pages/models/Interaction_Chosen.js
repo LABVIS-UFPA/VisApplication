@@ -1,3 +1,5 @@
+
+
 module.exports = class Interaction_Chosen {
   constructor() {
     this.element = [];
@@ -33,7 +35,7 @@ module.exports = class Interaction_Chosen {
         this.strategy = new AnotationStategy(this.element);
         break
       case "Line":
-        // this.strategy = new ConcreteStrategyB()
+        this.strategy = new LineStategy(this.element);
         break
       case "Rect":
         // this.strategy = new ConcreteStrategyB()
@@ -102,7 +104,7 @@ class AnotationStategy extends Strategy{
         var x = event.offsetX;
         var y = event.offsetY;
           parentElement.__vis__.comments(x,y);
-  
+
       });
       }
 
@@ -136,24 +138,24 @@ class ZoomOnStrategy extends Strategy{
   for (let i = 0; i < this.element.length; i++) {
     let elem = this.element[i].parentElement;
     let g = d3.selectAll(this.element[i].parentElement.children)
-   
-    console.log("1:",this.element[i].parentElement.children);    
+
+    console.log("1:",this.element[i].parentElement.children);
 
     d3.selectAll(this.element[i].parentElement.children).call(d3.zoom()
     .scaleExtent([1, 5])
     .on("zoom", zoomed));
-    
+
     function zoomed() {
         g.attr("transform", d3.event.transform);
         g.translate(d3.event.transform.x, d3.event.transform.y);
         //g.scale(zoom.transform, d3.zoomIdentity);
         //g.save();
- 
-  
+
+
     //    g.restore();
       }
-  }  
-      
+  }
+
     console.log(' DetaionsOnStrategy created');
   }
 
@@ -162,39 +164,78 @@ class ZoomOnStrategy extends Strategy{
 class LineStategy extends Strategy{
   constructor(element) {
     super()
-    var stage = new createjs.Stage("canvas");
-    createjs.Ticker.on("tick", tick);
-
-    var selection = new createjs.Shape(),
-        g = selection.graphics.setStrokeStyle(1).beginStroke("#000").beginFill("rgba(0,0,0,0.05)"),
-        sd = g.setStrokeDash([10,5], 0).command,
-        r = g.drawRect(0,0,100,100).command,
-        moveListener;
-
-
-    stage.on("stagemousedown", dragStart);
-    stage.on("stagemouseup", dragEnd);
-
-    function dragStart(event) {
-      stage.addChild(selection).set({x:event.stageX, y:event.stageY});
-      r.w = 0; r.h = 0;
-      moveListener = stage.on("stagemousemove", drag);
-    };
-
-    function drag(event) {
-      r.w = event.stageX - selection.x;
-      r.h = event.stageY - selection.y;
-    }
-
-    function dragEnd(event) {
-      stage.off("stagemousemove", moveListener);
-    }
-
-    function tick(event) {
-      stage.update(event);
-      sd.offset--;
-    }
-
+    this.element = element;
   }
+
+  start(){
+  let sel = vis.selection;
+  var selection = d3.select(".interactionLayer")
+  let line = [0,0,0,0];
+  let drawLine=  selection.append('line')
+  .attr('class','svgSelectionElement')
+  .attr('stroke', 'grey')
+  .attr('stroke-width','2px')
+  .style("stroke-dasharray", ("10,3")) // make the stroke dashed
+
+
+  let toggleSelected = true;
+  selection.on('click',()=>{
+    console.log("begin");
+    if(toggleSelected == true) {
+      console.log( d3.event.pageX, d3.event.pageY )
+      line[0]= d3.event.clientX
+      line[1]= d3.event.clientY
+      d3.select(".interactionLayer").classed("selected", true);
+      toggleSelected = false;
+
+      selection.on('mousemove',()=>{
+        line[2] = d3.event.pageX;
+        line[3] = d3.event.pageY;
+        drawLine
+        .attr('x1',line[0])
+        .attr('y1',line[1])
+        .attr('x2', line[2])
+        .attr('y2', line[3])
+      });
+
+    } else {
+      d3.select(".interactionLayer").classed("deselected", true);
+      toggleSelected = true;
+      line[2] = d3.event.pageX;
+      line[3] = d3.event.pageY;
+      drawLine
+      .attr('x2', line[2])
+      .attr('y2', line[3])
+      let lin2 =new sel.LineSelection(line);
+      this.element[0].select(lin2);
+      //this.element[0].redraw();
+
+      line = [0,0,0,0]
+      console.log("teste moves");
+      selection.on('mousemove',()=>{
+      });
+
+    }
+
+    console.log("end");
+  });
+
+
+  selection.on('dblclick',()=>{
+    let lin2 =new sel.LineSelection([0,0,0,0]);
+    //this.element[0].select(lin2);
+
+    console.log(this.element[0])
+    //this.element[0].redraw();
+    console.log("db click")
+    line= [0,0,0,0]
+  });
+
+
+  for (let i = 0; i <this.element.length ; i++) {
+     this.element[i].setInteractionMode(true);
+      console.log('LineStrategy created');
+    }
+}
 
 }

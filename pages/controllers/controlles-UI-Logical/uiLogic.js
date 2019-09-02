@@ -264,12 +264,9 @@ $(document).ready(function () {
 })
 
 // --atualizar interface tools ferramentas de interação -------------------------------------------------------------------------------------------
-let menu_tools = (parentElement) => {
-  $(parentElement).load('public/html/menu-tools.html')
+let menu_tools = async (parentElement) => {
+  await $(parentElement).load('public/html/menu-tools.html')
 
-  $(document).ready(function () {
-      // strategia alteração da interação com mouse
-  })
 }
 
 function updateTools () {
