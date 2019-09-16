@@ -71,6 +71,7 @@ ipc.on('file-data', function (event, data) {
 
 ipc.on('change-datasample', function (event, data) {
   _data_ = data
+  console.log(data)
   clean_menus()
   updatevis()
 })
@@ -198,7 +199,8 @@ $(document).ready(function () {
         'Treemap': {name: 'Treemap'},
         'Histogram': {name: 'Histogram'},
         'Sunburst': {name: 'Sunburst'},
-        'BarChart': {name: 'Bar Chart'}
+        'BarChart': {name: 'Bar Chart'},
+        'CirclePacking': {name: 'Circle Packing'}
       }
     })
 
@@ -225,6 +227,7 @@ $(document).ready(function () {
             width: '800px',
             height: '600px'
           })
+          console.log(_data_)
           pc.data(_data_)
           pc.redraw()
           let file = new Blob([element.innerHTML], {type: 'image/svg+xml'})

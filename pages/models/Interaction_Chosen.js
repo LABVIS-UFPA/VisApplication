@@ -145,15 +145,15 @@ class ZoomOnStrategy extends Strategy{
     .scaleExtent([1, 5])
     .on("zoom", zoomed));
 
-    function zoomed() {
-        g.attr("transform", d3.event.transform);
-        g.translate(d3.event.transform.x, d3.event.transform.y);
-        //g.scale(zoom.transform, d3.zoomIdentity);
-        //g.save();
-
-
-    //    g.restore();
-      }
+    // function zoomed() {
+    //     g.attr("transform", d3.event.transform);
+    //     g.translate(d3.event.transform.x, d3.event.transform.y);
+    //     //g.scale(zoom.transform, d3.zoomIdentity);
+    //     //g.save();
+    //
+    //
+    // //    g.restore();
+    //   }
   }
 
     console.log(' DetaionsOnStrategy created');

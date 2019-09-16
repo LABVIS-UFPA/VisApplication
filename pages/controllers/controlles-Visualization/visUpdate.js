@@ -142,6 +142,8 @@ function filterCategoricalValues(attr,item_name, item_value) {
                     }else if(!d.data && d[item_name] != item_value) {
                         return "grey";
                     }else{
+                        console.log("deu certo")
+                        console.log(d)
                         return old_Color;
                     }
                 });
@@ -161,9 +163,11 @@ function filterColorContinues(item,min,max,min_select,max_select){
         if ($(index).children("svg").length){
             this.__vis__.setColor(function (d, i) {
                 if(d.data && d.data[item]>=min_select && d.data[item]<=max_select) {
+                    console.log("deu certo")
                     return old_Color;
                 }
                 else if(!d.data && d[item]>=min_select && d[item]<=max_select){
+                    console.log("deu certo")
                     return old_Color;
                 }
                 else{
@@ -181,8 +185,8 @@ function details_on_demand(element,items) {
     let parentElement = element.parentElement;
     element.on("datamouseover",function(d,i){
         parentElement.__vis__.detail(d,i,items);
-          
-    
+
+
       });
 }
 
