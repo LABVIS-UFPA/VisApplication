@@ -1,4 +1,9 @@
-module.exports = class DataPreparation{
+/**
+ * Class Data preparation and processing class for later use.
+ * @param {object} data - Selected database.
+ */
+
+class DataPreparation{
   constructor(data) {
     this.data = data;
     this.data_keys =Object.keys(this.data[0]);
@@ -12,15 +17,27 @@ module.exports = class DataPreparation{
     this.setCategorical_values();
   }
 
+  /**
+   * Get the keys of columns.
+   * @return {string} the key values ​​of all columns.
+   */
   getKeys(){
     return this.data_keys;
   }
 
+  /**
+   * set the values keys of columns.
+   * @return {string} the key values ​​of all columns.
+   */
   getValues(){
     return this.data_values;
   }
 
-  //values of min and max
+  /**
+   * Get the limit of columns.
+   * @return {array<number>} the minimum and maximum limit values ​​of each column.
+   */
+
   getLimit(){
     return this.limit_values;
 
@@ -31,7 +48,6 @@ module.exports = class DataPreparation{
 
       let values =this.data.map(value=>value[this.data_keys[i]]);
       values = [...new Set(values)];
-      // console.log(values);
       this.data_values.push(values);
     }
     return this.data_values;
@@ -58,6 +74,12 @@ module.exports = class DataPreparation{
     }
   }
 
+
+  /**
+   * Get Categorical values of database.
+   * @return {array<string>} The attribute of of each column in the dataset.
+   */
+
   getCategorical_values(){
     return this.categorical_values;
   }
@@ -71,6 +93,10 @@ module.exports = class DataPreparation{
     }
   }
 
+  /**
+   * Get numeric values of database.
+   * @return {array<number>} The non-repeating values ​​of each dataset column.
+   */
   getNumeric_values(){
     return this.numeric_values;
   }

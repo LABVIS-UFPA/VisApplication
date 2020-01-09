@@ -1,6 +1,7 @@
-
-
-module.exports = class Interaction_Chosen {
+/**
+ * Class Data Interaction Chosen for all visualizations.
+ */
+class Interaction_Chosen {
   constructor() {
     this.element = [];
     this.type;

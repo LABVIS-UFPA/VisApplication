@@ -28,13 +28,13 @@ function initialize () {
     makeSingleInstance();
 
     function createWindow () {
-        const appIcon = new Tray(__dirname+'/pages/public/css/icons/home.png');
+        const appIcon = new Tray(__dirname+'/src/public/css/icons/home.png');
         const windowOptions = {
             width: 1080,
             minWidth: 680,
             height: 840,
             title: app.getName(),
-            icon:__dirname+'/pages/public/css/icons/home.png'
+            icon:__dirname+'/src/public/css/icons/home.png'
         };
         // if (process.platform === 'linux') {
         //   windowOptions.icon = path.join(__dirname, '/assets/app-icon/png/512.png')
@@ -49,7 +49,7 @@ function initialize () {
         });
 
         mainWindow = new BrowserWindow(windowOptions);
-        mainWindow.loadURL(path.join('file://', __dirname, '/pages/mainWindow.html'));
+        mainWindow.loadURL(path.join('file://', __dirname, '/src/mainWindow.html'));
 
         mainWindow.on('closed', () => {
             mainWindow = null

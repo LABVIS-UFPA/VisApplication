@@ -14,13 +14,14 @@
     "package:win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --out=out --icon=assets/app-icon/win/app.ico",
     "package:linux": "electron-packager . --overwrite --platform=linux --arch=x64 --out=out",
     "package:sign-exe": "signcode './out/Electron API Demos-win32-ia32/Electron API Demos.exe' --cert ~/electron-api-demos.p12 --prompt --name 'Electron API Demos' --url 'http://electron.atom.io'",
-    "package:installer": "node ./script/installer.js",
+    "package:installer": "node script-electron/installer.js",
     "package:sign-installer": "signcode './out/windows-installer/ElectronAPIDemosSetup.exe' --cert ~/electron-api-demos.p12 --prompt --name 'Electron API Demos' --url 'http://electron.atom.io'",
-    "xpackage:mas": "./script/mas.sh",
-    "windows-store": "node ./script/windows-store.js",
-    "release": "node ./script/release.js",
+    "xpackage:mas": "script-electron/mas.sh",
+    "windows-store": "node script-electron/windows-store.js",
+    "release": "node script-electron/release.js",
     "prepack": "check-for-leaks",
-    "prepush": "check-for-leaks"
+    "prepush": "check-for-leaks",
+    "doc": "jsdoc -c jsdoc.json"
   },
   "repository": "https://github.com/electron/electron-api-demos",
   "keywords": [
@@ -38,6 +39,7 @@
     "electron-packager": "^12.2.0",
     "electron-winstaller": "^2.7.0",
     "husky": "^0.14.3",
+    "jsdoc": "^3.6.3",
     "mocha": "^5.2.0",
     "npm-run-all": "^4.1.5",
     "request": "^2.88.0",

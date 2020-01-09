@@ -4,8 +4,6 @@ const fs = require('fs')
 const ipc = require('electron').ipcRenderer
 const vis = require('@labvis-ufpa/vistechlib')
 const d3 = require('d3')
-const DataPreparation = require('./models/DataPreparation.js')
-const Interaction_Chosen = require('./models/Interaction_Chosen.js')
 console.log(vis)
 console.log(ipc)
 let _data_
@@ -15,6 +13,11 @@ let defautColor = d3.scaleOrdinal(d3.schemeCategory10);
 let interaction = new Interaction_Chosen();
 let inputVis = ''
 
+/**add graphic on selected div
+ * @param {string} visName - name of graphic selected to be created
+ * @param {string} parentElement - div class name where view will be added
+ * @event
+ * */
 let addVis = (visName, parentElement) => {
     let pc = new vis[visName](parentElement)
 
@@ -267,6 +270,11 @@ $(document).ready(function () {
 })
 
 // --atualizar interface tools ferramentas de interação -------------------------------------------------------------------------------------------
+
+/** importa estrutura html do menu de configurações da pasta **public/html/**
+ * @param {string} parentElement - titulo do id da div pai onde o elemento sera adicionado
+ * @interface
+ * */
 let menu_tools = async (parentElement) => {
   await $(parentElement).load('public/html/menu-tools.html')
 
@@ -293,6 +301,10 @@ function updateTools () {
   details()
 }
 
+/**
+ * Aturaliza interface conforme os dados inseridos e crias as sub menus com interações e mudanças nos clicks
+ * @event
+ * */
 function updateInteface () {
   data_prep = new DataPreparation(_data_)
   const dimension = data_prep.data_keys
@@ -301,6 +313,10 @@ function updateInteface () {
 
 // --------------parte dinamica dos menus---------
 // ------colors-----------------
+  /**
+   * use **colors()** para criar o menu html de cores e adicionar os inputs seleção de cores conforme os dados
+   * @interface
+   * */
   const colors = () => {
     let items = $('.colorSelector').children('.optColor').length
     $.each(dimension, function (i, item) {
@@ -343,7 +359,11 @@ function updateInteface () {
         updateCategoricalColor(d_values[index], dataHeader, colors)
       } else if (!isNaN(d_values[index][1]) && d_values[index].length > 10) {
         let k = limit.indexOf(dataHeader)
-        updateColorContinues(d_values[index], dataHeader, limit[k + 1], limit[k + 2])
+        console.log("teste:",dataHeader);
+        console.log("teste:2",d_values[index])
+        let color1 = $("#getColor1").val();
+        let color2 = $("#getColor2").val();
+        updateColorContinues(dataHeader, limit[k + 1], limit[k + 2],color1,color2)
       } else {
         updateCategoricalColor(d_values[index], dataHeader, colors)
       }
@@ -401,6 +421,10 @@ function updateInteface () {
     }
   }
 
+  /**
+   * use **filter()** para criar o menu html e opções de filtros conforme os dados
+   * @interface
+   * */
 // filter-------------------
   const filter = () => {
     data_prep = new DataPreparation(_data_)
@@ -511,13 +535,16 @@ function updateInteface () {
       let item_key = $('select.filter').val()
       let attr_value = $('select.categoricalFilter').val()
 
-      let i = dimension.indexOf(item_key)
-      let listItem = d_values[i]
-      filterCategoricalValues(listItem, item_key, attr_value)
+      filterCategoricalValues(item_key, attr_value)
     }
   }
 
+  /**
+   * use **hierarchies()** para criar  hieraquias nos dados  para visualizações hieraquicas e controle de drag-drop
+   * @interface
+   * */
 // hieraquies----------
+
   const hierarchies = () => {
     let hierarchyAttrs = $('.selectHierarchy')
     let categorical_values = data_prep.getCategorical_values()
@@ -576,6 +603,10 @@ function updateInteface () {
   }
 
 // ---size--------------
+  /**
+   * use **size()** para criar  e atualizar opções do menu de size para os itens da visualização
+   * @interface
+   * */
   const size = () => {
     let sizeAttr = $('.selectSize')
 
@@ -592,10 +623,14 @@ function updateInteface () {
       })
     })
     $('select.selectSize').change(function () {
-      updateSize()
+      updateSize(this.value);
     })
   }
 // ---------------default menu--------------------
+  /**
+   * use **defaultMenu()** para criar o html de controle das cores de criação padrão dos itens e higlight
+   * @interface
+   * */
   const defaultMenu = () => {
     $('input.setColorDefault').change(function () {
       updatevis()
@@ -609,7 +644,10 @@ function updateInteface () {
       updatevis()
     })
   }
-
+  /**
+   * use **filter_by_dimension()** para criar o html de opções de filtro de dimensões do dados
+   * @interface
+   * */
 // -------filtro nas dimensões--------------------------------------------------
   const filter_by_dimension = () => {
     data_prep = new DataPreparation(_data_)
@@ -645,7 +683,12 @@ function updateInteface () {
 }
 
 // -----------------limpar o menu quando mudar uma nova base de dados------------------------------------------------------------
-function clean_menus () {
+/**
+ *event to clear settings menu interface.
+ *function to clear html from application settings menu
+ * @event
+ */
+function clean_menus() {
   let parent = $('#menu_settings').parent().parent();
   $('#menu_settings').remove();
 
@@ -653,8 +696,13 @@ function clean_menus () {
   addMenu(parent)
   updateInteface()
 }
-
 // ----------------list item menu----------------------------------------------------------------------------------
+
+/**
+ * criar menu html do configurações e controle das da interfaces dos submenus hiden and show
+ * @param {string} parentElement - titulo da id do elemento pai onde o menu será adicionado
+ * @interface
+ */
 let addMenu = async(parentElement) => {
   await $(parentElement).load('public/html/menu-settings-vis.html')
   $(document).ready(function () {
