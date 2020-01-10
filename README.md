@@ -1,5 +1,5 @@
 # VisApplication
-Interactive information visualization tool with a set of standard techniques and scalable layout that can be used in [Blocks](https://github.com/gustavoresque/DataGenerator "Blocks") or individually.
+Interactive information visualization tool with a set of techniques, pattern and scalable layout can be used in [Blocks](https://github.com/gustavoresque/DataGenerator "Blocks") or individually.
 
 
 ## How to build
@@ -15,23 +15,10 @@ You can run the application locally running the code below:
 ```
 npm start
 ```
-After that you can run the following codes:
-### Windows
-```
-electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true --out=release-builds --version-string.ProductName="DataGenerator"
-```
-### Linux
-```
-electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --prune=true --out=release-builds --version-string.ProductName="DataGenerator"
-```
-### MacOS
-```
-electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-builds --version-string.ProductName="DataGenerator"
-```
 
 ###  Documentation
 
-[Api documentation](https://doxdox.org/LABVIS-UFPA/vistechlib "documentation")
+[Api documentation](https://doxdox.org/LABVIS-UFPA/VisApplication "documentation")
 
 ## License
 
