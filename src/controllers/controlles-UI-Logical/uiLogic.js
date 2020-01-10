@@ -271,8 +271,8 @@ $(document).ready(function () {
 
 // --atualizar interface tools ferramentas de interação -------------------------------------------------------------------------------------------
 
-/** importa estrutura html do menu de configurações da pasta **public/html/**
- * @param {string} parentElement - titulo do id da div pai onde o elemento sera adicionado
+/** import html structure from folder settings menu **public / html /**
+ * @param {string} parentElement - parent div id title where element will be added
  * @interface
  * */
 let menu_tools = async (parentElement) => {
@@ -302,7 +302,7 @@ function updateTools () {
 }
 
 /**
- * Aturaliza interface conforme os dados inseridos e crias as sub menus com interações e mudanças nos clicks
+ * Update interface as you enter data and create submenus with interactions and click changes
  * @event
  * */
 function updateInteface () {
@@ -314,7 +314,7 @@ function updateInteface () {
 // --------------parte dinamica dos menus---------
 // ------colors-----------------
   /**
-   * use **colors()** para criar o menu html de cores e adicionar os inputs seleção de cores conforme os dados
+   * use **colors()** to create the html color menu and add the color selection inputs according to the data
    * @interface
    * */
   const colors = () => {
@@ -422,7 +422,7 @@ function updateInteface () {
   }
 
   /**
-   * use **filter()** para criar o menu html e opções de filtros conforme os dados
+   * use **filter()** to create html menu and filter options according to the data
    * @interface
    * */
 // filter-------------------
@@ -540,7 +540,7 @@ function updateInteface () {
   }
 
   /**
-   * use **hierarchies()** para criar  hieraquias nos dados  para visualizações hieraquicas e controle de drag-drop
+   * use **hierarchies()** create data hierarchies for hierarchical visualization and drag-drop control
    * @interface
    * */
 // hieraquies----------
@@ -604,7 +604,7 @@ function updateInteface () {
 
 // ---size--------------
   /**
-   * use **size()** para criar  e atualizar opções do menu de size para os itens da visualização
+   * use **size()** to create and update size menu options for view items
    * @interface
    * */
   const size = () => {
@@ -628,7 +628,7 @@ function updateInteface () {
   }
 // ---------------default menu--------------------
   /**
-   * use **defaultMenu()** para criar o html de controle das cores de criação padrão dos itens e higlight
+   * use **defaultMenu()** to create the default item creation color control html and higlight
    * @interface
    * */
   const defaultMenu = () => {
@@ -645,7 +645,7 @@ function updateInteface () {
     })
   }
   /**
-   * use **filter_by_dimension()** para criar o html de opções de filtro de dimensões do dados
+   * use **filter_by_dimension()** to create data dimension filter options html
    * @interface
    * */
 // -------filtro nas dimensões--------------------------------------------------
@@ -699,8 +699,8 @@ function clean_menus() {
 // ----------------list item menu----------------------------------------------------------------------------------
 
 /**
- * criar menu html do configurações e controle das da interfaces dos submenus hiden and show
- * @param {string} parentElement - titulo da id do elemento pai onde o menu será adicionado
+ * create html menu of settings and control of interfaces of submenus hiden and show
+ * @param {string} parentElement - parent element id title where the menu will be added
  * @interface
  */
 let addMenu = async(parentElement) => {

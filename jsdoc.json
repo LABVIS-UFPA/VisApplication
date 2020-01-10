@@ -18,7 +18,7 @@
   "opts": {
     "template": "templates/default",
     "encoding": "utf8",
-    "destination": "./out/",
+    "destination": "./documentation/",
     "recurse": true,
     "readme": "README.md"
   }

@@ -11,7 +11,7 @@ let oldColorMax;
 // /** @module visualization */
 
 /**
- * Essa função  atualiza as visualização resenhado e inserindo os dados para todas as visaulizações na tela  **/
+ * This function updates the reviewed views and entering data for all views on screen **/
 function updatevis() {
     let colorDefault = $("input.setColorDefault").val();
     let highlightDefault = $("input.setHighlightColor").val();
@@ -31,7 +31,7 @@ function updatevis() {
 }
 //size items treeamp
 /**
- * @description Essa função  atualiza o tamanho do items conforme os atributo a dimensão da base de dados selecionada
+ * @description This function updates the size of items according to the attributes of the selected database dimension.
  * @param {string} size - The title of dimesion chosen size.
  *
  * */
@@ -47,8 +47,8 @@ function updateSize(size) {
 
 
 /**
- * @description Essa função  atualiza as hieraquias conforme as dimensões adicionadas
- * @param {array.<string>} hie -  array com titulo das dimensões selecionadas da base de dados para montar a hieraquia.
+ * @description This function updates hierarchies as dimensions are added.
+ * @param {array.<string>} hie -  array with title of the selected dimensions of the database to mount the hierarchy.
  *
  * */
 function updateHie(hie){
@@ -67,10 +67,10 @@ function updateHie(hie){
 }
 
 /**
- * @description função  para coloração em dimensões continuas
- * @param {array.<string>} attr -  array com titulo da  dimensão continua.
- * @param {number} min -  valor minimo da dimensão continua .
- * @param {number} max -  valor máximo da dimensão continua .
+ * @description function for coloring in continuous dimensions
+ * @param {array.<string>} attr -  array with continuous dimension title.
+ * @param {number} min -  minimum value of the dimension continues.
+ * @param {number} max -  maximum value of the continuous dimension.
 
  *
  * */
@@ -129,10 +129,10 @@ function updateColorContinues(attr,min,max,colorMin,colorMax){
 
 //categorical color
 /**
- * @description função  para coloração em dimensões categoricas
- * @param {string} attr - Titulo de dimensão selecionada para coloração.
- * @param {array.<string>} item -  array com titulo do valores da categoricos da dimensão attr.
- * @param {array.<string>} colors -  array com titulo das dimensões selecionadas da base de dados para montar a hieraquia.
+ * @description function for coloring in categorical dimensions
+ * @param {string} attr - Dimension title selected for coloring.
+ * @param {array.<string>} item -  title array of the attr category dimension values.
+ * @param {array.<string>} colors - array with title of the selected dimensions of the database to mount the hierarchy.
  *
  * */
 function updateCategoricalColor(attr, item, colors) {
@@ -158,9 +158,9 @@ function updateCategoricalColor(attr, item, colors) {
 };
 
 /**
- * @description função  de filtro de cor para valores categoricos
- * @param {string} attr - Titulo da dimensão categorica selecionada para filtro.
- * @param {string} select_item - attributo da dimensão selecionado para o filtro
+ * @description color filter function for categorical values
+ * @param {string} attr - Title of the selected categorical dimension to filter.
+ * @param {string} select_item - dimension attribute selected for filter
  * */
 
 function filterCategoricalValues(attr, select_item) {
@@ -191,12 +191,12 @@ function filterCategoricalValues(attr, select_item) {
     });
 };
 /**
- * @description função  de filtro de cor para valores continuos
- * @param {string} attr - Titulo da dimensão categorica selecionada para filtro.
- * @param {number} min - valor minimo do atributo
- * @param {number} max - valor maximo do atributo
- * @param {number} min_select - limite minimo para filtro
- * @param {number} max_select - limite maximo para filtro
+ * @description color filter function for continuous values
+ * @param {string} attr - Title of the selected categorical dimension to filter.
+ * @param {number} min - minimum attribute value
+ * @param {number} max - attribute maximum value
+ * @param {number} min_select - minimum filter limit
+ * @param {number} max_select - maximum filter limit
 
  * */
 
