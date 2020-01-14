@@ -1,5 +1,5 @@
 /**
- * Class Data Interaction Chosen for all visualizations.
+ * Data interaction of the chosen class. used for all views controls real-time mouse event dispatch uses pattern strategy
  */
 class Interaction_Chosen {
   constructor() {

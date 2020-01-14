@@ -13,10 +13,11 @@ let defautColor = d3.scaleOrdinal(d3.schemeCategory10);
 let interaction = new Interaction_Chosen();
 let inputVis = ''
 
-/**add graphic on selected div
+/** create and add graphic to selected html div. Exemplo de uso **addVis(scatterplotMatrix,contentDiv)** .
  * @param {string} visName - name of graphic selected to be created
  * @param {string} parentElement - div class name where view will be added
  * @event
+ * @return {object} svg visualization
  * */
 let addVis = (visName, parentElement) => {
     let pc = new vis[visName](parentElement)
@@ -302,8 +303,9 @@ function updateTools () {
 }
 
 /**
- * Update interface as you enter data and create submenus with interactions and click changes
+ * Refresh the interface as you enter data and create submenus with interactions and click changes, function responsible for updating color menu options, filter, hierarchies, demand details and all other menus use **updateInteface()** .
  * @event
+ * @return {object} updated html element
  * */
 function updateInteface () {
   data_prep = new DataPreparation(_data_)
@@ -314,7 +316,7 @@ function updateInteface () {
 // --------------parte dinamica dos menus---------
 // ------colors-----------------
   /**
-   * use **colors()** to create the html color menu and add the color selection inputs according to the data
+   * use **colors()** To create options in the html color menu and add the color selection inputs as needed, you can add various inputs or color range. Use the html element in the html **colorSelector** class to select and update options.
    * @interface
    * */
   const colors = () => {
@@ -422,7 +424,7 @@ function updateInteface () {
   }
 
   /**
-   * use **filter()** to create html menu and filter options according to the data
+   * use **filter()** To create options in the html menu and filter according to the data, selector can be created for categorical attributes or numeric range for continuous attributes. and use the html **filter** class to add options and interactions
    * @interface
    * */
 // filter-------------------
@@ -540,7 +542,7 @@ function updateInteface () {
   }
 
   /**
-   * use **hierarchies()** create data hierarchies for hierarchical visualization and drag-drop control
+   * use **hierarchies()** create data hierarchies for hierarchical viewing, and drag and drop control, the hierarchy options html interface is created and multiple hierarchies can also be added or removed through interactions. html **selectHierarchy** class is used to create html elements
    * @interface
    * */
 // hieraquies----------
@@ -604,7 +606,7 @@ function updateInteface () {
 
 // ---size--------------
   /**
-   * use **size()** to create and update size menu options for view items
+   * use **size()** to create and size select options to display items. use html select **selectSize** to create elements
    * @interface
    * */
   const size = () => {
@@ -628,7 +630,7 @@ function updateInteface () {
   }
 // ---------------default menu--------------------
   /**
-   * use **defaultMenu()** to create the default item creation color control html and higlight
+   * use **defaultMenu()** to create the default item creation color control html and higlight. use html select **input.setColorDefault** and **input.setHighlightColor** to create elements and changes
    * @interface
    * */
   const defaultMenu = () => {
@@ -645,7 +647,7 @@ function updateInteface () {
     })
   }
   /**
-   * use **filter_by_dimension()** to create data dimension filter options html
+   * use **filter_by_dimension()** create html data dimension filter options, create filter option checbox and use html class **menu-filter_dimension** to add checkboxes
    * @interface
    * */
 // -------filtro nas dimensões--------------------------------------------------
@@ -684,9 +686,10 @@ function updateInteface () {
 
 // -----------------limpar o menu quando mudar uma nova base de dados------------------------------------------------------------
 /**
- *event to clear settings menu interface.
+ *event to clear settings menu interface use  **clean_menus()** .
  *function to clear html from application settings menu
  * @event
+ * @return {object} html element
  */
 function clean_menus() {
   let parent = $('#menu_settings').parent().parent();

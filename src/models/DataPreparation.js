@@ -1,5 +1,5 @@
 /**
- * Class Data preparation and processing class for later use.
+ * Class Class Data preparation and processing class for later use.can return keys, arrays, minimum and maximum as needed for application
  * @param {object} data - Selected database.
  */
 
@@ -34,7 +34,7 @@ class DataPreparation{
   }
 
   /**
-   * Get the limit of columns.
+   * Get the column limit in the array where the minimum value **array[0]** and maximum value **array[1]**
    * @return {array<number>} the minimum and maximum limit values ​​of each column.
    */
 

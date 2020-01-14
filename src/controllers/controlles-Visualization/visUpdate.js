@@ -11,7 +11,7 @@ let oldColorMax;
 // /** @module visualization */
 
 /**
- * This function updates the reviewed views and entering data for all views on screen **/
+ * This function redraws all screen views, enters data, and redraws **/
 function updatevis() {
     let colorDefault = $("input.setColorDefault").val();
     let highlightDefault = $("input.setHighlightColor").val();
@@ -31,7 +31,7 @@ function updatevis() {
 }
 //size items treeamp
 /**
- * @description This function updates the size of items according to the attributes of the selected database dimension.
+ * @description This function updates the size of items according to the attributes of the selected database dimension, works in hierarchical views.
  * @param {string} size - The title of dimesion chosen size.
  *
  * */
@@ -47,7 +47,7 @@ function updateSize(size) {
 
 
 /**
- * @description This function updates hierarchies as dimensions are added.
+ * @description This function creates hierarchies as dimensions are added to hierarchical views, they must be passed the title of the selected dimensions.
  * @param {array.<string>} hie -  array with title of the selected dimensions of the database to mount the hierarchy.
  *
  * */
@@ -67,7 +67,7 @@ function updateHie(hie){
 }
 
 /**
- * @description function for coloring in continuous dimensions
+ * @description continuous color coloring function by tweening two colors, this function has effect on all screen views
  * @param {array.<string>} attr -  array with continuous dimension title.
  * @param {number} min -  minimum value of the dimension continues.
  * @param {number} max -  maximum value of the continuous dimension.
@@ -129,7 +129,7 @@ function updateColorContinues(attr,min,max,colorMin,colorMax){
 
 //categorical color
 /**
- * @description function for coloring in categorical dimensions
+ * @description coloring function in categorical dimensions, this function has effect on all views
  * @param {string} attr - Dimension title selected for coloring.
  * @param {array.<string>} item -  title array of the attr category dimension values.
  * @param {array.<string>} colors - array with title of the selected dimensions of the database to mount the hierarchy.
@@ -158,7 +158,7 @@ function updateCategoricalColor(attr, item, colors) {
 };
 
 /**
- * @description color filter function for categorical values
+ * @description Color filter function for categorical values, Color values are preserved. This function, once applied, has an effect on all views.
  * @param {string} attr - Title of the selected categorical dimension to filter.
  * @param {string} select_item - dimension attribute selected for filter
  * */
@@ -191,7 +191,7 @@ function filterCategoricalValues(attr, select_item) {
     });
 };
 /**
- * @description color filter function for continuous values
+ * @description color filter function for continuous values, can pass the color filter range, and prescribe the visualization colors, this function has effect on all screen views
  * @param {string} attr - Title of the selected categorical dimension to filter.
  * @param {number} min - minimum attribute value
  * @param {number} max - attribute maximum value
