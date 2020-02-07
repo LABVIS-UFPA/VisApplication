@@ -2,7 +2,7 @@
   "plugins": ["plugins/markdown"],
   "recurseDepth": 10,
   "source": {
-    "include": ["src"],
+    "include": ["src","tutorials"],
     "excludePattern": "(node_modules/|docs)",
     "excludePattern": "(^|\\/|\\\\/)_"
   },
@@ -13,13 +13,19 @@
   },
   "templates": {
     "cleverLinks": false,
-    "monospaceLinks": false
+    "monospaceLinks": false,
+    "default": {
+      "staticFiles": {
+        "paths": ["./tutorials/img"]
+      }
+    }
   },
   "opts": {
     "template": "templates/default",
     "encoding": "utf8",
     "destination": "./documentation/",
     "recurse": true,
+    "tutorials": "./tutorials",
     "readme": "README.md"
   }
 }

@@ -150,7 +150,6 @@ $(document).ready(function () {
         callback: function (key) {
           if (_data_) {
             let content = $('#' + $(this).attr('data-nodeid')).children('.partition-content')
-            // let content = $("#"+$(this).attr("data-nodeVis")).children(".partition-content");
             let partition = $(this).parents('.partition-node').attr('id')
             content.empty()
             addMenu(content)
@@ -195,6 +194,13 @@ $(document).ready(function () {
           ipc.send('not-data')
         }
       },
+      /**
+       * @description variable with the json object with the name for the button and the name of the library 
+       * view vistechlib that's enough to add a new view
+       * @example {ParallelCoordinates': {name: 'Parallel Coordinates'}} 
+       * @tutorial add_vis
+       *
+       */ 
       items: {
         'ParallelCoordinates': {name: 'Parallel Coordinates'},
         'ParallelBundling': {name: 'Bundled Parallel Coordinates'},
@@ -318,6 +324,7 @@ function updateInteface () {
   /**
    * use **colors()** To create options in the html color menu and add the color selection inputs as needed, you can add various inputs or color range. Use the html element in the html **colorSelector** class to select and update options.
    * @interface
+   * @tutorial menu-color
    * */
   const colors = () => {
     let items = $('.colorSelector').children('.optColor').length
@@ -426,6 +433,7 @@ function updateInteface () {
   /**
    * use **filter()** To create options in the html menu and filter according to the data, selector can be created for categorical attributes or numeric range for continuous attributes. and use the html **filter** class to add options and interactions
    * @interface
+   * @tutorial filter
    * */
 // filter-------------------
   const filter = () => {
@@ -544,6 +552,7 @@ function updateInteface () {
   /**
    * use **hierarchies()** create data hierarchies for hierarchical viewing, and drag and drop control, the hierarchy options html interface is created and multiple hierarchies can also be added or removed through interactions. html **selectHierarchy** class is used to create html elements
    * @interface
+   * @tutorial hierarchy
    * */
 // hieraquies----------
 
@@ -632,6 +641,7 @@ function updateInteface () {
   /**
    * use **defaultMenu()** to create the default item creation color control html and higlight. use html select **input.setColorDefault** and **input.setHighlightColor** to create elements and changes
    * @interface
+   * @tutorial default-colors
    * */
   const defaultMenu = () => {
     $('input.setColorDefault').change(function () {
@@ -649,6 +659,7 @@ function updateInteface () {
   /**
    * use **filter_by_dimension()** create html data dimension filter options, create filter option checbox and use html class **menu-filter_dimension** to add checkboxes
    * @interface
+   * @tutorial filter-dimension
    * */
 // -------filtro nas dimensões--------------------------------------------------
   const filter_by_dimension = () => {
@@ -705,6 +716,7 @@ function clean_menus() {
  * create html menu of settings and control of interfaces of submenus hiden and show
  * @param {string} parentElement - parent element id title where the menu will be added
  * @interface
+ * @tutorial menu-settings
  */
 let addMenu = async(parentElement) => {
   await $(parentElement).load('public/html/menu-settings-vis.html')

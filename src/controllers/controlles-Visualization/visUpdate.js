@@ -8,10 +8,15 @@ let oldColorMin;
 let oldColorMax;
 
 //update functions
-// /** @module visualization */
-
 /**
- * This function redraws all screen views, enters data, and redraws **/
+ * This function redraws all screen views, enters data, and redraws 
+ * @example 
+ * // basic selection for all views using the ".partition-content" class used in all update functions
+ * $(".partition-content").each(function () {
+ *      this.__vis__.data(_data_);
+ *      this.__vis__.redraw();
+    });
+ * **/
 function updatevis() {
     let colorDefault = $("input.setColorDefault").val();
     let highlightDefault = $("input.setHighlightColor").val();
@@ -71,6 +76,11 @@ function updateHie(hie){
  * @param {array.<string>} attr -  array with continuous dimension title.
  * @param {number} min -  minimum value of the dimension continues.
  * @param {number} max -  maximum value of the continuous dimension.
+ * @example  
+ * Scale color linear used     
+ * let c = d3.scaleLinear()
+        .domain([min,max])
+        .range([colorMin,colorMax]);
 
  *
  * */
@@ -133,7 +143,9 @@ function updateColorContinues(attr,min,max,colorMin,colorMax){
  * @param {string} attr - Dimension title selected for coloring.
  * @param {array.<string>} item -  title array of the attr category dimension values.
  * @param {array.<string>} colors - array with title of the selected dimensions of the database to mount the hierarchy.
- *
+ * @example
+ * return  colors[attr.indexOf(d.data[item])];//   d.data[] hierchies visualization  
+ * return colors[attr.indexOf(d[item])];//         d[] other visualizations
  * */
 function updateCategoricalColor(attr, item, colors) {
     attr_global = attr;
@@ -175,13 +187,11 @@ function filterCategoricalValues(attr, select_item) {
         $(".partition-content").each(function (i,index) {
             if($(index).children("svg").length){
                 this.__vis__.setColor(function (d,i) {
-                    if(d.data && d.data[item_name] != select_item){
+                    if(d.data && d.data[attr] != select_item){
                         return "grey";
-                    }else if(!d.data && d[item_name] != select_item) {
+                    }else if(!d.data && d[attr] != select_item) {
                         return "grey";
                     }else{
-                        console.log("deu certo")
-                        console.log(d)
                         return old_Color;
                     }
                 });
@@ -228,6 +238,12 @@ function filterColorContinues(attr,min,max,min_select,max_select){
 }
 
 //detalhes sobre demanda setar os itens
+
+
+/**
+ * activate details on demand use visthechlib  function detail(data,index,items value)
+ * @param  {string} items - list name of dimensions 
+ */
 function details_on_demand(element,items) {
     let parentElement = element.parentElement;
     element.on("datamouseover",function(d,i){
@@ -264,6 +280,11 @@ function detail_on(element){
     });
 }
 
+/**
+ * update filter by dimension use visthechlib function filterByDimension()
+ * @param {Array<string>} dimension_select - list name of dimensions
+ * array dimension_select
+ */
 function updateFilter_by_dimension(){
     const dimension_select = get_values_Filter_by_dimension();
         $(".partition-content").each(function () {

@@ -172,7 +172,7 @@ function openFile() {
         checkType = checkType[checkType.length - 1].split('.');
 
         if (checkType[1] == 'csv') {
-            console.log('csv');
+  
             csv()
                 .fromFile(fileName)
                 .then((jsonObj) => {
@@ -184,7 +184,7 @@ function openFile() {
                             }
                         }
                     }
-                    console.log(jsonObj);
+    
                     mainWindow.webContents.send("file-data", jsonObj)
                 })
         }
@@ -196,7 +196,7 @@ function openFile() {
         if(checkType[1]=='tsv' || checkType[1]=='txt'){
             let jsonObj = fs.readFileSync(fileName, "utf8");
             jsonObj = tsvJSON(jsonObj);
-            console.log(jsonObj);
+
             mainWindow.webContents.send("file-data", jsonObj);
 
         }

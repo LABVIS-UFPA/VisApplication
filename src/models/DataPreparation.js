@@ -1,6 +1,9 @@
 /**
  * Class Class Data preparation and processing class for later use.can return keys, arrays, minimum and maximum as needed for application
  * @param {object} data - Selected database.
+ * @example 
+ * const data = {.......};
+ * const DataPreparation = new DataPreparation(data);
  */
 
 class DataPreparation{

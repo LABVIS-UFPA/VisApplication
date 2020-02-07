@@ -1,0 +1,31 @@
+{
+    "add_vis":{
+        "title":"Add Visualization"
+
+    },
+    "create-partition":{
+        "title":"Create New Partition"
+    },
+    "menu-settings":{
+        "title":"Menu settings"
+    },
+    "menu-color":{
+        "title":"Color by attribute menu "
+    },
+    "hierarchy":{
+        "title":"hierarchies and size menu "
+    },
+    "anottation":{
+        "title": "Anottation"
+    },
+    "filter":{
+        "title": "Filter by attributes"
+    },
+    "filter-dimension":{
+        "title":"Filter by dimension"
+    },
+    "highlight":{
+        "title":"Highlight"
+    }
+
+}
