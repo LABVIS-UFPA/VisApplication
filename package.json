@@ -59,6 +59,7 @@
     "electron-shortcut-normalizer": "^1.0.0",
     "glob": "^7.1.4",
     "highlight.js": "^9.15.9",
+    "svgsaver": "^0.9.0",
     "update-electron-app": "^1.5.0",
     "ws": "^6.2.1"
   },
