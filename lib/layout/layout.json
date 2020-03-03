@@ -1,0 +1,18 @@
+{
+  "partition": {
+    "colluns":[
+      {
+        "visname": "chart",
+        "width": 500,
+        "height": 200,
+        "rows": [
+          {
+            "visname": "chart",
+            "width": 500,
+            "height": 200
+          }
+        ]
+      }
+    ]
+  }
+}

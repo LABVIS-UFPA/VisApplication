@@ -154,7 +154,7 @@ $(document).ready(function () {
             let partition = $(this).parents('.partition-node').attr('id')
             content.empty()
             addMenu(content)
-            //updateInteface()
+            updateInteface()
             //ipc.send('update-sampledata', {})
           } else {
             alert('You have to link data first')
@@ -196,6 +196,7 @@ $(document).ready(function () {
 
               ipc.send('update-sampledata', {})
               createVis(content.get(0), select);
+              updateInteface();
 
             } else {
               alert('You have to link data first')
