@@ -1,20 +1,20 @@
 // controle e criação das interfaces ini
-const { exec } = require('child_process')
-const fs = require('fs')
-const ipc = require('electron').ipcRenderer
-const vis = require('@labvis-ufpa/vistechlib')
-const d3 = require('d3')
+const { exec } = require('child_process');
+const fs = require('fs');
+const ipc = require('electron').ipcRenderer;
+const vis = require('@labvis-ufpa/vistechlib');
+const d3 = require('d3');
 const SvgSaver = require('svgsaver');
 
 
-console.log(vis)
-console.log(ipc)
-let _data_
-let data_prep
+console.log(vis);
+console.log(ipc);
+let _data_;
+let data_prep;
 
 let defautColor = d3.scaleOrdinal(d3.schemeCategory10);
 let interaction = new Interaction_Chosen();
-let inputVis = ''
+let inputVis = '';
 
 /** create and add graphic to selected html div. Exemplo de uso **addVis(scatterplotMatrix,contentDiv)** .
  * @param {string} visName - name of graphic selected to be created
@@ -190,12 +190,13 @@ $(document).ready(function () {
               }
 
               let content = $('#' + $(this).attr('data-nodeid')).children('.partition-content')
-              content.empty()
-              settings_individual_for_views(content.get(0))
-              addVis(name, content.get(0))
+              content.empty();
+              settings_individual_for_views(content.get(0));
+              addVis(name, content.get(0));
 
-              ipc.send('update-sampledata', {})
+              ipc.send('update-sampledata', {});
               createVis(content.get(0), select);
+              updateInterface();
 
             } else {
               alert('You have to link data first')
@@ -438,11 +439,11 @@ function updateTools() {
  * @event
  * @return {object} updated html element
  * */
-function updateInteface() {
-  data_prep = new DataPreparation(_data_)
-  const dimension = data_prep.data_keys
-  const d_values = data_prep.data_values
-  const limit = data_prep.limit_values
+function updateInterface() {
+  data_prep = new DataPreparation(_data_);
+  const dimension = data_prep.data_keys;
+  const d_values = data_prep.data_values;
+  const limit = data_prep.limit_values;
 
   // --------------parte dinamica dos menus---------
   // ------colors-----------------
@@ -460,7 +461,7 @@ function updateInteface() {
           text: dimension[i]
         }).addClass('optColor'))
       }
-    })
+    });
 
     // input colors dinamicamente
     $('select.colorSelector').change(function () {
@@ -686,11 +687,11 @@ function updateInteface() {
   // hieraquies----------
 
   const hierarchies = () => {
-    let hierarchyAttrs = $('.selectHierarchy')
-    let categorical_values = data_prep.getCategorical_values()
+    let hierarchyAttrs = $('.selectHierarchy');
+    let categorical_values = data_prep.data_keys;
 
     $(hierarchyAttrs).each(function (i, attr) {
-      let items = $(attr).children('.optHie').length
+      let items = $(attr).children('.optHie').length;
       $.each(categorical_values, function (i, item) {
         if ($(attr).length && items < categorical_values.length) {
           $(attr).append($('<option>', {
@@ -699,7 +700,7 @@ function updateInteface() {
           }).addClass('optHie'))
         }
       })
-    })
+    });
 
     $('select.selectHierarchy').change(function () {
       let hie = $('select.selectHierarchy').val()
@@ -837,7 +838,7 @@ function clean_menus() {
 
   parent.empty();
   addMenu(parent)
-  updateInteface()
+  updateInterface()
 }
 // ----------------list item menu----------------------------------------------------------------------------------
 
@@ -998,7 +999,7 @@ let addMenu = async (parentElement) => {
 
 
     updateTools()
-    updateInteface()
+    updateInterface()
   })
 }
 // ------gerar conteudo do input dinamicamente------------------------------------------------------------------------------
