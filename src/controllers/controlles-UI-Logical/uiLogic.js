@@ -12,7 +12,7 @@ console.log(ipc)
 let _data_
 let data_prep
 
-let defautColor = d3.scaleOrdinal(d3.schemeCategory10);
+let defautColor = d3.scaleOrdinal(d3.schemeTableau10);
 let interaction = new Interaction_Chosen();
 let inputVis = ''
 
@@ -154,7 +154,7 @@ $(document).ready(function () {
             let partition = $(this).parents('.partition-node').attr('id')
             content.empty()
             addMenu(content)
-            //updateInteface()
+            updateInterface()
             //ipc.send('update-sampledata', {})
           } else {
             alert('You have to link data first')
@@ -235,10 +235,10 @@ $(document).ready(function () {
             "CirclePacking": {
               name: "CirclePacking",
             },
-            "PieChart": {
-              name: "PieChart",
-              items: {},
-            },
+            // "PieChart": {
+            //   name: "PieChart",
+            //   items: {},
+            // },
           }
         };
 
@@ -248,7 +248,8 @@ $(document).ready(function () {
           "BeeswarmPlot",
           "Histogram",
           "BarChart",
-          "PieChart"];
+          // "PieChart"
+        ];
 
         //function createSubItens(options, names, keys) {
         let i = 0;
@@ -438,7 +439,7 @@ function updateTools() {
  * @event
  * @return {object} updated html element
  * */
-function updateInteface() {
+function updateInterface() {
   data_prep = new DataPreparation(_data_)
   const dimension = data_prep.data_keys
   const d_values = data_prep.data_values
@@ -530,6 +531,7 @@ function updateInteface() {
 
       $('div.menuColor').append($('<div/>').attr('id', 'legend'))
 
+      //mimimo
       $('div.menuColor')
         .append($('<label/>').text(min)
           .css({ margin: '.4rem' })
@@ -537,10 +539,12 @@ function updateInteface() {
             .css({ height: '40px' })
             .attr('type', 'color')
             .addClass('getColor')
-            .attr('value', '#f7f9f9')
+            .attr('value', '#e9e9e9')
             .attr('id', value)
             .attr('id', 'getColor1')
           ))
+
+      //maximo
       $('div.menuColor')
         .append($('<label/>').text(max)
           .css({ margin: '.4rem', float: 'right' })
@@ -548,7 +552,7 @@ function updateInteface() {
             .css({ height: '40px' })
             .attr('type', 'color')
             .addClass('getColor')
-            .attr('value', '#006699')
+            .attr('value', '#4e79a7')
             .attr('id', value)
             .attr('id', 'getColor2')
           ))
@@ -687,15 +691,15 @@ function updateInteface() {
 
   const hierarchies = () => {
     let hierarchyAttrs = $('.selectHierarchy')
-    let categorical_values = data_prep.getCategorical_values()
+    let values_collums = data_prep.data_keys;
 
     $(hierarchyAttrs).each(function (i, attr) {
       let items = $(attr).children('.optHie').length
-      $.each(categorical_values, function (i, item) {
-        if ($(attr).length && items < categorical_values.length) {
+      $.each(values_collums, function (i, item) {
+        if ($(attr).length && items < values_collums.length) {
           $(attr).append($('<option>', {
-            value: categorical_values[i],
-            text: categorical_values[i]
+            value: values_collums[i],
+            text: values_collums[i]
           }).addClass('optHie'))
         }
       })
@@ -837,7 +841,7 @@ function clean_menus() {
 
   parent.empty();
   addMenu(parent)
-  updateInteface()
+  updateInterface()
 }
 // ----------------list item menu----------------------------------------------------------------------------------
 
@@ -998,7 +1002,7 @@ let addMenu = async (parentElement) => {
 
 
     updateTools()
-    updateInteface()
+    updateInterface()
   })
 }
 // ------gerar conteudo do input dinamicamente------------------------------------------------------------------------------

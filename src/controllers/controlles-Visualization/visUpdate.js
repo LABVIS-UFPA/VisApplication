@@ -87,7 +87,7 @@ function updatevis() {
  * */
 function updateSize(size) {
     $(".partition-content").each(function () {
-        if (this.__vis__.d_h) {
+        if (this.__vis__ && this.__vis__.d_h) {
             this.__vis__.setSize(size);
             this.__vis__.data(_data_);
             this.__vis__.redraw();
@@ -103,7 +103,7 @@ function updateSize(size) {
  * */
 function updateHie(hie) {
     $(".partition-content").each(function () {
-        if (this.__vis__.d_h) {
+        if (this.__vis__ && this.__vis__.d_h) {
             if (hie.length) {
                 this.__vis__.hierarchy(hie);
             }
