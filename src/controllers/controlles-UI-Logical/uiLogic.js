@@ -12,7 +12,7 @@ console.log(ipc);
 let _data_;
 let data_prep;
 
-let defautColor = d3.scaleOrdinal(d3.schemeCategory10);
+let defautColor = d3.scaleOrdinal(d3.schemeTableau10);
 let interaction = new Interaction_Chosen();
 let inputVis = '';
 
@@ -154,7 +154,7 @@ $(document).ready(function () {
             let partition = $(this).parents('.partition-node').attr('id')
             content.empty()
             addMenu(content)
-            //updateInteface()
+            updateInterface()
             //ipc.send('update-sampledata', {})
           } else {
             alert('You have to link data first')
@@ -236,10 +236,10 @@ $(document).ready(function () {
             "CirclePacking": {
               name: "CirclePacking",
             },
-            "PieChart": {
-              name: "PieChart",
-              items: {},
-            },
+            // "PieChart": {
+            //   name: "PieChart",
+            //   items: {},
+            // },
           }
         };
 
@@ -249,7 +249,8 @@ $(document).ready(function () {
           "BeeswarmPlot",
           "Histogram",
           "BarChart",
-          "PieChart"];
+          // "PieChart"
+        ];
 
         //function createSubItens(options, names, keys) {
         let i = 0;
@@ -477,7 +478,7 @@ function updateInterface() {
           return
         }
       }
-    })
+    });
 
     // alter menu select color attr
     $('div.menuColor').change(function () {
@@ -531,6 +532,7 @@ function updateInterface() {
 
       $('div.menuColor').append($('<div/>').attr('id', 'legend'))
 
+      //mimimo
       $('div.menuColor')
         .append($('<label/>').text(min)
           .css({ margin: '.4rem' })
@@ -538,10 +540,12 @@ function updateInterface() {
             .css({ height: '40px' })
             .attr('type', 'color')
             .addClass('getColor')
-            .attr('value', '#f7f9f9')
+            .attr('value', '#e9e9e9')
             .attr('id', value)
             .attr('id', 'getColor1')
           ))
+
+      //maximo
       $('div.menuColor')
         .append($('<label/>').text(max)
           .css({ margin: '.4rem', float: 'right' })
@@ -549,7 +553,7 @@ function updateInterface() {
             .css({ height: '40px' })
             .attr('type', 'color')
             .addClass('getColor')
-            .attr('value', '#006699')
+            .attr('value', '#4e79a7')
             .attr('id', value)
             .attr('id', 'getColor2')
           ))
