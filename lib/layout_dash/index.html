@@ -6,41 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script></script>
     <title>Document</title>
+
+    
+    <script src="../jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="layout.js"></script>
     <link rel="stylesheet" href="./layout_partition.css">
     <script src="./layout_partition.js"></script>
 </head>
 
 <body>
     <script>
-//        let $body = $('body')
-//        let partitionLayout = new PartitionLayout($body.get(0))
+        const data_json = data
+        let $body = $('body');
+        let partitionLayout = new PartitionLayout($body.get(0));
+
+        partitionLayout.import(data);        
+        console.log(partitionLayout)
 
     </script>
-    <div class="partition-root" >
-        <div class="partition-node" style=" resize: vertical;overflow: auto;">
-            <div class="partion-leaf" style="width: 33%;margin: 1px;background-color: cornflowerblue;">1</div>
-            <div class="partion-leaf" style="width: 33%;margin: 1px;background-color: cornflowerblue;">2</div>
-            <div class="partion-leaf" style="width: 33%;margin: 1px;background-color: cornflowerblue;">3</div>
-        </div>
-
-        <div class="partition-node">
-            <div class="partion-leaf" style="width: 25%;margin: 1px;background-color: cornflowerblue;">5</div>
-            <div class="partion-leaf" style="width: 25%;margin: 1px;background-color: cornflowerblue;">6</div>
-            <div class="partion-leaf" style="width: 25%;margin: 1px;background-color: cornflowerblue;">5</div>
-            <div class="partion-leaf" style="width: 25%;margin: 1px;background-color: cornflowerblue;">6</div>
-        </div>
-
-        <div class="partition-node">
-            <div class="partion-leaf" style="width:100%;margin: 1px;background-color: cornflowerblue;">5</div>
-         
-        </div>
-    </div>
-
-
-
-
-
-
+   
 
 </body>
 
