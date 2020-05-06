@@ -16,12 +16,12 @@
 
 <body>
     <script>
-        const data_json = data
         let $body = $('body');
         let partitionLayout = new PartitionLayout($body.get(0));
 
         partitionLayout.import(data);        
-        console.log(partitionLayout)
+        console.log(partitionLayout);
+        console.log(partitionLayout.export());
 
     </script>
    
