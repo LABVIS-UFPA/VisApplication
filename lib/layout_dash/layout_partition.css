@@ -3,6 +3,10 @@ html, body {
     margin: 0;
 }
 
+div{
+    user-select: none;
+}
+
 .partition-root{
     display: flex;
     flex-direction: column;
@@ -12,12 +16,14 @@ html, body {
 
 .partition-row{
     border-bottom: 2px dashed steelblue;
+    overflow: hidden;
 }
 .partition-row:last-child{
     border-bottom: none;
 }
 .partition-column{
     border-right: 2px dashed steelblue;
+    overflow: hidden;
 }
 .partition-column:last-child{
     border-right: none;
