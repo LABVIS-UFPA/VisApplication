@@ -62,7 +62,7 @@
     "highlight.js": "^9.18.1",
     "svgsaver": "^0.9.0",
     "update-electron-app": "^1.5.0",
-    "ws": "^6.2.1"
+    "ws": "^7.4.6"
   },
   "standard": {
     "env": {
