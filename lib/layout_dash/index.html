@@ -21,6 +21,14 @@
 
         partitionLayout.import(data);        
         console.log(partitionLayout);
+
+        partitionLayout.root.addChild(new Partition());
+
+        partitionLayout.updateHTML()
+
+        partitionLayout.setCutter({direction:"row"});
+        partitionLayout.setCutter({active:false});
+
         console.log(partitionLayout.export());
 
     </script>
