@@ -1,0 +1,49 @@
+{
+  "id": "000001",
+  "direction": "column",
+  "children": [
+    {
+      "proportion": 0.2,
+      "children": [
+        {
+          "proportion": 0.6,
+          "children": []
+        },
+        {
+          "proportion": 0.4,
+          "children": []
+        }
+      ]
+    },
+    {
+      "proportion": 0.1,
+      "children": []
+    },
+    {
+     "proportion": 0.1,
+      "children": []
+    },
+    {
+      "proportion": 0.6,
+      "children": [
+        {
+          "proportion": 0.6,
+          "children": [
+            {
+              "proportion": 0.6,
+              "children": []
+            },
+            {
+              "proportion": 0.4,
+              "children": []
+            }
+          ]
+        },
+        {
+          "proportion": 0.4,
+          "children": []
+        }
+      ]
+    }
+  ]
+}

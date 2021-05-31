@@ -6,7 +6,6 @@ const vis = require('@labvis-ufpa/vistechlib')
 const d3 = require('d3')
 const SvgSaver = require('svgsaver');
 
-
 console.log(vis)
 console.log(ipc)
 let _data_
@@ -68,12 +67,25 @@ ipc.on('add-vis', function (event, arg) {
   addVis(arg, $('.partition-content').get(0))
 })
 
+ipc.on('file-layout',function (event, data) {
+  let $body = $('body');
+  let partitionLayout = new PartitionLayout($body.get(0));
+  console.log(data);
+
+  partitionLayout.import(data);
+  console.log(partitionLayout);
+  console.log(partitionLayout.export());
+
+});
+
+
 ipc.on('file-data', function (event, data) {
   _data_ = data
   data_prep = new DataPreparation(_data_);
   clean_menus()
   updatevis()
 })
+
 
 ipc.on('change-datasample', function (event, data) {
   _data_ = data
