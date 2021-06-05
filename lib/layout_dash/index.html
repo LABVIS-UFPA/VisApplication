@@ -7,7 +7,7 @@
     <script></script>
     <title>Document</title>
 
-    
+
     <script src="../jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="layout.js"></script>
     <link rel="stylesheet" href="./layout_partition.css">
@@ -15,24 +15,41 @@
 </head>
 
 <body>
-    <script>
-        let $body = $('body');
-        let partitionLayout = new PartitionLayout($body.get(0));
+<script>
+  let $body = $('body')
+  let partitionLayout = new PartitionLayout($body.get(0))
 
-        partitionLayout.import(data);        
-        console.log(partitionLayout);
+  partitionLayout.import(data)
+  // console.log("layout",partitionLayout.root);
 
-        partitionLayout.root.addChild(new Partition());
+  $('.partition-node').each( (index,element) =>{
 
-        partitionLayout.updateHTML()
+    $(element).click((e) => {
+      console.log("verificar",(element));
+      // console.log("teste",element)
+      // console.log($(element).attr('id'));
+      // console.log("element",$(e.target).attr('id'))
+      // console.log("e:",e)
+      // console.log('eventos:',$(e.target).parent().attr('id'));
+      // partitionLayout.root.addChild(new Partition());
+      partitionLayout.getChildren($(element).attr('id'))
 
-        partitionLayout.setCutter({direction:"row"});
-        partitionLayout.setCutter({active:false});
+      partitionLayout.updateHTML()
 
-        console.log(partitionLayout.export());
+    })
+  })
 
-    </script>
-   
+  // partitionLayout.root.addChild(new Partition())
+
+  // partitionLayout.updateHTML()
+
+  partitionLayout.setCutter({ direction: 'column' })
+  partitionLayout.setCutter({ active: true })
+
+  console.log(partitionLayout.export())
+
+</script>
+
 
 </body>
 
