@@ -21,30 +21,15 @@
 
   partitionLayout.import(data)
   // console.log("layout",partitionLayout.root);
-
-  $('.partition-node').each( (index,element) =>{
-
-    $(element).click((e) => {
-      console.log("verificar",(element));
-      // console.log("teste",element)
-      // console.log($(element).attr('id'));
-      // console.log("element",$(e.target).attr('id'))
-      // console.log("e:",e)
-      // console.log('eventos:',$(e.target).parent().attr('id'));
-      // partitionLayout.root.addChild(new Partition());
-      partitionLayout.getChildren($(element).attr('id'))
-
-      partitionLayout.updateHTML()
-
-    })
-  })
-
-  // partitionLayout.root.addChild(new Partition())
-
-  // partitionLayout.updateHTML()
-
   partitionLayout.setCutter({ direction: 'column' })
   partitionLayout.setCutter({ active: true })
+
+
+  // partitionLayout.root.addChild(new Partition());
+
+  partitionLayout.updateHTML()
+
+
 
   console.log(partitionLayout.export())
 
