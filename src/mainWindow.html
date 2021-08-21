@@ -9,10 +9,10 @@
     <link rel="stylesheet" href="../lib/layout_dash/layout_partition.css">
     <link rel="stylesheet" href="../lib/contextMenu/jquery.contextMenu.min.css">
     <script>
-      if (typeof module === 'object') {
-        window.module = module;
-        module = undefined;
-      }
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
     </script>
     <script src="models/DataPreparation.js"></script>
     <script src="models/Interaction_Chosen.js"></script>
@@ -20,13 +20,13 @@
     <script src="../lib/contextMenu/jquery.contextMenu.js"></script>
     <script src="../lib/contextMenu/jquery.ui.position.min.js"></script>
     <script>
-      if (window.module) module = window.module;</script>
+        if (window.module) module = window.module;</script>
     <script src="../lib/date/date-en-US.js"></script>
     <script src="../lib/date/core.js"></script>
     <script src="../lib/date/parser.js"></script>
     <script src="../lib/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="../lib/jquery-ui.css">
-<!--    <script src="../lib/layout/partition_layout.js"></script>-->
+    <!--    <script src="../lib/layout/partition_layout.js"></script>-->
     <script src="../lib/layout_dash/layout_partition.js"></script>
 
     <script src="controllers/controlles-UI-Logical/uiLogic.js"></script>
@@ -35,6 +35,133 @@
 
 </head>
 <body>
+<style>
+    body{
+        display: flex;
+    }
+    #main{
+        width: 100%;
+        height:100vh;
+    }
+
+    #lateral-menu {
+        width: 50px;
+        background-color: #f1f1f1;
+        height: 100vh;
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        width: 50px;
+    }
+
+    ul li {
+        position: relative;
+    }
+
+    li ul {
+        position: absolute;
+        left: 50px;
+        top: 0;
+        display: none;
+    }
+
+    ul li a {
+        display: block;
+        text-decoration: none;
+        color: #212121;
+        background-color: #f1f1f1;
+        padding: 0px;
+        border: 1px solid #ccc;
+    }
+
+    li:hover ul {
+        display: block;
+    }
+
+</style>
+<script type="text/javascript">
+    startList = function () {
+        if (document.all && document.getElementById) {
+            navRoot = document.getElementById("menuDropDown");
+            for (i = 0; i < navRoot.childNodes.length; i++) {
+                node = navRoot.childNodes[i];
+                if (node.nodeName == "LI") {
+                    node.onmouseover = function () {
+                        this.className += " over";
+                    }
+                    node.onmouseout = function () {
+                        this.className = this.className.replace
+                        (" over", "");
+                    }
+                }
+            }
+        }
+    }
+    window.onload = startList;
+</script>
+
+<div id="lateral-menu">
+    <ul id="nav">
+        <li>
+            <div>
+                <img class='icons Color' src='./public/css/icons/fill_color.png' title='Color by attribute'>
+            </div>
+        </li>
+        <li>
+            <div>
+                <img class='icons Hie' src='./public/css/icons/tree_list.png' title='Hierarchy'>
+            </div>
+        </li>
+        <li>
+            <div>
+                <img class='icons Filter' src='./public/css/icons/filter_add.png' title='Filter'>
+            </div>
+        </li>
+        <li>
+            <div>
+                <img class='icons Default' src='./public/css/icons/color_picker_default.png' title='Default color'>
+            </div>
+        </li>
+        <li>
+            <div>
+                <img class='icons Filter_Dimension' src='./public/css/icons/select_by_adding_to_selection.png' title='Filter_Dimension'>
+            </div>
+        </li>
+        <li>
+            <div>
+                <img class='icons Zoom chosen' value="Zoom" src='./public/css/icons/zoom.png' title='Default Zoom'>
+            </div>
+        </li>
+        <li>
+            <div>
+                <img class='icons Anottation chosen' value="Anottation" src='./public/css/icons/new_comment.png' title='Anottation'>
+            </div>
+        </li>
+        <li>
+            <div>
+                <img class='icons highlighted chosen' value="highlighted" src='./public/css/icons/highlighter.png' title='highlighted'>
+            </div>
+        </li>
+<!--        <li>-->
+<!--            <div>-->
+<!--                <img class='icons Color' src='./public/css/icons/fill_color.png' title='Color by attribute'>-->
+<!--            </div>-->
+<!--            </a>-->
+<!--            <ul>-->
+<!--                <li><a href="#"></a></li>-->
+<!--                <li><a href="#"></a></li>-->
+<!--                <li><a href="#"></a></li>-->
+<!--                <li><a href="#">Sistemas</a></li>-->
+<!--            </ul>-->
+<!--        </li>-->
+    </ul>
+
+
+</div>
+<div id="main"></div>
 
 </body>
 </html>

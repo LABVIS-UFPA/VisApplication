@@ -14,6 +14,7 @@ let data_prep
 let defautColor = d3.scaleOrdinal(d3.schemeCategory10);
 let interaction = new Interaction_Chosen();
 let inputVis = ''
+let layout;
 
 /** create and add graphic to selected html div. Exemplo de uso **addVis(scatterplotMatrix,contentDiv)** .
  * @param {string} visName - name of graphic selected to be created
@@ -67,17 +68,62 @@ ipc.on('add-vis', function (event, arg) {
   addVis(arg, $('.partition-content').get(0))
 })
 
-ipc.on('file-layout',function (event, data) {
-  let $body = $('body');
-  let partitionLayout = new PartitionLayout($body.get(0));
-  console.log(data);
 
-  partitionLayout.import(data);
-  console.log(partitionLayout);
-  console.log(partitionLayout.export());
+ipc.on('file-layout',function (event, data) {
+  let $body = $('#main');
+  let partitionLayout = new PartitionLayout($body.get(0));
+  $(".partition-node").remove();
+  layout = partitionLayout;
+  layout.import(data);
+  console.log(layout);
 
 });
 
+ipc.on('cut_layout',function (direction){
+  let $body = $('#main');
+  let partitionLayout = new PartitionLayout($body.get(0));
+
+  partitionLayout.setCutter(true,direction);
+  layout.export()
+  partitionLayout.updateHTML();
+
+})
+
+ipc.on('export-layout',function(){
+  if(!layout){
+    alert("Layout is empty!");
+  }
+  download( layout.export(),'partition.json','json');
+
+})
+
+function download(content, filename, contentType)
+{
+  if(!contentType) contentType = 'application/octet-stream';
+  var a = document.createElement('a');
+  var blob = new Blob([JSON.stringify(content)], {'type':contentType});
+  a.href = window.URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+
+// function download(filename, text) {
+//   var pom = document.createElement('a');
+//   console.log("text", text)
+//   console.log("text",JSON.stringify(text))
+//   pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(text)));
+//   pom.setAttribute('type','json')
+//   pom.setAttribute('download', filename);
+//
+//   if (document.createEvent) {
+//     var event = document.createEvent('MouseEvents');
+//     event.initEvent('click', true, true);
+//     pom.dispatchEvent(event);
+//   }
+//   else {
+//     pom.click();
+//   }
+// }
 
 ipc.on('file-data', function (event, data) {
   _data_ = data
@@ -108,8 +154,7 @@ const layer = (boolean) => {
 // --------------------------interface tela inicial---------------------------------------------------------------------------------------
 $(document).ready(function () {
   ipc.send('document-ready')
-  let $body = $('body')
-  let partitionLayout = new PartitionLayout($body.get(0))
+
 
   $(window).resize(function () {
     $('.partition-content').each(function () {
@@ -411,6 +456,13 @@ let settings_individual_for_views = (vis_container) => {
     }
   });
 }
+
+ipc.on('cut-layout', function (event, direction) {
+  partitionLayout.setCutter(direction);
+  // clean_menus()
+  // updatevis()npm a
+})
+
 
 
 // --atualizar interface tools ferramentas de interação -------------------------------------------------------------------------------------------

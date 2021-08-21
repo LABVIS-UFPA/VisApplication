@@ -1,6 +1,8 @@
 {
   "id": "000001",
   "direction": "column",
+  "proportion": 1,
+  "isLeaf": false,
   "children": [
     {
       "proportion": 0.2,

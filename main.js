@@ -85,11 +85,13 @@ function initialize() {
                     label: 'cut layout', submenu: [
                         {
                             label: 'Row', click() {
+                                cut_layout('row')
                             },
 
                         },
                         {
                             label: 'Column', click() {
+                                cut_layout('column')
                             },
                         }
                     ]
@@ -214,10 +216,13 @@ function openFile() {
     });
 }
 
+function cut_layout(direction){
+    mainWindow.webContents.send("cut_layout", direction);
+}
+
 function exportLayoutFile() {
-    dialog.showOpenDialog(function (fileNames) {
-            mainWindow.webContents.send("export-layout", layout_json);
-    });
+    mainWindow.webContents.send("export-layout");
+
 }
 
 function importLayoutFile() {
