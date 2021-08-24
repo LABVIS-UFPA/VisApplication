@@ -4,48 +4,103 @@
   "proportion": 1,
   "isLeaf": false,
   "children": [
-    {
-      "proportion": 0.2,
-      "children": [
-        {
-          "proportion": 0.6,
-          "children": []
-        },
-        {
-          "proportion": 0.4,
-          "children": []
-        }
-      ]
-    },
-    {
-      "proportion": 0.1,
-      "children": []
-    },
-    {
-     "proportion": 0.1,
-      "children": []
-    },
-    {
-      "proportion": 0.6,
-      "children": [
-        {
-          "proportion": 0.6,
+      {
+          "id": "eDinDQ6k",
+          "direction": "row",
+          "proportion": 0.025783012510620845,
+          "isLeaf": true
+      },
+      {
+          "id": "B3eeEuao",
+          "direction": "row",
+          "proportion": 0.17983651226158037,
+          "isLeaf": false,
           "children": [
-            {
-              "proportion": 0.6,
-              "children": []
-            },
-            {
-              "proportion": 0.4,
-              "children": []
-            }
+              {
+                  "id": "x0bMSGQo",
+                  "direction": "column",
+                  "proportion": 0.41666666666666663,
+                  "isLeaf": false,
+                  "children": [
+                      {
+                          "id": "2gpnJm2e",
+                          "direction": "row",
+                          "proportion": 0.41666666666666663,
+                          "isLeaf": true
+                      },
+                      {
+                          "id": "pAsu1xr3",
+                          "direction": "row",
+                          "proportion": 0.5833333333333333,
+                          "isLeaf": true
+                      }
+                  ]
+              },
+              {
+                  "id": "oVI9n4T4",
+                  "direction": "column",
+                  "proportion": 0.5833333333333333,
+                  "isLeaf": true
+              }
           ]
-        },
-        {
-          "proportion": 0.4,
-          "children": []
-        }
-      ]
-    }
+      },
+      {
+          "id": "A0RbIG7P",
+          "direction": "row",
+          "proportion": 0.3405994550408719,
+          "isLeaf": false,
+          "children": [
+              {
+                  "id": "51sjUdJC",
+                  "direction": "column",
+                  "proportion": 0.41666666666666663,
+                  "isLeaf": true
+              },
+              {
+                  "id": "knJzE1oS",
+                  "direction": "column",
+                  "proportion": 0.5833333333333333,
+                  "isLeaf": false,
+                  "children": [
+                      {
+                          "id": "04FLLufg",
+                          "direction": "row",
+                          "proportion": 0.3128875912408759,
+                          "isLeaf": true
+                      },
+                      {
+                          "id": "IDyZN2Ln",
+                          "direction": "row",
+                          "proportion": 0.687112408759124,
+                          "isLeaf": true
+                      }
+                  ]
+              }
+          ]
+      },
+      {
+          "id": "wM9bZBUx",
+          "direction": "row",
+          "proportion": 0.16496350364963505,
+          "isLeaf": true
+      },
+      {
+          "id": "IHN4TUkB",
+          "direction": "row",
+          "proportion": 0,
+          "isLeaf": true
+      },
+      {
+          "id": "ZQVGYkjL",
+          "direction": "row",
+          "proportion": 0,
+          "isLeaf": true
+      },
+      {
+          "id": "Ef8d40yF",
+          "direction": "row",
+          "proportion": 0.28881751653729176,
+          "isLeaf": true
+      }
   ]
 }

@@ -85,13 +85,13 @@ function initialize() {
                     label: 'cut layout', submenu: [
                         {
                             label: 'Row', click() {
-                                cut_layout('row')
+                                cut_layout('column')
                             },
 
                         },
                         {
                             label: 'Column', click() {
-                                cut_layout('column')
+                                cut_layout('row')
                             },
                         }
                     ]
