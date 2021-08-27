@@ -190,7 +190,9 @@ $(document).ready(function () {
 
     // resize menus ------------------------------------------
     $body.on('layout:resize', '.partition-node', function (e) {
-        let content = $(this).children('.partition-content').get(0)
+        console.log("entrou no resize on!")
+        let content = $(this).children('partiton-content').get(0)
+        console.log(content, content.__vis__);
 
         if (content && content.__vis__) {
             content.__vis__.resize()
@@ -317,172 +319,172 @@ $(document).ready(function () {
 
     })
 
-    //
-    // $body.on('layout:created', '.partition-node', function (e) {
-    //     console.log('layout:created', this)
-    //     if (this !== e.target) {
-    //         return
-    //     }
-    //     // verificação para criação dos butões
-    //     if ($(this).children('.partition-content').children().is('button.btn.btn-large.btn-positive')) {
-    //         $(this).children('.partition-content').children().attr('data-nodeid', $(this).attr('id'))
-    //         return
-    //     } else
-    //         // não fazer nada caso existam menus
-    //     if ($(this).children('.partition-content').children('.partition-content').children().is('#menu_settings')) {
-    //         return
-    //     }
-    //     // verificar para abrir apenas um menu de settings
-    //     $('.partition-content').each(function (i, item) {
-    //         $(item).children('.AddSettings').remove()
-    //
-    //     })
-    //
-    //
-    //     // if (!$('#menu_settings').length) {
-    //     //     $(this).children('.partition-content').append($('<button/>')
-    //     //         .text(' view settings ')
-    //     //         .addClass('AddSettings')
-    //     //         .addClass('btn btn-large btn-positive')
-    //     //         .addClass('icon icon-cog')
-    //     //         .attr('data-nodeid', $(this).attr('id'))
-    //     //         .css({'float': 'right'}))
-    //     //
-    //     //     $.contextMenu({
-    //     //         selector: '.AddSettings',
-    //     //         trigger: 'left',
-    //     //         callback: function (key) {
-    //     //             if (_data_) {
-    //     //                 let content = $('#' + $(this).attr('data-nodeid')).children('.partition-content')
-    //     //                 let partition = $(this).parents('.partition-node').attr('id')
-    //     //                 content.empty()
-    //     //                 addMenu(content)
-    //     //                 updateInteface()
-    //     //                 //ipc.send('update-sampledata', {})
-    //     //             } else {
-    //     //                 alert('You have to link data first')
-    //     //                 ipc.send('not-data')
-    //     //             }
-    //     //         },
-    //     //         items: {
-    //     //             'menu settings visualization': {name: 'settings visualization'}
-    //     //         }
-    //     //
-    //     //     })
-    //     // }
-    //
-    //     $('.partition-node').each(function () {
-    //         $(this).append($('<button/>')
-    //             .text('Add Visualization')
-    //             .addClass('btn btn-large btn-positive')
-    //             .attr('data-nodeid', $(this).attr('id'))
-    //             .css({'float': 'right'}))
-    //     })
-    //
-    //     $.contextMenu({
-    //         selector: '.btn.btn-large.btn-positive',
-    //         trigger: 'left',
-    //         build: function ($trigger, e) {
-    //             let options = {
-    //                 callback: function (key, opt) {
-    //                     if (_data_) {
-    //                         let select;
-    //                         let name;
-    //                         if (key.split(',')) {
-    //                             key = key.split(',');
-    //                             name = key[0];
-    //                             select = key[1];
-    //                         }
-    //
-    //                         let content = $('#' + $(this).attr('data-nodeid')).children('.partition-content')
-    //                         content.empty()
-    //                         settings_individual_for_views(content.get(0))
-    //                         addVis(name, content.get(0))
-    //
-    //                         ipc.send('update-sampledata', {})
-    //                         createVis(content.get(0), select);
-    //                         updateInteface();
-    //
-    //                     } else {
-    //                         alert('You have to link data first')
-    //                         ipc.send('not-data')
-    //                     }
-    //
-    //                 },
-    //                 items: {
-    //                     "ParallelCoordinates": {
-    //                         name: "Parallel Coordinates",
-    //                     },
-    //                     "ParallelBundling": {
-    //                         name: "Bundled Parallel Coordinates",
-    //                     },
-    //                     "ScatterplotMatrix": {
-    //                         name: "Scatter Plot",
-    //                         items: {},
-    //                     },
-    //                     "BeeswarmPlot": {
-    //                         name: "Beeswarm Plot",
-    //                         items: {},
-    //                     },
-    //                     "Treemap": {
-    //                         name: "Treemap",
-    //                     },
-    //                     "Histogram": {
-    //                         name: "Histogram ",
-    //                         items: {},
-    //                     },
-    //                     "Sunburst": {
-    //                         name: "Sunburst"
-    //                     },
-    //                     'BarChart': {
-    //                         name: 'Bar Chart',
-    //                         items: {},
-    //                     },
-    //                     "CirclePacking": {
-    //                         name: "CirclePacking",
-    //                     },
-    //                     "PieChart": {
-    //                         name: "PieChart",
-    //                         items: {},
-    //                     },
-    //                 }
-    //             };
-    //
-    //             let keys = data_prep.data_keys;
-    //             let names = [
-    //                 "ScatterplotMatrix",
-    //                 "BeeswarmPlot",
-    //                 "Histogram",
-    //                 "BarChart",
-    //                 "PieChart"];
-    //
-    //             //function createSubItens(options, names, keys) {
-    //             let i = 0;
-    //             for (let i = 0; i < names.length; i++) {
-    //                 options.items[names[i]].items[names[i]] = {
-    //                     "name": 'all', className: 'list_collunms'
-    //                 }
-    //                 for (let j = 0; j < keys.length; j++) {
-    //                     options.items[names[i]].items[[names[i], keys[j]]] =
-    //                         {
-    //                             "name": keys[j],
-    //                             "value": names[i],
-    //                             "className": 'list_collunms',
-    //                         }
-    //
-    //                 }
-    //
-    //             }
-    //             return options;
-    //             //}
-    //
-    //             //return createSubItens(options, arrayNames, keys);
-    //         }
-    //
-    //     })
-    //
-    //     // Download Visualizations ------------------------------------------------------
-    // })
+
+    $body.on('layout:created', '.partition-node', function (e) {
+        // console.log('layout:created', this)
+        // if (this !== e.target) {
+        //     return
+        // }
+        // // verificação para criação dos butões
+        // if ($(this).children('.partition-content').children().is('button.btn.btn-large.btn-positive')) {
+        //     $(this).children('.partition-content').children().attr('data-nodeid', $(this).attr('id'))
+        //     return
+        // } else
+        //     // não fazer nada caso existam menus
+        // if ($(this).children('.partition-content').children('.partition-content').children().is('#menu_settings')) {
+        //     return
+        // }
+        // // verificar para abrir apenas um menu de settings
+        // $('.partition-content').each(function (i, item) {
+        //     $(item).children('.AddSettings').remove()
+        //
+        // })
+
+
+        // if (!$('#menu_settings').length) {
+        //     $(this).children('.partition-content').append($('<button/>')
+        //         .text(' view settings ')
+        //         .addClass('AddSettings')
+        //         .addClass('btn btn-large btn-positive')
+        //         .addClass('icon icon-cog')
+        //         .attr('data-nodeid', $(this).attr('id'))
+        //         .css({'float': 'right'}))
+        //
+        //     $.contextMenu({
+        //         selector: '.AddSettings',
+        //         trigger: 'left',
+        //         callback: function (key) {
+        //             if (_data_) {
+        //                 let content = $('#' + $(this).attr('data-nodeid')).children('.partition-content')
+        //                 let partition = $(this).parents('.partition-node').attr('id')
+        //                 content.empty()
+        //                 addMenu(content)
+        //                 updateInteface()
+        //                 //ipc.send('update-sampledata', {})
+        //             } else {
+        //                 alert('You have to link data first')
+        //                 ipc.send('not-data')
+        //             }
+        //         },
+        //         items: {
+        //             'menu settings visualization': {name: 'settings visualization'}
+        //         }
+        //
+        //     })
+        // }
+
+        // $('.partition-node').each(function () {
+        //     $(this).append($('<button/>')
+        //         .text('Add Visualization')
+        //         .addClass('btn btn-large btn-positive')
+        //         .attr('data-nodeid', $(this).attr('id'))
+        //         .css({'float': 'right'}))
+        // })
+
+        // $.contextMenu({
+        //     selector: '.btn.btn-large.btn-positive',
+        //     trigger: 'left',
+        //     build: function ($trigger, e) {
+        //         let options = {
+        //             callback: function (key, opt) {
+        //                 if (_data_) {
+        //                     let select;
+        //                     let name;
+        //                     if (key.split(',')) {
+        //                         key = key.split(',');
+        //                         name = key[0];
+        //                         select = key[1];
+        //                     }
+        //
+        //                     let content = $('#' + $(this).attr('data-nodeid')).children('.partition-content')
+        //                     content.empty()
+        //                     settings_individual_for_views(content.get(0))
+        //                     addVis(name, content.get(0))
+        //
+        //                     ipc.send('update-sampledata', {})
+        //                     createVis(content.get(0), select);
+        //                     updateInteface();
+        //
+        //                 } else {
+        //                     alert('You have to link data first')
+        //                     ipc.send('not-data')
+        //                 }
+        //
+        //             },
+        //             items: {
+        //                 "ParallelCoordinates": {
+        //                     name: "Parallel Coordinates",
+        //                 },
+        //                 "ParallelBundling": {
+        //                     name: "Bundled Parallel Coordinates",
+        //                 },
+        //                 "ScatterplotMatrix": {
+        //                     name: "Scatter Plot",
+        //                     items: {},
+        //                 },
+        //                 "BeeswarmPlot": {
+        //                     name: "Beeswarm Plot",
+        //                     items: {},
+        //                 },
+        //                 "Treemap": {
+        //                     name: "Treemap",
+        //                 },
+        //                 "Histogram": {
+        //                     name: "Histogram ",
+        //                     items: {},
+        //                 },
+        //                 "Sunburst": {
+        //                     name: "Sunburst"
+        //                 },
+        //                 'BarChart': {
+        //                     name: 'Bar Chart',
+        //                     items: {},
+        //                 },
+        //                 "CirclePacking": {
+        //                     name: "CirclePacking",
+        //                 },
+        //                 "PieChart": {
+        //                     name: "PieChart",
+        //                     items: {},
+        //                 },
+        //             }
+        //         };
+        //
+        //         let keys = data_prep.data_keys;
+        //         let names = [
+        //             "ScatterplotMatrix",
+        //             "BeeswarmPlot",
+        //             "Histogram",
+        //             "BarChart",
+        //             "PieChart"];
+        //
+        //         //function createSubItens(options, names, keys) {
+        //         let i = 0;
+        //         for (let i = 0; i < names.length; i++) {
+        //             options.items[names[i]].items[names[i]] = {
+        //                 "name": 'all', className: 'list_collunms'
+        //             }
+        //             for (let j = 0; j < keys.length; j++) {
+        //                 options.items[names[i]].items[[names[i], keys[j]]] =
+        //                     {
+        //                         "name": keys[j],
+        //                         "value": names[i],
+        //                         "className": 'list_collunms',
+        //                     }
+        //
+        //             }
+        //
+        //         }
+        //         return options;
+        //         //}
+        //
+        //         //return createSubItens(options, arrayNames, keys);
+        //     }
+        //
+        // })
+
+        // Download Visualizations ------------------------------------------------------
+    })
 })
 
 //-------------------------- menu de configurações iniciais------------------------------------------------------------------
