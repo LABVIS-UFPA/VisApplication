@@ -225,10 +225,9 @@ $(document).ready(function () {
                             select = key[1];
                         }
 
-                        let content = $('#' + $(this).attr('data-nodeid')).children('.partition-content')
+                        let content = $(this).parent().parent()
                         content.empty()
                         settings_individual_for_views(content.get(0))
-                        console.log("teste content",content)
                         addVis(name, content.get(0))
 
                         ipc.send('update-sampledata', {})

@@ -20,9 +20,9 @@
   let partitionLayout = new PartitionLayout($body.get(0))
 
   partitionLayout.import(data)
-  // console.log("layout",partitionLayout.root);
+  console.log("layout",partitionLayout.root);
   partitionLayout.updateHTML()
-  // partitionLayout.setCutter({active: true , direction: 'row' })
+  partitionLayout.setCutter({active: true , direction: 'column' })
 
   // partitionLayout.root.addChild(new Partition());
 
