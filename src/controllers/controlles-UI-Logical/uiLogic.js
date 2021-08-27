@@ -104,24 +104,6 @@ function download(content, filename, contentType) {
     a.click();
 }
 
-// function download(filename, text) {
-//   var pom = document.createElement('a');
-//   console.log("text", text)
-//   console.log("text",JSON.stringify(text))
-//   pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(text)));
-//   pom.setAttribute('type','json')
-//   pom.setAttribute('download', filename);
-//
-//   if (document.createEvent) {
-//     var event = document.createEvent('MouseEvents');
-//     event.initEvent('click', true, true);
-//     pom.dispatchEvent(event);
-//   }
-//   else {
-//     pom.click();
-//   }
-// }
-
 ipc.on('file-data', function (event, data) {
     _data_ = data
     data_prep = new DataPreparation(_data_);
@@ -166,51 +148,27 @@ $(document).ready(function () {
         }
     });
 
+    $body.on('layout:resize',  function (e) {
+        $('.partition-node').each(function () {
+            console.log("teste nodes", this)
+            console.log("teste",this.__vis__)
+            if (this && this.__vis__) {
+                    this.__vis__.resize()
+                }
+            })
+
+
+    });
 
     $(window).resize(function () {
+        console.log("resize window")
         $('.partition-content').each(function () {
-            if (this.__vis__) {
+            if (this && this.__vis__) {
                 this.__vis__.resize()
             }
         })
+
     })
-
-    // $('.partition-node').each(function (){
-    //     $(this)
-    //         .append($('<button/>').text(' view settings ')
-    //         .addClass('AddSettings')
-    //         .addClass('btn btn-large btn-positive')
-    //         .addClass('icon icon-cog')
-    //         .attr("width",'20px')
-    //         .attr('data-nodeid', $(this).attr('id'))
-    //         .css({'float': 'right'}))
-    //
-    // });
-
-
-    // resize menus ------------------------------------------
-    $body.on('layout:resize', '.partition-node', function (e) {
-        console.log("entrou no resize on!")
-        let content = $(this).children('partiton-content').get(0)
-        console.log(content, content.__vis__);
-
-        if (content && content.__vis__) {
-            content.__vis__.resize()
-        }
-    })
-
-    // $('.partition-node').each(function (){
-    //     console.log("paer",this)
-    //     $(this).append($('<button/>')
-    //         .text('Add Visualization')
-    //         .addClass('btn btn-large btn-positive')
-    //         .attr('data-nodeid', $(this).attr('id'))
-    //         .css({'float': 'right'}))
-    //
-
-    //
-    //
-    // })
 
     $.contextMenu({
         selector: '.btn.btn-large.btn-positive',
