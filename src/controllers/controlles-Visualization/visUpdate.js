@@ -65,7 +65,7 @@ function updatevis() {
 
     let colorDefault = $("input.setColorDefault").val();
     let highlightDefault = $("input.setHighlightColor").val();
-    $(".partition-content").each(function () {
+    $(".partition-node").each(function () {
         if (this.__vis__) {
             if (colorDefault && colorDefault != "#006699") {
                 this.__vis__.setColor(colorDefault);
@@ -86,7 +86,7 @@ function updatevis() {
  *
  * */
 function updateSize(size) {
-    $(".partition-content").each(function () {
+    $(".partition-node").each(function () {
         if (this.__vis__.d_h) {
             this.__vis__.setSize(size);
             this.__vis__.data(_data_);
@@ -102,7 +102,7 @@ function updateSize(size) {
  *
  * */
 function updateHie(hie) {
-    $(".partition-content").each(function () {
+    $(".partition-node").each(function () {
         if (this.__vis__.d_h) {
             if (hie.length) {
                 this.__vis__.hierarchy(hie);
@@ -168,7 +168,7 @@ function updateColorContinues(attr, min, max, colorMin, colorMax) {
         .attr("stop-color", $('#getColor2').val());
 
     //update no setcolor
-    $(".partition-content").each(function (i, index) {
+    $(".partition-node").each(function (i, index) {
         if ($(index).children("svg").length) {
             this.__vis__.setColor(function (d, i) {
                 if (d.data)
@@ -196,8 +196,8 @@ function updateCategoricalColor(attr, item, colors) {
     attr_global = attr;
     item_global = item;
     colors_global = colors;
-    $(".partition-content").each(function () {
-        $(".partition-content").each(function (i, index) {
+    $(".partition-node").each(function () {
+        $(".partition-node").each(function (i, index) {
             if ($(index).children("svg").length) {
                 this.__vis__.setColor(function (d, i) {
                     if (d.data) {
@@ -228,8 +228,8 @@ function filterCategoricalValues(attr, select_item) {
         updateCategoricalColor(attr_global, item_global, colors_global);
     }
 
-    $(".partition-content").each(function () {
-        $(".partition-content").each(function (i, index) {
+    $(".partition-node").each(function () {
+        $(".partition-node").each(function (i, index) {
             if ($(index).children("svg").length) {
                 this.__vis__.setColor(function (d, i) {
                     if (d.data && d.data[attr] != select_item) {
@@ -261,7 +261,7 @@ function filterColorContinues(attr, min, max, min_select, max_select) {
     } else {
         updateCategoricalColor(attr_global, item_global, colors_global);
     }
-    $(".partition-content").each(function (i, index) {
+    $(".partition-node").each(function (i, index) {
         if ($(index).children("svg").length) {
             this.__vis__.setColor(function (d, i) {
                 if (d.data && d.data[attr] >= min_select && d.data[attr] <= max_select) {
@@ -333,7 +333,7 @@ function detail_on(element) {
 function updateFilter_by_dimension() {
     const dimension_select = get_values_Filter_by_dimension();
     console.log(dimension_select);
-    $(".partition-content").each(function () {
+    $(".partition-node").each(function () {
         if (this.__vis__) {
             this.__vis__.filterByDimension(dimension_select)
             this.__vis__.data(_data_);

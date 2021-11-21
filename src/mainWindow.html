@@ -56,9 +56,16 @@
     }
 
     #submenus{
-        width: 50px;
+        width: 300px;
         background-color: #f1f1f1;
         height: 100%;
+    }
+
+    #menuContent{
+        width: 300px;
+        background-color: #f1f1f1;
+        height: 100%;
+
     }
     /*#submenus:hover{*/
     /*    width: 250px;*/
@@ -96,6 +103,7 @@
     li:hover ul {
         display: block;
     }
+   
 
 </style>
 <script type="text/javascript">
@@ -179,7 +187,262 @@
 </div>
 <div id="main"></div>
 
-<div id="submenus"></div>
+<div id="submenus">
+<div id="menuContent">
+    <div class="color-header" style="display:none;">
+        <button  class="color-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; margin-top: 10px; font-size: 15px; transition: 0.4s;">Color By Attribute
+            <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
+            <span class="icon icon-cancel cancel" style="float: right;"></span>
+        </button>
+    <div class="menuColor menu-acordion" >
+        <label style="margin: 0.4rem; float: initial;">Attribute</label>
+        <select class="form-control colorSelector" id="colorSelector">
+            <option value="..." class="optColor">...</option>
+        </select>
+    </div>
+
+    </div>
+
+
+    <div class="hierarchy-header" style="display:none;">
+        <button class="hierarchy-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+            Hierarchy
+            <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
+            <span class="icon icon-cancel cancel" style="float: right;"></span>
+        </button>
+
+
+        <div class="menuHie menu-acordion" style="width: 100%; position: relative; text-align: left"; >
+        Hierarchy
+
+        <select class="form-control selectHierarchy">
+            <!--<option value="..." class="optHie">...</option>-->
+        </select>
+
+        <div class="window-content list-group" >
+            <ul  id="sortable" style="width: 100%; max-height: 200px; overflow-y: scroll"></ul>
+
+        </div>
+
+        <div class="menuSize" style="width: 100%; position: relative; text-align: left;">
+            size
+            <select class="form-control selectSize">
+                <!--<option value="..." class="optSize">...</option>-->
+            </select>
+        </div>
+    </div>
+</div>
+
+
+<div class="filter-header" style="display:none;">
+    <button class="filter-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+        Filter
+        <span class="icon icon-minus"  id="plus-minus" style="float: right;"></span>
+        <span class="icon icon-cancel cancel" style="float: right;"></span>
+    </button>
+
+
+    <div class="menuFilter menu-acordion" style="width: 100%; position: relative; text-align: left;">
+        Select attribute
+        <select class="form-control filter">
+            <option value="..." class="optFilter">...</option>
+
+        </select>
+    </div>
+</div>
+
+<div class="default-header" style="display:none;">
+    <button class="default-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+        Default colors
+        <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
+        <span class="icon icon-cancel cancel" style="float: right;"></span>
+    </button>
+
+    <div class="menuDefault menu-acordion">
+        <div><label style="margin: 0.4rem; float: initial;">
+            Default color<input type="color" class="setColorDefault" value="#006699" style="height: 40px; float: initial;">
+        </label>
+        </div>
+        <div>
+            <label class="HighlightColor" style="margin: 0.4rem; float: initial;">
+                Highlight Color
+                <input type="color" class="setHighlightColor" id="setHighlightColor" value="#FF1122" style="height: 40px; float: initial;">
+            </label>
+        </div>
+    </div>
+</div>
+    <div class="filter_dimension-header" style="display:none;">
+        <button class="filter_dimension-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+            filter by dimension
+            <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
+            <span class="icon icon-cancel cancel" style="float: right;"></span>
+        </button>
+
+        <div class="menu-filter_dimension menu-acordion"  style="height: 400px; overflow-y: scroll;width: 100%; background-color: rgb(204, 204, 204);">
+        </div>
+    </div>
+
+    <!--interaction tools    -->
+
+    <div class="selection-header" style="display:none;">
+        <button class="selection-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+            Selection
+            <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
+            <span class="icon icon-cancel cancel" style="float: right;"></span>
+        </button>
+
+        <div class="menuSelection menu-acordion" style="width: 100%; position: relative; text-align: left;">
+            <img class='icons Line chosen' value="Line" src='./public/css/icons/draw_line.png' title='Line Selection'>
+
+            <img class='icons Rect chosen' value="Rect" src='./public/css/icons/layer_select.png' title='Rect Selection'>
+
+            <img class='icons handFree chosen' value="Free" src='./public/css/icons/tap.png' title='Free Selection'>
+
+            </select>
+        </div>
+    </div>
+
+
+    <div class="zoom-header" style="display:none">
+        <button class="selection-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+            Anottation
+            <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
+            <span class="icon plus-cancel cancel"  style="float: right;"></span>
+        </button>
+
+        <div class="menuZoom menu-acordion" style="width: 100%; position: relative; text-align: left;">
+            Select attribute
+            <select class="form-control filter">
+                <option value="..." class="optFilter">...</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="highlight-header" style="display:none;">
+        <button class="highlight-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+            Highlight
+            <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
+            <span class="icon icon-cancel cancel" style="float: right;"></span>
+        </button>
+        <style>
+            .switch {
+                margin: 10px;
+                position: relative;
+                display: inline-block;
+                width: 60px;
+                height: 34px;
+            }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+            input:checked + .slider {
+                background-color: #2196F3;
+            }
+
+            input:focus + .slider {
+                box-shadow: 0 0 1px #2196F3;
+            }
+
+            input:checked + .slider:before {
+                -webkit-transform: translateX(26px);
+                -ms-transform: translateX(26px);
+                transform: translateX(26px);
+            }
+
+            /* Rounded sliders */
+            .slider.round {
+                border-radius: 34px;
+            }
+            .slider.round:before {
+                border-radius: 50%;
+            }
+
+        </style>
+        <div class="menu-highlight menu-acordion" style="width: 100%; position: relative; text-align: left;">
+            <label class="switch">
+                <input id="highlight_selection" type="checkbox" checked>
+                <span class="slider round"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="anottation-header" style="display:none;">
+        <button class="anottation-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+            Anottation
+            <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
+            <span class="icon icon-cancel cancel" style="float: right;"></span>
+        </button>
+
+        <div class="menuAnottation menu-acordion" style="width: 100%; position: relative; text-align: left;">
+
+            <button id="clearComment" onclick="comentclear()">
+                clean
+            </button>
+        </div>
+    </div>
+
+    <div class="high-header" style="display:none;">
+        <button class="high-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+            Highlight Interaction
+            <span class="icon icon-high" id="plus-minus" style="float: right;"></span>
+            <span class="icon icon-cancel cancel" style="float: right;"></span>
+        </button>
+
+        <div class="menu-high menu-acordion"  style="height: 400px; overflow-y: scroll; position: absolute; width: 100%; background-color: rgb(204, 204, 204);">
+            <button class="highlight_on"  style="margin:10px"; value="on">On</button>
+            <button class="highlight_off" style="margin:10px"; value="on">Off</button>
+
+        </div>
+    </div>
+
+    <div class="Details-header" style="display:none;">
+        <button class="Details-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+            Details on demand
+            <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
+            <span class="icon icon-cancel cancel" style="float: right;"></span>
+        </button>
+
+        <div class="menu-details menu-acordion"  style="height: 400px; overflow-y: scroll; position: absolute; width: 100%; background-color: rgb(204, 204, 204);">
+        </div>
+    </div>
+
+
+
+</div>
+</div>
+
+
+
+</div>
 
 </body>
 </html>
