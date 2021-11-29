@@ -80,13 +80,17 @@ class HighlightStategy extends Strategy{
     for (let i = 0; i <this.element.length ; i++) {
       this.element[i].on("datamouseover",function(d,i){
         $(".partition-content").each(function(){
-          if(this.__vis__){
-            let elem = this.__vis__.getHighlightElement(i);
+          if(this.__vis__)
             this.__vis__.highlight(d,i);
-          }
         });
-      });
-      console.log('StrategyA highlight created')
+      }).on('datamouseout', function (d, i) {
+        $(".partition-content").each(function(){
+          if(this.__vis__)
+            this.__vis__.removeHighlight(d, i)
+        });
+
+
+      })
     }
   }
 }
