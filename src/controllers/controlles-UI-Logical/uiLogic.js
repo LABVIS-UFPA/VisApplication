@@ -27,37 +27,6 @@ let addVis = (visName, parentElement, select) => {
 
   layer(false)
 
-  pc.on('highlightstart', function (d, i) {
-    $('.partition-content').each(function () {
-      // if (this.__vis__ && this.__vis__ !== pc) {
-      // this.__vis__.highlight(d, i);
-      // }
-    })
-  })
-    .on('highlightend', function (d, i) {
-      $('.partition-content').each(function () {
-        if (this.__vis__ && this.__vis__ !== pc) {
-          this.__vis__.removeHighlight(d, i)
-        }
-      })
-    })
-    .on('datamouseover', function (d, i) {
-
-    })
-    .on('datamouseout', function (d, i) {
-      pc.removeHighlight(d, i)
-    })
-    .on('dataclick', function (d, i) {
-      $('.partition-content').each(function () {
-        // if (this.__vis__) {
-        // console.log('clicou', d, i)
-        // this.__vis__.comments(event.clientX,event.clientY);
-        // let elem = this.__vis__.getHighlightElement(i)
-        // this.__vis__.annotate(elem)
-        // }
-      })
-    })
-
   interaction.setElemt(pc)
   interaction.selectInteraction(inputVis);
   interaction.strategy.start();

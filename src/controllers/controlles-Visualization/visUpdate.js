@@ -30,13 +30,12 @@ function createVis(container, select) {
 
 /**
  * @description
- * @param {object} container - object html with view svg 
- * @param {array<string>} select - string elements selecteds 
+ * @param {object} container - object html with view svg
+ * @param {array<string>} select - string elements selecteds
  */
-function selectColumnsInVis(container, select) {
+async function selectColumnsInVis(container, select) {
 
     let keys = data_prep.data_keys;
-    
     var array_difference = keys.filter(function (x) {
         // checking second array does not contain element "x"
         if (select.indexOf(x) == -1)
@@ -45,15 +44,15 @@ function selectColumnsInVis(container, select) {
             return false;
     });
 
-    container.__vis__.filterByDimension(array_difference);
-    container.__vis__.data(_data_);
-    container.__vis__.redraw();
+    await container.__vis__.filterByDimension(array_difference);
+    await container.__vis__.data(_data_);
+    await container.__vis__.redraw();
 }
 
 
 /**
- * This function redraws all screen views, enters data, and redraws 
- * @example 
+ * This function redraws all screen views, enters data, and redraws
+ * @example
  * // basic selection for all views using the ".partition-content" class used in all update functions
  * $(".partition-content").each(function () {
  *      this.__vis__.data(_data_);
@@ -121,8 +120,8 @@ function updateHie(hie) {
  * @param {array.<string>} attr -  array with continuous dimension title.
  * @param {number} min -  minimum value of the dimension continues.
  * @param {number} max -  maximum value of the continuous dimension.
- * @example  
- * Scale color linear used     
+ * @example
+ * Scale color linear used
  * let c = d3.scaleLinear()
         .domain([min,max])
         .range([colorMin,colorMax]);
@@ -189,7 +188,7 @@ function updateColorContinues(attr, min, max, colorMin, colorMax) {
  * @param {array.<string>} item -  title array of the attr category dimension values.
  * @param {array.<string>} colors - array with title of the selected dimensions of the database to mount the hierarchy.
  * @example
- * return  colors[attr.indexOf(d.data[item])];//   d.data[] hierchies visualization  
+ * return  colors[attr.indexOf(d.data[item])];//   d.data[] hierchies visualization
  * return colors[attr.indexOf(d[item])];//         d[] other visualizations
  * */
 function updateCategoricalColor(attr, item, colors) {
@@ -287,7 +286,7 @@ function filterColorContinues(attr, min, max, min_select, max_select) {
 
 /**
  * activate details on demand use visthechlib  function detail(data,index,items value)
- * @param  {string} items - list name of dimensions 
+ * @param  {string} items - list name of dimensions
  */
 function details_on_demand(element, items) {
     let parentElement = element.parentElement;
