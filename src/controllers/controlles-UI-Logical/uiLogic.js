@@ -17,6 +17,8 @@ let interaction = new Interaction_Chosen();
 let inputVis = ''
 let layout;
 
+
+
 /** create and add graphic to selected html div. Exemplo de uso **addVis(scatterplotMatrix,contentDiv)** .
  * @param {string} visName - name of graphic selected to be created
  * @param {string} parentElement - div class name where view will be added
@@ -40,12 +42,14 @@ ipc.on('add-vis', function (event, arg) {
 
 
 ipc.on('file-layout', function (event, data) {
+    $(".partition-node").remove();
+
     let $body = $('#main');
     let partitionLayout = new PartitionLayout($body.get(0));
-    $(".partition-node").remove();
     layout = partitionLayout;
     layout.import(data);
     layout.updateHTML();
+
 
 });
 
@@ -59,6 +63,7 @@ ipc.on('export-layout', function () {
     if (!layout) {
         alert("Layout is empty!");
     }
+    console.log("export:",layout.export());
     download(layout.export(), 'partition.json', 'json');
 
 })
@@ -112,7 +117,7 @@ $(document).ready(function () {
 
     $("body").mousedown(function (event) {
         if (cut_divisions && event.which == 3) {
-            layout.setCutter({active: false, direction: 'column'});
+            layout.setCutter({active: false});
             alert("deselected layout cutout");
         }
     });
@@ -164,7 +169,7 @@ $(document).ready(function () {
                         updateInteface();
 
                     } else {
-                        alert('You have to link data first')
+                        errorEmptyDatabase();
                         ipc.send('not-data')
                     }
 
@@ -412,6 +417,8 @@ $(document).ready(function () {
 
         // Download Visualizations ------------------------------------------------------
     })
+
+    addMenu();
 })
 
 //-------------------------- menu de configurações iniciais------------------------------------------------------------------
@@ -542,7 +549,7 @@ let settings_individual_for_views = (vis_container) => {
 ipc.on('cut-layout', function (event, direction) {
     partitionLayout.setCutter(direction);
     // clean_menus()
-    // updatevis()npm a
+    // updatevis()
 })
 
 
@@ -662,6 +669,7 @@ function updateInteface() {
                             .css({margin: '.4rem', height: '40px'})
                             .attr('type', 'color')
                             .addClass('getColor')
+                            .addClass('form-label')
                             .attr('value', defautColor(i))
                             .attr('id', item))
                     )
@@ -1002,10 +1010,11 @@ function clean_menus() {
  * @tutorial menu-settings
  */
 let addMenu = async (parentElement) => {
+    if(!parentElement){
+        return
+    }
     await $(parentElement).load('public/html/menu-settings-vis.html')
-    $(document).ready(function () {
-
-        //resumir essa parte
+    $(document).ready(function () {//resumir essa parte
         $('.Color').click(function () {
             $('.color-header').children('button').children('#plus-minus').remove()
             if ($('.color-header').is(':visible')) {
@@ -1154,6 +1163,11 @@ let addMenu = async (parentElement) => {
         updateTools()
         updateInteface()
     })
+}
+
+function errorEmptyDatabase(){
+    console.log('You have to link data first')
+    alert('You have to link data first')
 }
 // ------gerar conteudo do input dinamicamente------------------------------------------------------------------------------
 
