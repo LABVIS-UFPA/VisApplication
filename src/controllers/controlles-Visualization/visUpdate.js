@@ -102,7 +102,7 @@ function updateSize(size) {
  *
  * */
 function updateHie(hie) {
-    $(".partition-content").each(function () {
+    $(".partition-node").each(function () {
         if (this.__vis__ && this.__vis__.d_h) {
             if (hie.length) {
                 this.__vis__.hierarchy(hie);
@@ -332,7 +332,6 @@ function detail_on(element) {
  */
 function updateFilter_by_dimension() {
     const dimension_select = get_values_Filter_by_dimension();
-    console.log(dimension_select);
     $(".partition-node").each(function () {
         if (this.__vis__) {
             this.__vis__.filterByDimension(dimension_select)

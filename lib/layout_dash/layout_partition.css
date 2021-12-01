@@ -37,7 +37,7 @@ div.partition-column:last-of-type{
 }
 
 .item{
-    /* resize: horizontal; 
+    /* resize: horizontal;
     overflow: auto; */
 
 }
@@ -48,7 +48,7 @@ body {
 
 .partition-divisor {
     position: absolute;
-    z-index: 1;
+    z-index: 5;
 }
 
 .partition-divisor-hor{

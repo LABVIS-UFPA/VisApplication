@@ -47,15 +47,33 @@ span.icon-plus:hover{
 
 
 /*icons menu interactions*/
-.icons{
+.icons-menu{
     margin: 12px;
     width: 30px;
     height: 30px;
 }
 
+.icon-trash{
+color:darkred;
+}
+.icon-trash:hover{
+    color:pink;
+}
 .icons:hover{
     background-color: #999999;
 
+}
+
+.cancel:hover{
+    color: pink;
+}
+
+.open:hover{
+    color: #6d6c6d;
+}
+
+.close:hover{
+    color: #6d6c6d;
 }
 
 div.tooltip {

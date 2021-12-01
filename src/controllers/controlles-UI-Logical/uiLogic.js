@@ -145,7 +145,7 @@ $(document).ready(function () {
     })
 
     $.contextMenu({
-        selector: '.btn.btn-large.btn-positive',
+        selector: '.btn.btn-success ',
         trigger: 'left',
         build: function ($trigger, e) {
             let options = {
@@ -251,6 +251,15 @@ $(document).ready(function () {
 
     })
 
+    $.contextMenu({
+            selector:'.icons.Color',
+            build: function($trigger, e) {
+                if(!data_prep){
+                    errorEmptyDatabase();
+                }
+
+            }}
+        )
 
     $body.on('layout:created', '.partition-node', function (e) {
         // console.log('layout:created', this)
@@ -274,7 +283,6 @@ $(document).ready(function () {
 
 
         // if (!$('#menu_settings').length) {
-        //     $(this).children('.partition-content').append($('<button/>')
         //         .text(' view settings ')
         //         .addClass('AddSettings')
         //         .addClass('btn btn-large btn-positive')
@@ -570,8 +578,9 @@ function updateTools() {
 
         for (let i = 0; i < dimension.length; i++) {
             $('div.menu-details')
+                .append($("<div/>")
                 .append($('<input/>')
-                    .attr('class', 'myCheckbox')
+                    .addClass('form-check-input')
                     .attr('type', 'checkbox')
                     .attr('value', dimension[i]))
                 .append($('<label/>')
@@ -580,7 +589,7 @@ function updateTools() {
                         'display': 'initial',
                         'font-size': '13px'
                     })
-                    .text(dimension[i]).append($('<br/>')))
+                    .text(dimension[i]).append($('<br/>'))))
         }
     }
     details()
@@ -749,13 +758,17 @@ function updateInteface() {
                         $('select.filter').parent()
                             .append($('<div/>')
                                 .append($('<div/>')
-                                    .append($('<p/>')
+                                    .append($('<label/>')
                                         .text('min:' + limit[j + 1])
-                                        .css('float', 'left'))
-                                    .append($('<p/>')
+                                        .css({'float': 'left',
+                                              'margin-top':'15px'
+                                        }))
+                                    .append($('<label/>')
                                         .text('max:' + limit[j + 2])
-                                        .css('float', 'right')))
-
+                                        .css(
+                                            {'float': 'right',
+                                             'margin-top':'15px'}
+                                        )))
                                 .append($('<div/>')
                                     .attr('id', 'slider-range')
                                     .css({
@@ -802,7 +815,7 @@ function updateInteface() {
                         $('select.filter').parent()
                             .append($('<select/>')
                                 .addClass('categoricalFilter')
-                                .addClass('form-control')
+                                .addClass('form-select')
                                 .css('marginTop', '10px'))
 
                         let index = dimension.indexOf(valor)
@@ -814,7 +827,9 @@ function updateInteface() {
                             $('.categoricalFilter').append($('<option>', {
                                 value: d_values[index][i],
                                 text: d_values[index][i]
-                            }).addClass('opt Categorical Filter'))
+                            }).addClass('opt Categorical Filter')
+
+                            )
 
                             $('.categoricalFilter').change(function () {
                                 filterCategorcal()
@@ -877,10 +892,13 @@ function updateInteface() {
                             })
                             .addClass('list-group-item')
                             .attr('id', hie)
+                            .css("display", "table-row")
                             .append($('<div/>').attr('class', 'listH').addClass('media-body')
-                                .append($('<span/>').addClass('icon icon-arrow-combo'))
+                                .addClass("form-select")
+                                .css("fontSize","10px")
+                                .append($('<i/>').addClass('bi bi-arrow-down-up'))
                                 .append($('<strong/>').text(' -' + hie))
-                                .append($('<span/>').addClass('remove').addClass('icon icon-trash')
+                                .append($('<i/>').addClass('remove').addClass('bi bi-trash icon-trash')
                                     .css('float', 'right')
                                     .click(function () {
                                         $(this).parent().parent().remove()
@@ -952,26 +970,25 @@ function updateInteface() {
      * @tutorial filter-dimension
      * */
         // -------filtro nas dimensões--------------------------------------------------
-    const filter_by_dimension = () => {
-            data_prep = new DataPreparation(_data_)
-            const dimension = data_prep.data_keys
+    const filter_dimension = () => {
 
             let props = elements['filter_by_dimension']
-            $('div.menu-filter_dimension')
-                .append($('<div>')
-                    .text(props[0].text))
-
+            $('div.menu-filter_dimension').children(".div").remove()
+            $('.menu-filter_dimension').append($('<div>'))
             for (let i = 0; i < dimension.length; i++) {
-                $('div.menu-filter_dimension')
+                $('div.menu-filter_dimension').children("div")
                     .append($('<input>')
                         .attr('type', props[0].type)
                         .attr('value', dimension[i])
+                        .attr('class',props[0].class)
                         .addClass('myCheckboxDimension')
                     )
                     .append($('<label>')
-                        .text(dimension[i]))
+                        .text(dimension[i])
+                    )
                     .append($('<br>'))
             }
+
             $('.myCheckboxDimension').change(function () {
                 updateFilter_by_dimension()
             })
@@ -982,7 +999,7 @@ function updateInteface() {
     size()
     filter()
     defaultMenu()
-    filter_by_dimension()
+    filter_dimension()
 }
 
 // -----------------limpar o menu quando mudar uma nova base de dados------------------------------------------------------------
@@ -1015,78 +1032,21 @@ let addMenu = async (parentElement) => {
     }
     await $(parentElement).load('public/html/menu-settings-vis.html')
     $(document).ready(function () {//resumir essa parte
-        $('.Color').click(function () {
-            $('.color-header').children('button').children('#plus-minus').remove()
-            if ($('.color-header').is(':visible')) {
-                $('.color-header').hide()
-                $('.menuColor').hide()
-            } else {
-                $('button.color-header').append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
-                $('.color-header').show()
-                $('.menuColor').show()
-            }
+
+        $(".icons-menu").click(function (item){
+            let name = $(this).attr('value')
+            $(`.${name}-header`).toggle();
+
         })
 
-        $('.Hie').click(function () {
-            $('.hierarchy-header').children('button').children('#plus-minus').remove()
-            if ($('.hierarchy-header').is(':visible')) {
-                $('.hierarchy-header').hide()
-                $('.menuHie').hide()
-            } else {
-                $('button.hierarchy-header').append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
-                $('.hierarchy-header').show()
-                $('.menuHie').show()
-            }
-        })
-
-        $('.Filter').click(function () {
-            $('.filter-header').children('button').children('#plus-minus').remove()
-            if ($('.filter-header').is(':visible')) {
-                $('.filter-header').hide()
-                $('.menuFilter').hide()
-            } else {
-                $('button.filter-header').append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
-                $('.filter-header').show()
-                $('.menuFilter').show()
-            }
-        })
-
-        $('.Default').click(function () {
-            $('.default-header').children('button').children('#plus-minus').remove()
-            if ($('.default-header').is(':visible')) {
-                $('.default-header').hide()
-            } else {
-                $('button.default-header').append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
-                $('.default-header').show()
-                $('.menuDefault').show()
-            }
-        })
-
-        $('.Filter_Dimension').click(function () {
-            $('.filter_dimension-header').children('button').children('#plus-minus').remove()
-            if ($('.filter_dimension-header').is(':visible')) {
-                $('.filter_dimension-header').hide()
-            } else {
-                $('button.filter_dimension-header').append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
-                $('.filter_dimension-header').show()
-                $('.menu-filter_dimension').show()
-            }
-        })
-
-        $('button.color-header , button.hierarchy-header,button.default-header,button.filter-header, button.Details-header,button.filter_dimension-header,button.Details-header,button.highlight-header,button.selection-header,button.anottation-header').click(function () {
-            let acordion = $(this).parent().children('.menu-acordion')
-            $(this).children('#plus-minus').remove()
-            if ($(acordion).is(':visible')) {
-                $(this).append($('<span/>').addClass('icon icon-plus').attr('id', 'plus-minus').css('float', 'right'))
-                $(acordion).hide()
-            } else {
-                $(this).append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
-                $(acordion).show()
-            }
+        $('.modal-button').click(function (){
+            $(this).parent().children(".menu-acordion").toggle();
+            $(this).children("div").children(".open").toggle();
+            $(this).children("div").children(".close").toggle();
         })
 
         $(".cancel").click(function () {
-            $(this).parent().parent().hide();
+            $(this).parent().parent().parent().hide();
         });
 
         $('.chosen').click(function () {
@@ -1107,61 +1067,7 @@ let addMenu = async (parentElement) => {
 
         })
 
-        $('.Selection').click(function () {
-            $('.selection-header').children('button').children('#plus-minus').remove()
-            if ($('.selection-header').is(':visible')) {
-                $('.selection-header').hide()
-            } else {
-                $('button.selection-header').append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
-                $('.selection-header').show()
-                $('.menuSelection').show()
-            }
-        })
-
-        $('.Anottation').click(function () {
-            $('.anottation-header').children('button').children('#plus-minus').remove()
-            if ($('.anottation-header').is(':visible')) {
-                $('.anottation-header').hide()
-            } else {
-                $('button.anottation-header').append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
-                $('.anottation-header').show()
-                $('.menuAnottation').show()
-            }
-        })
-
-        $('.demmandDetails').click(function () {
-            $('.Details-header').children('button').children('#plus-minus').remove()
-            if ($('.Details-header').is(':visible')) {
-                $('.Details-header').hide()
-            } else {
-                $('button.Details-header').append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
-                $('.Details-header').show()
-                $('.menu-details').show()
-            }
-        })
-
-        $('.highlighted').click(function () {
-            $('.highlight-header').children('button').children('#plus-minus').remove()
-            if ($('.highlight-header').is(':visible')) {
-                $('.highlight-header').hide()
-            } else {
-                $('button.highlight-header').append($('<span/>').addClass('icon icon-minus').attr('id', 'plus-minus').css('float', 'right'))
-                $('.highlight-header').show()
-                $('.menu-highlight').show()
-            }
-        })
-
-        $('#highlight_selection').change(function () {
-            if ($('#highlight_selection').is(':checked')) {
-                layer(false)
-            } else {
-                layer(true)
-            }
-        })
-
-
         updateTools()
-        updateInteface()
     })
 }
 
@@ -1178,9 +1084,9 @@ const comentclear = () => {
 const elements = {
     'filter_by_dimension': [
         {
-            'text': 'Filter By Dimension',
             'type': 'checkbox',
-            'checked': false
+            'checked': false,
+            'class': 'form-check-input'
         }
     ]
 }
