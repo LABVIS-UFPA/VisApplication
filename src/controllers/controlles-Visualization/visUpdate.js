@@ -1,5 +1,7 @@
 const CATEGORICAL_TYPE = "categorical"
 const CONTINUIES_TYPE = "continues"
+const DEFAULT_TYPE = "default"
+
 let attr_global;
 let item_global_categorical;
 let min_global;
@@ -23,31 +25,27 @@ let highlightDefault;
  * @param {string} select - collum selected for generate view
  */
 function createVis(container, select) {
-    if (!select) {
-        container.__vis__.data(_data_);
-    } else {
+    container.__vis__.data(_data_);
+
+    if (list_hiarchy || size_global) {
+        checkCores();
+        updateHie(list_hiarchy);
+        if (size_global)
+            return updateSize(size_global)
+    }
+
+    checkCores();
+    if (select) {
         let keys = data_prep.data_keys;
         //inverter array para as chaves que não estão presentes
-        keys = keys.filter((item) => { return item !== select })
+        keys = keys.filter((item) => {
+            return item !== select
+        })
         container.__vis__.filterByDimension(keys)
         container.__vis__.data(_data_);
     }
-    if(list_hiarchy)
-        updateHie(list_hiarchy);
-
-    if(size_global)
-        updateSize(size_global)
-
-    if(colors_global_categorical && attr_global && item_global_categorical){
-        container.__vis__.data(_data_);
-        updateCategoricalColor(attr_global,item_global_categorical,colors_global_categorical)
-    }
-    if(attr_global && min_global && max_global && oldColorMin && oldColorMax){
-        updateColorContinues(attr_global,min_global,max_global,oldColorMin,oldColorMax)
-    }
-    //if(colorDefault && highlightDefault)
-        //updatevis();
     container.__vis__.redraw();
+
 
 }
 
@@ -83,15 +81,29 @@ async function selectColumnsInVis(container, select) {
  *      this.__vis__.redraw();
     });
  * **/
-$("input.setColorDefault").onchange(function (){
-    colorDefault  = $(this).val();
-    colors_global_categorical = colorDefault
-    old_Color = colorDefault
-})
-$("input.setHighlightColor").onchange(function (){
-    highlightDefault = $(this).val();
 
-})
+function changesDefaultMenu() {
+
+    $("input.setColorDefault").onchange(function () {
+        colorDefault = $(this).val();
+        old_Color = colorDefault
+        colorTypeSelected = DEFAULT_TYPE
+    })
+    $("input.setHighlightColor").onchange(function () {
+        highlightDefault = $(this).val();
+        colorTypeSelected = DEFAULT_TYPE
+    })
+}
+
+
+function checkCores() {
+    if (colors_global_categorical && attr_global && item_global_categorical) {
+        updateCategoricalColor(attr_global, item_global_categorical, colors_global_categorical)
+    }
+    if (attr_global && min_global && max_global && oldColorMin && oldColorMax) {
+        updateColorContinues(attr_global, min_global, max_global, oldColorMin, oldColorMax)
+    }
+}
 
 function updatevis() {
 
@@ -111,6 +123,7 @@ function updatevis() {
         }
     });
 }
+
 //size items treeamp
 /**
  * @description This function updates the size of items according to the attributes of the selected database dimension, works in hierarchical views.
@@ -140,8 +153,7 @@ function updateHie(hie) {
         if (this.__vis__ && this.__vis__.d_h) {
             if (hie.length) {
                 this.__vis__.hierarchy(hie);
-            }
-            else {
+            } else {
                 this.__vis__.hierarchy();
             }
             this.__vis__.data(_data_);
@@ -160,17 +172,17 @@ function updateHie(hie) {
  * @example
  * Scale color linear used
  * let c = d3.scaleLinear()
-        .domain([min,max])
-        .range([colorMin,colorMax]);
+ .domain([min,max])
+ .range([colorMin,colorMax]);
 
  *
  * */
 
 function updateColorContinues(attr, min, max, colorMin, colorMax) {
-    if(!attr && !min && !max && !colorMin && !colorMax){
+    if (!attr && !min && !max && !colorMin && !colorMax) {
         return console.log("error attr not defined!");
     }
-    colorTypeSelected = "CONTINUIES_TYPE"
+    colorTypeSelected = CONTINUIES_TYPE
     attr_global = attr;
     min_global = min;
     max_global = max;
@@ -231,9 +243,9 @@ function updateColorContinues(attr, min, max, colorMin, colorMax) {
  * return  colors[attr.indexOf(d.data[item])];//   d.data[] hierchies visualization
  * return colors[attr.indexOf(d[item])];//         d[] other visualizations
  * */
-function  updateCategoricalColor(attr, item, colors) {
-    if(!attr || !item || !colors)
-        return  console.log("error select color!")
+function updateCategoricalColor(attr, item, colors) {
+    if (!attr || !item || !colors)
+        return console.log("error select color!")
     colorTypeSelected = CATEGORICAL_TYPE
     attr_global = attr;
     item_global_categorical = item;
@@ -244,8 +256,7 @@ function  updateCategoricalColor(attr, item, colors) {
                 this.__vis__.setColor(function (d, i) {
                     if (d.data) {
                         return colors[attr.indexOf(d.data[item])]
-                    }
-                    else {
+                    } else {
                         return colors[attr.indexOf(d[item])];
                     }
                 });
@@ -264,12 +275,12 @@ function  updateCategoricalColor(attr, item, colors) {
 
 function filterCategoricalValues(attr, select_item) {
     //verificar a existencia dos inputs
-    if(!old_Color)
+    if (!old_Color)
         old_Color = colorDefault
-    if(!$("input#getColor1").length){
+    if (!$("input#getColor1").length) {
         updateCategoricalColor(attr_global, item_global_categorical, colors_global_categorical)
-    }else{
-        updateColorContinues(attr_global,min_global,max_global , oldColorMin,oldColorMax)
+    } else {
+        updateColorContinues(attr_global, min_global, max_global, oldColorMin, oldColorMax)
     }
 
 
@@ -282,7 +293,7 @@ function filterCategoricalValues(attr, select_item) {
                     } else if (!d.data && d[attr] != select_item) {
                         return "grey";
                     } else {
-                        return old_Color?old_Color:colorDefault;
+                        return old_Color ? old_Color : colorDefault;
                     }
                 });
                 this.__vis__.redraw();
@@ -290,6 +301,7 @@ function filterCategoricalValues(attr, select_item) {
         });
     });
 };
+
 /**
  * @description color filter function for continuous values, can pass the color filter range, and prescribe the visualization colors, this function has effect on all screen views
  * @param {string} attr - Title of the selected categorical dimension to filter.
@@ -301,24 +313,22 @@ function filterCategoricalValues(attr, select_item) {
  * */
 
 function filterColorContinues(attr, min, max, min_select, max_select) {
-    if(!old_Color)
+    if (!old_Color)
         old_Color = colorDefault
 
     if ($("input#getColor1").length) {
         updateColorContinues(attr_global, min_global, max_global, oldColorMin, oldColorMax);
     } else {
-      updateCategoricalColor(attr_global, item_global_categorical, colors_global_categorical);
+        updateCategoricalColor(attr_global, item_global_categorical, colors_global_categorical);
     }
     $(".partition-node").each(function (i, index) {
         if ($(index).children("svg").length) {
             this.__vis__.setColor(function (d, i) {
                 if (d.data && d.data[attr] >= min_select && d.data[attr] <= max_select) {
-                    return old_Color?old_Color:colorDefault;
-                }
-                else if (!d.data && d[attr] >= min_select && d[attr] <= max_select) {
-                    return old_Color?old_Color:colorDefault;
-                }
-                else {
+                    return old_Color ? old_Color : colorDefault;
+                } else if (!d.data && d[attr] >= min_select && d[attr] <= max_select) {
+                    return old_Color ? old_Color : colorDefault;
+                } else {
                     return "grey";
                 }
             });
@@ -386,7 +396,6 @@ function updateFilter_by_dimension() {
         }
     });
 }
-
 
 
 function get_values_Filter_by_dimension() {

@@ -484,6 +484,7 @@ let settings_individual_for_views = (vis_container) => {
                                             "data-nodeid": $(this).attr('id')
 
                                         })
+
                                         .css({'float': 'right'}))
                                 )
                         // case 'pdf':
@@ -671,8 +672,6 @@ function updateInteface() {
                 updateCategoricalColor(d_values[index], dataHeader, colors)
             } else if (!isNaN(d_values[index][1]) && d_values[index].length > 10) {
                 let k = limit.indexOf(dataHeader)
-                console.log("teste:", dataHeader);
-                console.log("teste:2", d_values[index])
                 let color1 = $("#getColor1").val();
                 let color2 = $("#getColor2").val();
                 updateColorContinues(dataHeader, limit[k + 1], limit[k + 2], color1, color2)
@@ -1010,6 +1009,7 @@ function updateInteface() {
     filter()
     defaultMenu()
     filter_dimension()
+    changesDefaultMenu()
     updateTools()
 }
 
