@@ -72,27 +72,16 @@ async function selectColumnsInVis(container, select) {
 }
 
 
-/**
- * This function redraws all screen views, enters data, and redraws
- * @example
- * // basic selection for all views using the ".partition-content" class used in all update functions
- * $(".partition-content").each(function () {
- *      this.__vis__.data(_data_);
- *      this.__vis__.redraw();
-    });
- * **/
-
-function changesDefaultMenu() {
-
-    $("input.setColorDefault").onchange(function () {
+function changesDefaultMenu(color, lineColor) {
+    if (color) {
         colorDefault = $(this).val();
         old_Color = colorDefault
-        colorTypeSelected = DEFAULT_TYPE
-    })
-    $("input.setHighlightColor").onchange(function () {
+    }
+    if (lineColor)
         highlightDefault = $(this).val();
-        colorTypeSelected = DEFAULT_TYPE
-    })
+
+    colorTypeSelected = DEFAULT_TYPE
+
 }
 
 
@@ -105,6 +94,15 @@ function checkCores() {
     }
 }
 
+/**
+ * This function redraws all screen views, enters data, and redraws
+ * @example
+ * // basic selection for all views using the ".partition-content" class used in all update functions
+ * $(".partition-content").each(function () {
+ *      this.__vis__.data(_data_);
+ *      this.__vis__.redraw();
+    });
+ * **/
 function updatevis() {
 
     colorDefault = $("input.setColorDefault").val();

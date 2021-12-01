@@ -79,14 +79,14 @@ function download(content, filename, contentType) {
 ipc.on('file-data', function (event, data) {
     _data_ = data
     data_prep = new DataPreparation(_data_);
-    clean_menus()
+    create_new_menu()
     updatevis()
 })
 
 
 ipc.on('change-datasample', function (event, data) {
     _data_ = data
-    clean_menus()
+    create_new_menu()
     updatevis()
 })
 
@@ -572,7 +572,7 @@ let settings_individual_for_views = (vis_container) => {
 
 ipc.on('cut-layout', function (event, direction) {
     partitionLayout.setCutter(direction);
-    // clean_menus()
+    // create_new_menu()
     // updatevis()
 })
 
@@ -1009,18 +1009,18 @@ function updateInteface() {
     filter()
     defaultMenu()
     filter_dimension()
-    changesDefaultMenu()
     updateTools()
 }
 
 // -----------------limpar o menu quando mudar uma nova base de dados------------------------------------------------------------
 /**
- *event to clear settings menu interface use  **clean_menus()** .
+ *event to clear settings menu interface use  **create_new_menu()** .
  *function to clear html from application settings menu
  * @event
  * @return {object} html element
  */
-function clean_menus() {
+function create_new_menu() {
+
     let parent = $('#menu_settings').parent().parent();
     $('#menu_settings').remove();
 
@@ -1038,9 +1038,6 @@ function clean_menus() {
  * @tutorial menu-settings
  */
 let addMenu = async (parentElement) => {
-    // if(!parentElement){
-    //     return
-    // }
     await $(parentElement).load('public/html/menu-settings-vis.html')
     $(document).ready(function () {
 
@@ -1064,6 +1061,16 @@ let addMenu = async (parentElement) => {
             inputVis = $(this).attr('value');
             interaction.selectInteraction(inputVis);
             return interaction.strategy.start();
+        })
+
+        $("input.setColorDefault").change(function () {
+            changesDefaultMenu($(this).val())
+            old_Color = colorDefault
+            colorTypeSelected = DEFAULT_TYPE
+        })
+        $("input.setHighlightColor").change(function () {
+            highlightDefault = $(this).val();
+            colorTypeSelected = DEFAULT_TYPE
         })
 
         $('.Anottation').click(function () {
