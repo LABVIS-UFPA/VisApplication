@@ -18,7 +18,6 @@ let inputVis = ''
 let layout;
 
 
-
 /** create and add graphic to selected html div. Exemplo de uso **addVis(scatterplotMatrix,contentDiv)** .
  * @param {string} visName - name of graphic selected to be created
  * @param {string} parentElement - div class name where view will be added
@@ -39,7 +38,6 @@ let addVis = (visName, parentElement, select) => {
 ipc.on('add-vis', function (event, arg) {
     addVis(arg, $('.partition-content').get(0))
 })
-
 
 ipc.on('file-layout', function (event, data) {
     $(".partition-node").remove();
@@ -124,8 +122,6 @@ $(document).ready(function () {
 
     $body.on('layout:resize',  function (e) {
         $('.partition-node').each(function () {
-            console.log("teste nodes", this)
-            console.log("teste",this.__vis__)
             if (this && this.__vis__) {
                     this.__vis__.resize()
                 }
@@ -425,8 +421,6 @@ $(document).ready(function () {
 
         // Download Visualizations ------------------------------------------------------
     })
-
-    addMenu();
 })
 
 //-------------------------- menu de configurações iniciais------------------------------------------------------------------
@@ -464,6 +458,7 @@ let settings_individual_for_views = (vis_container) => {
             let options = {
                 callback: function (key) {
                     let svg = vis_container.children[1];
+                    let config = vis_container.children[0];
                     switch (key) {
                         case 'svg':
                             let svgsaver = new SvgSaver();
@@ -471,6 +466,18 @@ let settings_individual_for_views = (vis_container) => {
                             svgsaver.asSvg(svg);
 
                             break;
+                        case 'close':
+                            $(vis_container).empty();
+                            $(vis_container).addClass('partiton-content')
+                                .append($('<div/>')
+                                    .append($('<button/>').text(' view settings ')
+                                        .text('Add Visualization')
+                                        .addClass('btn btn-success btn-sm')
+                                        .attr("width", '20px')
+                                        .attr("height", '20px')
+                                        .attr('data-nodeid', $(this).attr('id'))
+                                        .css({'float': 'right'}))
+                                )
                         // case 'pdf':
                         //
                         //
@@ -486,7 +493,7 @@ let settings_individual_for_views = (vis_container) => {
                         items: {},
                         disabled: false
                     },
-                    'chart': {name: 'chart properties'},
+                    // 'chart': {name: 'chart properties'},
                     'export': {
                         name: "exports",
                         items: {
@@ -496,9 +503,9 @@ let settings_individual_for_views = (vis_container) => {
                             // 'pdf': {
                             //   name: 'pdf'
                             // }
-                        }
-
-                    }
+                        },
+                    },
+                    'close': {name: 'close'},
                 }
             };
 
@@ -605,6 +612,7 @@ function updateInteface() {
     const dimension = data_prep.data_keys
     const d_values = data_prep.data_values
     const limit = data_prep.limit_values
+    const categorical_values = data_prep.getCategorical_values()
 
     // --------------parte dinamica dos menus---------
     // ------colors-----------------
@@ -726,11 +734,7 @@ function updateInteface() {
      * */
         // filter-------------------
     const filter = () => {
-            data_prep = new DataPreparation(_data_)
-            let dimension = data_prep.data_keys
-            let d_values = data_prep.data_values
             let attrFilter = $('.filter')
-            let limit = data_prep.limit_values
 
             dimension.unshift('...')
             $(attrFilter).each(function (i, attr) {
@@ -857,7 +861,6 @@ function updateInteface() {
 
     const hierarchies = () => {
             let hierarchyAttrs = $('.selectHierarchy')
-            let categorical_values = data_prep.getCategorical_values()
 
             $(hierarchyAttrs).each(function (i, attr) {
                 let items = $(attr).children('.optHie').length
@@ -894,8 +897,8 @@ function updateInteface() {
                             .attr('id', hie)
                             .css("display", "table-row")
                             .append($('<div/>').attr('class', 'listH').addClass('media-body')
-                                .addClass("form-select")
-                                .css("fontSize","10px")
+                                .addClass("input-group-text")
+                                .css({"fontSize":"10px","background-color":"#fff"})
                                 .append($('<i/>').addClass('bi bi-arrow-down-up'))
                                 .append($('<strong/>').text(' -' + hie))
                                 .append($('<i/>').addClass('remove').addClass('bi bi-trash icon-trash')
@@ -971,7 +974,6 @@ function updateInteface() {
      * */
         // -------filtro nas dimensões--------------------------------------------------
     const filter_dimension = () => {
-
             let props = elements['filter_by_dimension']
             $('div.menu-filter_dimension').children(".div").remove()
             $('.menu-filter_dimension').append($('<div>'))
@@ -1000,6 +1002,7 @@ function updateInteface() {
     filter()
     defaultMenu()
     filter_dimension()
+    updateTools()
 }
 
 // -----------------limpar o menu quando mudar uma nova base de dados------------------------------------------------------------
@@ -1027,11 +1030,11 @@ function clean_menus() {
  * @tutorial menu-settings
  */
 let addMenu = async (parentElement) => {
-    if(!parentElement){
-        return
-    }
+    // if(!parentElement){
+    //     return
+    // }
     await $(parentElement).load('public/html/menu-settings-vis.html')
-    $(document).ready(function () {//resumir essa parte
+    $(document).ready(function () {
 
         $(".icons-menu").click(function (item){
             let name = $(this).attr('value')
@@ -1067,7 +1070,6 @@ let addMenu = async (parentElement) => {
 
         })
 
-        updateTools()
     })
 }
 

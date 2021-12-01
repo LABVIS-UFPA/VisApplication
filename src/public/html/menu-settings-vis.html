@@ -1,152 +1,145 @@
-<script>
-    /**
-     * @ignore
-     * */
-
-</script>
-<div class='partition-content' style='background-color: rgb(241, 241, 241); overflow-y: scroll;'>
-
-    <header class='toolbar toolbar-header' id='menu_settings'>
-
-        <h1 class='title' style='background-color: rgb(241, 241, 241);'>
-
-            visualization settings</h1>
-
-    </header>
-
-    <div class='tab-group'>
-
-        <div class='main-menu' style='width: 100%; background-color: rgb(204, 204, 204); list-style-type: none;'>
-
-            <img class='icons Color' src='./public/css/icons/fill_color.png' title='Color by attribute'>
-
-            <img class='icons Hie' src='./public/css/icons/tree_list.png' title='Hierarchy'>
-
-            <img class='icons Filter' src='./public/css/icons/filter_add.png' title='Filter'>
-
-            <img class='icons Default' src='./public/css/icons/color_picker_default.png' title='Default color'>
-
-            <img class='icons Filter_Dimension' src='./public/css/icons/select_by_adding_to_selection.png' title='Filter_Dimension'>
-
-            <img class='icons Selection chosen' value="Selection by attribute" src='./public/css/icons/select_.png' title='Selection by attribute'>
-
-            <img class='icons demmandDetails chosen' value="Detail on Demand" src='./public/css/icons/document_comment_above.png' title='Detail on Demand'>
-
-            <img class='icons Zoom chosen' value="Zoom" src='./public/css/icons/zoom.png' title='Default Zoom'>
-
-            <img class='icons Anottation chosen' value="Anottation" src='./public/css/icons/new_comment.png' title='Anottation'>
-
-            <img class='icons highlighted chosen' value="highlighted" src='./public/css/icons/highlighter.png' title='highlighted'>
-
-
-        </div>
-    </div>
-    <div class="color-header" style="display:none;">
-        <button  class="color-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; margin-top: 10px; font-size: 15px; transition: 0.4s;">Color By Attribute
-            <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
-            <span class="icon icon-cancel cancel" style="float: right;"></span>
+<div id="menuContent" class=form-label">
+    <span class="navbar navbar-expand-lg navbar-light bg-light>main menu">
+        <a class="navbar-brand small">Main menu</a>
+    </span>
+    <hr/>
+    <div class="color-header accordion-header" style="display:none;">
+        <button class="btn btn-primary modal-button"
+                style="cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; margin-top: 10px; font-size: 15px; transition: 0.4s;">
+            Color By Attribute
+            <div style="float: right">
+                <i class="bi bi-caret-up-fill icon-modal close"></i>
+                <i class="bi bi-caret-down-fill icon-modal open" style="display:none"></i>
+                <i class="bi bi-x-circle-fill icon-modal cancel"></i>
+            </div>
         </button>
-    <div class="menuColor menu-acordion" >
-        <label style="margin: 0.4rem; float: initial;">Attribute</label>
-        <select class="form-control colorSelector" id="colorSelector">
-            <option value="..." class="optColor">...</option>
-        </select>
-    </div>
+        <div class="menu-color menuColor menu-acordion accordion-body">
+            <label style="margin: 0.4rem; float: initial;">Attribute</label>
+            <select class="form-select colorSelector" id="colorSelector">
+                <option value="..." class="optColor">...</option>
+            </select>
+        </div>
 
     </div>
 
 
-    <div class="hierarchy-header" style="display:none;">
-        <button class="hierarchy-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+    <div class="hierarchy-header accordion-header" style="display:none;">
+        <button class="btn btn-primary modal-button"
+                style="cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
             Hierarchy
-            <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
-            <span class="icon icon-cancel cancel" style="float: right;"></span>
+            <div style="float: right">
+                <i class="bi bi-caret-up-fill icon-modal close"></i>
+                <i class="bi bi-caret-down-fill icon-modal open" style="display:none;"></i>
+                <i class="bi bi-x-circle-fill icon-modal cancel"></i>
+            </div>
         </button>
 
 
-        <div class="menuHie menu-acordion" style="width: 100%; position: relative; text-align: left"; >
-        Hierarchy
+        <div class="menuHie menu-acordion accordion-body" style="width: 100%; position: relative; text-align: left" ;>
+            Hierarchy
 
-        <select class="form-control selectHierarchy">
-            <!--<option value="..." class="optHie">...</option>-->
-        </select>
+            <select class="form-select selectHierarchy">
+                <!--<option value="..." class="optHie">...</option>-->
+            </select>
 
-        <div class="window-content list-group" >
-            <ul  id="sortable" style="width: 100%; max-height: 200px; overflow-y: scroll"></ul>
+            <div class="window-content list-group">
+                <ul id="sortable" style="width: 100%; max-height: 200px; overflow-y: scroll"></ul>
 
+            </div>
+
+            <div class="menuSize" style="width: 100%; position: relative; text-align: left;">
+                size
+                <select class="form-select selectSize">
+                    <!--<option value="..." class="optSize">...</option>-->
+                </select>
+            </div>
         </div>
+    </div>
 
-        <div class="menuSize" style="width: 100%; position: relative; text-align: left;">
-            size
-            <select class="form-control selectSize">
-                <!--<option value="..." class="optSize">...</option>-->
+
+    <div class="filter-header accordion-header" style="display:none;">
+        <button class="btn btn-primary modal-button"
+                style="cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+            Filter
+            <div style="float: right">
+                <i class="bi bi-caret-up-fill icon-modal close"></i>
+                <i class="bi bi-caret-down-fill icon-modal open" style="display:none"></i>
+                <i class="bi bi-x-circle-fill icon-modal cancel"></i>
+            </div>
+
+        </button>
+
+
+        <div class="menuFilter menu-acordion accordion-body" style="width: 100%; position: relative; text-align: left;">
+            Select attribute
+            <select class="form-select filter">
+                <option value="..." class="optFilter">...</option>
+
             </select>
         </div>
     </div>
-</div>
 
-
-<div class="filter-header" style="display:none;">
-    <button class="filter-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
-        Filter
-        <span class="icon icon-minus"  id="plus-minus" style="float: right;"></span>
-        <span class="icon icon-cancel cancel" style="float: right;"></span>
-    </button>
-
-
-    <div class="menuFilter menu-acordion" style="width: 100%; position: relative; text-align: left;">
-        Select attribute
-        <select class="form-control filter">
-            <option value="..." class="optFilter">...</option>
-
-        </select>
-    </div>
-</div>
-
-<div class="default-header" style="display:none;">
-    <button class="default-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
-        Default colors
-        <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
-        <span class="icon icon-cancel cancel" style="float: right;"></span>
-    </button>
-
-    <div class="menuDefault menu-acordion">
-        <div><label style="margin: 0.4rem; float: initial;">
-            Default color<input type="color" class="setColorDefault" value="#006699" style="height: 40px; float: initial;">
-        </label>
-        </div>
-        <div>
-            <label class="HighlightColor" style="margin: 0.4rem; float: initial;">
-                Highlight Color
-                <input type="color" class="setHighlightColor" id="setHighlightColor" value="#FF1122" style="height: 40px; float: initial;">
-            </label>
-        </div>
-    </div>
-</div>
-    <div class="filter_dimension-header" style="display:none;">
-        <button class="filter_dimension-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
-            filter by dimension
-            <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
-            <span class="icon icon-cancel cancel" style="float: right;"></span>
+    <div class="default-header accordion-header" style="display:none;">
+        <button class="btn btn-primary modal-button"
+                style=" cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+            Default colors
+            <div style="float: right">
+                <i class="bi bi-caret-up-fill icon-modal close"></i>
+                <i class="bi bi-caret-down-fill icon-modal open" style="display:none"></i>
+                <i class="bi bi-x-circle-fill icon-modal cancel"></i>
+            </div>
         </button>
 
-        <div class="menu-filter_dimension menu-acordion"  style="height: 400px; overflow-y: scroll;width: 100%; background-color: rgb(204, 204, 204);">
+        <div class="menuDefault menu-acordion accordion-body">
+            <div><label style="margin: 0.4rem; float: initial;">
+                Default color<input type="color" class="setColorDefault" value="#006699"
+                                    style="height: 40px; float: initial;">
+            </label>
+            </div>
+            <div>
+                <label class="HighlightColor" style="margin: 0.4rem; float: initial;">
+                    Highlight Color
+                    <input type="color" class="setHighlightColor" id="setHighlightColor" value="#FF1122"
+                           style="height: 40px; float: initial;">
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="filter-dimension-header accordion-header" style="display:none;">
+        <button class="btn btn-primary modal-button"
+                style="cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+            filter by dimension
+            <div style="float: right">
+                <i class="bi bi-caret-up-fill icon-modal close"></i>
+                <i class="bi bi-caret-down-fill icon-modal open" style="display:none"></i>
+                <i class="bi bi-x-circle-fill icon-modal cancel"></i>
+            </div>
+        </button>
+
+        <div class="menu-filter_dimension menu-acordion accordion-body"
+             style="height: 400px; overflow-y: scroll;width: 100%;">
+
         </div>
     </div>
 
     <!--interaction tools    -->
 
-    <div class="selection-header" style="display:none;">
-        <button class="selection-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+    <div class="selection-header accordion-header" style="display:none;">
+        <button class="btn btn-primary modal-button"
+                style="cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
             Selection
-            <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
-            <span class="icon icon-cancel cancel" style="float: right;"></span>
+            <div style="float: right">
+                <i class="bi bi-caret-up-fill icon-modal close"></i>
+                <i class="bi bi-caret-down-fill icon-modal open" style="display:none"></i>
+                <i class="bi bi-x-circle-fill icon-modal cancel"></i>
+            </div>
         </button>
 
-        <div class="menuSelection menu-acordion" style="width: 100%; position: relative; text-align: left;">
+        <div class="menuSelection menu-acordion " style="width: 100%; position: relative; text-align: left;">
             <img class='icons Line chosen' value="Line" src='./public/css/icons/draw_line.png' title='Line Selection'>
 
-            <img class='icons Rect chosen' value="Rect" src='./public/css/icons/layer_select.png' title='Rect Selection'>
+            <img class='icons Rect chosen' value="Rect" src='./public/css/icons/layer_select.png'
+                 title='Rect Selection'>
 
             <img class='icons handFree chosen' value="Free" src='./public/css/icons/tap.png' title='Free Selection'>
 
@@ -156,26 +149,34 @@
 
 
     <div class="zoom-header" style="display:none">
-        <button class="selection-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+        <button class="btn btn-primary modal-button"
+                style="cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
             Anottation
-            <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
-            <span class="icon plus-cancel cancel"  style="float: right;"></span>
+            <div style="float: right">
+                <i class="bi bi-caret-up-fill icon-modal close"></i>
+                <i class="bi bi-caret-down-fill icon-modal open" style="display:none"></i>
+                <i class="bi bi-x-circle-fill icon-modal cancel"></i>
+            </div>
         </button>
 
         <div class="menuZoom menu-acordion" style="width: 100%; position: relative; text-align: left;">
             Select attribute
-            <select class="form-control filter">
+            <select class="form-select filter">
                 <option value="..." class="optFilter">...</option>
             </select>
         </div>
     </div>
 
 
-    <div class="highlight-header" style="display:none;">
-        <button class="highlight-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+    <div class="highlight-header accordion-header" style="display:none;">
+        <button class="btn btn-primary modal-button"
+                style=" cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
             Highlight
-            <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
-            <span class="icon icon-cancel cancel" style="float: right;"></span>
+            <div style="float: right">
+                <i class="bi bi-caret-up-fill icon-modal close"></i>
+                <i class="bi bi-caret-down-fill icon-modal open" style="display:none"></i>
+                <i class="bi bi-x-circle-fill icon-modal cancel"></i>
+            </div>
         </button>
         <style>
             .switch {
@@ -234,63 +235,77 @@
             .slider.round {
                 border-radius: 34px;
             }
+
             .slider.round:before {
                 border-radius: 50%;
             }
 
         </style>
-        <div class="menu-highlight menu-acordion" style="width: 100%; position: relative; text-align: left;">
+        <div class="menu-highlight menu-acordion accordion-body"
+             style="width: 100%; position: relative; text-align: left;">
             <label class="switch">
-                <input id="highlight_selection" type="checkbox" checked>
+                <input id="highlight_selection form-check-input" type="checkbox" checked>
                 <span class="slider round"></span>
             </label>
         </div>
     </div>
 
-
-
-    <div class="anottation-header" style="display:none;">
-        <button class="anottation-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+    <div class="anottation-header accordion-header" style="display:none;">
+        <button class="btn btn-primary modal-button"
+                style=" cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
             Anottation
-            <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
-            <span class="icon icon-cancel cancel" style="float: right;"></span>
+            <div style="float: right">
+                <i class="bi bi-caret-up-fill icon-modal close"></i>
+                <i class="bi bi-caret-down-fill icon-modal open" style="display:none"></i>
+                <i class="bi bi-x-circle-fill icon-modal cancel"></i>
+            </div>
         </button>
 
-        <div class="menuAnottation menu-acordion" style="width: 100%; position: relative; text-align: left;">
+        <div class="menuAnottation menu-acordion accordion-body"
+             style="width: 100%; position: relative; text-align: left;">
 
-            <button id="clearComment" onclick="comentclear()">
-                clean
-            </button>
+            <div>
+                <button id="clearComment" class="btn btn-outline-secondary" style="width: 100%;position: relative; "
+                        onclick="comentclear()">
+                    clean
+                </button>
+            </div>
         </div>
     </div>
 
     <div class="high-header" style="display:none;">
-        <button class="high-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+        <button class="btn btn-primary modal-button"
+                style="cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
             Highlight Interaction
-            <span class="icon icon-high" id="plus-minus" style="float: right;"></span>
-            <span class="icon icon-cancel cancel" style="float: right;"></span>
+            <div style="float: right">
+                <i class="bi bi-caret-up-fill icon-modal close"></i>
+                <i class="bi bi-caret-down-fill icon-modal open" style="display:none"></i>
+                <i class="bi bi-x-circle-fill icon-modal cancel"></i>
+            </div>
         </button>
 
-        <div class="menu-high menu-acordion"  style="height: 400px; overflow-y: scroll; position: absolute; width: 100%; background-color: rgb(204, 204, 204);">
-            <button class="highlight_on"  style="margin:10px"; value="on">On</button>
-            <button class="highlight_off" style="margin:10px"; value="on">Off</button>
+        <div class="menu-high menu-acordion"
+             style="height: 400px; overflow-y: scroll; position: absolute; width: 100%; background-color: rgb(204, 204, 204);">
+            <button class="highlight_on" style="margin:10px" ; value="on">On</button>
+            <button class="highlight_off" style="margin:10px" ; value="on">Off</button>
 
         </div>
     </div>
 
-    <div class="Details-header" style="display:none;">
-        <button class="Details-header btn btn-primary" style="background-color: rgb(204, 204, 204); cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
+    <div class="details-header" style="display:none;">
+        <button class=" btn btn-primary modal-button"
+                style="cursor: pointer; padding: 9px; width: 100%; border: none; text-align: center; outline: none; font-size: 15px; transition: 0.4s;">
             Details on demand
-            <span class="icon icon-minus" id="plus-minus" style="float: right;"></span>
-            <span class="icon icon-cancel cancel" style="float: right;"></span>
+            <div style="float: right">
+                <i class="bi bi-caret-up-fill icon-modal close"></i>
+                <i class="bi bi-caret-down-fill icon-modal open" style="display:none"></i>
+                <i class="bi bi-x-circle-fill icon-modal cancel"></i>
+            </div>
         </button>
 
-        <div class="menu-details menu-acordion"  style="height: 400px; overflow-y: scroll; position: absolute; width: 100%; background-color: rgb(204, 204, 204);">
+        <div class="menu-details menu-acordion accordion-body " style="height: 400px; overflow-y: scroll;">
         </div>
     </div>
-
-
-
 
 
 </div>

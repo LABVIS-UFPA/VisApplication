@@ -1,11 +1,19 @@
+const CATEGORICAL_TYPE = "categorical"
+const CONTINUIES_TYPE = "continues"
 let attr_global;
-let item_global;
+let item_global_categorical;
 let min_global;
 let max_global;
-let colors_global;
+let colors_global_categorical;
+let colorTypeSelected;
 let old_Color = 0;
 let oldColorMin;
 let oldColorMax;
+let list_hiarchy;
+let size_global;
+let colorDefault = "steelblue";
+let highlightDefault;
+
 
 //update functions
 
@@ -17,15 +25,30 @@ let oldColorMax;
 function createVis(container, select) {
     if (!select) {
         container.__vis__.data(_data_);
-        container.__vis__.redraw();
     } else {
         let keys = data_prep.data_keys;
         //inverter array para as chaves que não estão presentes
         keys = keys.filter((item) => { return item !== select })
         container.__vis__.filterByDimension(keys)
         container.__vis__.data(_data_);
-        container.__vis__.redraw();
     }
+    if(list_hiarchy)
+        updateHie(list_hiarchy);
+
+    if(size_global)
+        updateSize(size_global)
+
+    if(colors_global_categorical && attr_global && item_global_categorical){
+        container.__vis__.data(_data_);
+        updateCategoricalColor(attr_global,item_global_categorical,colors_global_categorical)
+    }
+    if(attr_global && min_global && max_global && oldColorMin && oldColorMax){
+        updateColorContinues(attr_global,min_global,max_global,oldColorMin,oldColorMax)
+    }
+    //if(colorDefault && highlightDefault)
+        //updatevis();
+    container.__vis__.redraw();
+
 }
 
 /**
@@ -60,11 +83,20 @@ async function selectColumnsInVis(container, select) {
  *      this.__vis__.redraw();
     });
  * **/
+$("input.setColorDefault").onchange(function (){
+    colorDefault  = $(this).val();
+    colors_global_categorical = colorDefault
+    old_Color = colorDefault
+})
+$("input.setHighlightColor").onchange(function (){
+    highlightDefault = $(this).val();
+
+})
 
 function updatevis() {
 
-    let colorDefault = $("input.setColorDefault").val();
-    let highlightDefault = $("input.setHighlightColor").val();
+    colorDefault = $("input.setColorDefault").val();
+    highlightDefault = $("input.setHighlightColor").val();
     $(".partition-node").each(function () {
         if (this.__vis__) {
             if (colorDefault && colorDefault != "#006699") {
@@ -86,6 +118,7 @@ function updatevis() {
  *
  * */
 function updateSize(size) {
+    size_global = size;
     $(".partition-node").each(function () {
         if (this.__vis__ && this.__vis__.d_h) {
             this.__vis__.setSize(size);
@@ -102,6 +135,7 @@ function updateSize(size) {
  *
  * */
 function updateHie(hie) {
+    list_hiarchy = hie
     $(".partition-node").each(function () {
         if (this.__vis__ && this.__vis__.d_h) {
             if (hie.length) {
@@ -121,6 +155,8 @@ function updateHie(hie) {
  * @param {array.<string>} attr -  array with continuous dimension title.
  * @param {number} min -  minimum value of the dimension continues.
  * @param {number} max -  maximum value of the continuous dimension.
+ * @param {string} colorMax - color attr max
+ * @param {string} colorMin - color attr min
  * @example
  * Scale color linear used
  * let c = d3.scaleLinear()
@@ -131,8 +167,11 @@ function updateHie(hie) {
  * */
 
 function updateColorContinues(attr, min, max, colorMin, colorMax) {
-    // attr_global = attr;
-    item_global = attr;
+    if(!attr && !min && !max && !colorMin && !colorMax){
+        return console.log("error attr not defined!");
+    }
+    colorTypeSelected = "CONTINUIES_TYPE"
+    attr_global = attr;
     min_global = min;
     max_global = max;
     oldColorMin = colorMin;
@@ -192,16 +231,19 @@ function updateColorContinues(attr, min, max, colorMin, colorMax) {
  * return  colors[attr.indexOf(d.data[item])];//   d.data[] hierchies visualization
  * return colors[attr.indexOf(d[item])];//         d[] other visualizations
  * */
-function updateCategoricalColor(attr, item, colors) {
+function  updateCategoricalColor(attr, item, colors) {
+    if(!attr || !item || !colors)
+        return  console.log("error select color!")
+    colorTypeSelected = CATEGORICAL_TYPE
     attr_global = attr;
-    item_global = item;
-    colors_global = colors;
+    item_global_categorical = item;
+    colors_global_categorical = colors;
     $(".partition-node").each(function () {
         $(".partition-node").each(function (i, index) {
             if ($(index).children("svg").length) {
                 this.__vis__.setColor(function (d, i) {
                     if (d.data) {
-                        return colors[attr.indexOf(d.data[item])];
+                        return colors[attr.indexOf(d.data[item])]
                     }
                     else {
                         return colors[attr.indexOf(d[item])];
@@ -222,11 +264,14 @@ function updateCategoricalColor(attr, item, colors) {
 
 function filterCategoricalValues(attr, select_item) {
     //verificar a existencia dos inputs
-    if ($("input#getColor1").length) {
-        updateColorContinues(item_global, min_global, max_global, oldColorMin, oldColorMax);
-    } else {
-        updateCategoricalColor(attr_global, item_global, colors_global);
+    if(!old_Color)
+        old_Color = colorDefault
+    if(!$("input#getColor1").length){
+        updateCategoricalColor(attr_global, item_global_categorical, colors_global_categorical)
+    }else{
+        updateColorContinues(attr_global,min_global,max_global , oldColorMin,oldColorMax)
     }
+
 
     $(".partition-node").each(function () {
         $(".partition-node").each(function (i, index) {
@@ -237,7 +282,7 @@ function filterCategoricalValues(attr, select_item) {
                     } else if (!d.data && d[attr] != select_item) {
                         return "grey";
                     } else {
-                        return old_Color;
+                        return old_Color?old_Color:colorDefault;
                     }
                 });
                 this.__vis__.redraw();
@@ -256,21 +301,22 @@ function filterCategoricalValues(attr, select_item) {
  * */
 
 function filterColorContinues(attr, min, max, min_select, max_select) {
+    if(!old_Color)
+        old_Color = colorDefault
+
     if ($("input#getColor1").length) {
-        updateColorContinues(item_global, min_global, max_global, oldColorMin, oldColorMax);
+        updateColorContinues(attr_global, min_global, max_global, oldColorMin, oldColorMax);
     } else {
-        updateCategoricalColor(attr_global, item_global, colors_global);
+      updateCategoricalColor(attr_global, item_global_categorical, colors_global_categorical);
     }
     $(".partition-node").each(function (i, index) {
         if ($(index).children("svg").length) {
             this.__vis__.setColor(function (d, i) {
                 if (d.data && d.data[attr] >= min_select && d.data[attr] <= max_select) {
-                    console.log("deu certo")
-                    return old_Color;
+                    return old_Color?old_Color:colorDefault;
                 }
                 else if (!d.data && d[attr] >= min_select && d[attr] <= max_select) {
-                    console.log("deu certo")
-                    return old_Color;
+                    return old_Color?old_Color:colorDefault;
                 }
                 else {
                     return "grey";
