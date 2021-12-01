@@ -438,6 +438,7 @@ let settings_individual_for_views = (vis_container) => {
     });
     let selections = [];
     let id = $(vis_container).parent().attr('id');
+
     $(vis_container)
         .append($('<button/>')
             .addClass('config')
@@ -457,6 +458,7 @@ let settings_individual_for_views = (vis_container) => {
         build: function ($trigger, e) {
             let options = {
                 callback: function (key) {
+                    console.log($(vis_container))
                     let svg = vis_container.children[1];
                     let config = vis_container.children[0];
                     switch (key) {
@@ -467,15 +469,21 @@ let settings_individual_for_views = (vis_container) => {
 
                             break;
                         case 'close':
-                            $(vis_container).empty();
-                            $(vis_container).addClass('partiton-content')
-                                .append($('<div/>')
+                            let containterHtml = $(this).parent();
+                            $(this).parent().empty();
+                            console.log("html",containterHtml)
+                            $(containterHtml)
+                                .append($('<div/>').addClass('partiton-content')
                                     .append($('<button/>').text(' view settings ')
                                         .text('Add Visualization')
-                                        .addClass('btn btn-success btn-sm')
-                                        .attr("width", '20px')
-                                        .attr("height", '20px')
-                                        .attr('data-nodeid', $(this).attr('id'))
+                                        .addClass('btn btn-success')
+                                        .addClass('icon icon-plus')
+                                        .attr({"width": '20px',
+                                            "height": '20px',
+                                            "float": 'right',
+                                            "data-nodeid": $(this).attr('id')
+
+                                        })
                                         .css({'float': 'right'}))
                                 )
                         // case 'pdf':
