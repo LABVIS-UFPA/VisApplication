@@ -477,7 +477,7 @@ let settings_individual_for_views = (vis_container) => {
                                     .append($('<button/>').text(' view settings ')
                                         .text('Add Visualization')
                                         .addClass('btn btn-success')
-                                        .addClass('icon icon-plus')
+                                        .addClass('icon icon-plus-circled')
                                         .attr({"width": '20px',
                                             "height": '20px',
                                             "float": 'right',
@@ -594,7 +594,7 @@ function updateTools() {
 
         for (let i = 0; i < dimension.length; i++) {
             $('div.menu-details')
-                .append($("<div/>")
+                .append($("<div/>").addClass("checkbox")
                 .append($('<input/>')
                     .addClass('form-check-input')
                     .attr('type', 'checkbox')
@@ -826,7 +826,7 @@ function updateInteface() {
                         $('select.filter').parent()
                             .append($('<select/>')
                                 .addClass('categoricalFilter')
-                                .addClass('form-select')
+                                .addClass('form-control')
                                 .css('marginTop', '10px'))
 
                         let index = dimension.indexOf(valor)
@@ -902,13 +902,12 @@ function updateInteface() {
                             })
                             .addClass('list-group-item')
                             .attr('id', hie)
-                            .css("display", "table-row")
                             .append($('<div/>').attr('class', 'listH').addClass('media-body')
                                 .addClass("input-group-text")
                                 .css({"fontSize":"10px","background-color":"#fff"})
-                                .append($('<i/>').addClass('bi bi-arrow-down-up'))
-                                .append($('<strong/>').text(' -' + hie))
-                                .append($('<i/>').addClass('remove').addClass('bi bi-trash icon-trash')
+                                .append($('<span/>').addClass('icon icon-arrow-combo'))
+                                .append($('<strong/>').text(' - ' + hie))
+                                .append($('<span/>').addClass('remove').addClass('icon icon-trash')
                                     .css('float', 'right')
                                     .click(function () {
                                         $(this).parent().parent().remove()
