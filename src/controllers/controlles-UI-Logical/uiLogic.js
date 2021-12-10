@@ -37,6 +37,8 @@ let addVis = (visName, parentElement, select) => {
 
 ipc.on('add-vis', function (event, arg) {
     addVis(arg, $('.partition-content').get(0))
+
+    // layout.findById()
 })
 
 ipc.on('file-layout', async function (event, data) {
@@ -47,7 +49,7 @@ ipc.on('file-layout', async function (event, data) {
     layout = partitionLayout;
     await layout.import(data);
     await layout.updateHTML();
-    await readLayoutImportVisualizations(data);
+    await renderDashboard(data);
 
 
 });
@@ -68,46 +70,31 @@ ipc.on('export-layout', function () {
 })
 
 
-function readLayoutImportVisualizations(jsonLatout) {
+function renderDashboard(jsonLatout) {
     if (!_data_)
-        return errorEmptyDatabase();
+        return alert("layout includes views but a database was not imported")
 
     let vis_layout = jsonLatout;
-
-
     const add_child_tree = function (item) {
-        console.log("dentro", item)
 
         if (item.content && item.content !== "") {
-            console.log("content", item.content)
-            console.log("id",item.id)
             let htmlNode = $(`#partition-${item.id}`)
             htmlNode.empty();
-            console.log("html node",htmlNode)
-            //alert("teste")
+            settings_individual_for_views(htmlNode.get(0))
             addVis(item.content,htmlNode.get(0));
             createVis(htmlNode.get(0));
-
         }
 
-        if (!item.children) {
-            console.log("Not child");
-            return
-        };
+        if (!item.children) {return};
 
 
-        for (const [index, child] of item.children.entries()) {
-            console.log("interno child", index, child)
+        for (const child of item.children) {
             add_child_tree(child)
         }
     }
 
-
     for (let index = 0; index < vis_layout.children.length; index++) {
-        // console.log(vis_layout.children.length)
-        // console.log(vis_layout.children[index])
         add_child_tree(vis_layout.children[index])
-
     }
 }
 
@@ -204,6 +191,9 @@ $(document).ready(function () {
                         content.empty()
                         settings_individual_for_views(content.get(0))
                         addVis(name, content.get(0))
+
+                        let idPartition = content.attr("id").split('-')
+                        layout.findById(idPartition[1],name)
 
                         ipc.send('update-sampledata', {})
                         createVis(content.get(0), select);
