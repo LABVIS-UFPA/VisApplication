@@ -31,7 +31,7 @@ function createVis(container, select) {
         checkCores();
         updateHie(list_hiarchy);
         if (size_global)
-            return updateSize(size_global)
+            updateSize(size_global)
     }
 
     checkCores();

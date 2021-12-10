@@ -39,14 +39,15 @@ ipc.on('add-vis', function (event, arg) {
     addVis(arg, $('.partition-content').get(0))
 })
 
-ipc.on('file-layout', function (event, data) {
+ipc.on('file-layout', async function (event, data) {
     $(".partition-node").remove();
 
     let $body = $('#main');
     let partitionLayout = new PartitionLayout($body.get(0));
     layout = partitionLayout;
-    layout.import(data);
-    layout.updateHTML();
+    await layout.import(data);
+    await layout.updateHTML();
+    await readLayoutImportVisualizations(data);
 
 
 });
@@ -61,10 +62,54 @@ ipc.on('export-layout', function () {
     if (!layout) {
         alert("Layout is empty!");
     }
-    console.log("export:",layout.export());
+    console.log("export:", layout.export());
     download(layout.export(), 'partition.json', 'json');
 
 })
+
+
+function readLayoutImportVisualizations(jsonLatout) {
+    if (!_data_)
+        return errorEmptyDatabase();
+
+    let vis_layout = jsonLatout;
+
+
+    const add_child_tree = function (item) {
+        console.log("dentro", item)
+
+        if (item.content && item.content !== "") {
+            console.log("content", item.content)
+            console.log("id",item.id)
+            let htmlNode = $(`#partition-${item.id}`)
+            htmlNode.empty();
+            console.log("html node",htmlNode)
+            //alert("teste")
+            addVis(item.content,htmlNode.get(0));
+            createVis(htmlNode.get(0));
+
+        }
+
+        if (!item.children) {
+            console.log("Not child");
+            return
+        };
+
+
+        for (const [index, child] of item.children.entries()) {
+            console.log("interno child", index, child)
+            add_child_tree(child)
+        }
+    }
+
+
+    for (let index = 0; index < vis_layout.children.length; index++) {
+        // console.log(vis_layout.children.length)
+        // console.log(vis_layout.children[index])
+        add_child_tree(vis_layout.children[index])
+
+    }
+}
 
 
 function download(content, filename, contentType) {
@@ -120,12 +165,12 @@ $(document).ready(function () {
         }
     });
 
-    $body.on('layout:resize',  function (e) {
+    $body.on('layout:resize', function (e) {
         $('.partition-node').each(function () {
             if (this && this.__vis__) {
-                    this.__vis__.resize()
-                }
-            })
+                this.__vis__.resize()
+            }
+        })
 
 
     });
@@ -209,7 +254,7 @@ $(document).ready(function () {
                 }
             };
 
-            if(!data_prep){
+            if (!data_prep) {
                 alert('You have to link data first')
             }
 
@@ -248,14 +293,15 @@ $(document).ready(function () {
     })
 
     $.contextMenu({
-            selector:'.icons.Color',
-            build: function($trigger, e) {
-                if(!data_prep){
+            selector: '.icons.Color',
+            build: function ($trigger, e) {
+                if (!data_prep) {
                     errorEmptyDatabase();
                 }
 
-            }}
-        )
+            }
+        }
+    )
 
     $body.on('layout:created', '.partition-node', function (e) {
         // console.log('layout:created', this)
@@ -437,7 +483,7 @@ let settings_individual_for_views = (vis_container) => {
         return {[item]: {status: false}}
     });
     let selections = [];
-    let id = $(vis_container).parent().attr('id');
+    let id = $(vis_container).attr('id');
 
     $(vis_container)
         .append($('<button/>')
@@ -471,14 +517,15 @@ let settings_individual_for_views = (vis_container) => {
                         case 'close':
                             let containterHtml = $(this).parent();
                             $(this).parent().empty();
-                            console.log("html",containterHtml)
+                            console.log("html", containterHtml)
                             $(containterHtml)
                                 .append($('<div/>').addClass('partiton-content')
                                     .append($('<button/>').text(' view settings ')
                                         .text('Add Visualization')
                                         .addClass('btn btn-success')
                                         .addClass('icon icon-plus-circled')
-                                        .attr({"width": '20px',
+                                        .attr({
+                                            "width": '20px',
                                             "height": '20px',
                                             "float": 'right',
                                             "data-nodeid": $(this).attr('id')
@@ -595,17 +642,17 @@ function updateTools() {
         for (let i = 0; i < dimension.length; i++) {
             $('div.menu-details')
                 .append($("<div/>").addClass("checkbox")
-                .append($('<input/>')
-                    .addClass('form-check-input')
-                    .attr('type', 'checkbox')
-                    .attr('value', dimension[i]))
-                .append($('<label/>')
-                    .css({
-                        'text-align': 'center',
-                        'display': 'initial',
-                        'font-size': '13px'
-                    })
-                    .text(dimension[i]).append($('<br/>'))))
+                    .append($('<input/>')
+                        .addClass('form-check-input')
+                        .attr('type', 'checkbox')
+                        .attr('value', dimension[i]))
+                    .append($('<label/>')
+                        .css({
+                            'text-align': 'center',
+                            'display': 'initial',
+                            'font-size': '13px'
+                        })
+                        .text(dimension[i]).append($('<br/>'))))
         }
     }
     details()
@@ -771,14 +818,17 @@ function updateInteface() {
                                 .append($('<div/>')
                                     .append($('<label/>')
                                         .text('min:' + limit[j + 1])
-                                        .css({'float': 'left',
-                                              'margin-top':'15px'
+                                        .css({
+                                            'float': 'left',
+                                            'margin-top': '15px'
                                         }))
                                     .append($('<label/>')
                                         .text('max:' + limit[j + 2])
                                         .css(
-                                            {'float': 'right',
-                                             'margin-top':'15px'}
+                                            {
+                                                'float': 'right',
+                                                'margin-top': '15px'
+                                            }
                                         )))
                                 .append($('<div/>')
                                     .attr('id', 'slider-range')
@@ -836,10 +886,9 @@ function updateInteface() {
 
                         $(d_values[index]).each(function (i, attr) {
                             $('.categoricalFilter').append($('<option>', {
-                                value: d_values[index][i],
-                                text: d_values[index][i]
-                            }).addClass('opt Categorical Filter')
-
+                                    value: d_values[index][i],
+                                    text: d_values[index][i]
+                                }).addClass('opt Categorical Filter')
                             )
 
                             $('.categoricalFilter').change(function () {
@@ -872,7 +921,7 @@ function updateInteface() {
             $(hierarchyAttrs).each(function (i, attr) {
                 let items = $(attr).children('.optHie').length
                 $.each(categorical_values, function (i, item) {
-                    if ($(attr).length && items < categorical_values.length) {
+                    if ($(attr).length && items <= categorical_values.length) {
                         $(attr).append($('<option>', {
                             value: categorical_values[i],
                             text: categorical_values[i]
@@ -904,7 +953,7 @@ function updateInteface() {
                             .attr('id', hie)
                             .append($('<div/>').attr('class', 'listH').addClass('media-body')
                                 .addClass("input-group-text")
-                                .css({"fontSize":"10px","background-color":"#fff"})
+                                .css({"fontSize": "10px", "background-color": "#fff"})
                                 .append($('<span/>').addClass('icon icon-arrow-combo'))
                                 .append($('<strong/>').text(' - ' + hie))
                                 .append($('<span/>').addClass('remove').addClass('icon icon-trash')
@@ -988,7 +1037,7 @@ function updateInteface() {
                     .append($('<input>')
                         .attr('type', props[0].type)
                         .attr('value', dimension[i])
-                        .attr('class',props[0].class)
+                        .attr('class', props[0].class)
                         .addClass('myCheckboxDimension')
                     )
                     .append($('<label>')
@@ -1040,13 +1089,13 @@ let addMenu = async (parentElement) => {
     await $(parentElement).load('public/html/menu-settings-vis.html')
     $(document).ready(function () {
 
-        $(".icons-menu").click(function (item){
+        $(".icons-menu").click(function (item) {
             let name = $(this).attr('value')
             $(`.${name}-header`).toggle();
 
         })
 
-        $('.modal-button').click(function (){
+        $('.modal-button').click(function () {
             $(this).parent().children(".menu-acordion").toggle();
             $(this).children("div").children(".open").toggle();
             $(this).children("div").children(".close").toggle();
@@ -1087,10 +1136,11 @@ let addMenu = async (parentElement) => {
     })
 }
 
-function errorEmptyDatabase(){
+function errorEmptyDatabase() {
     console.log('You have to link data first')
     alert('You have to link data first')
 }
+
 // ------gerar conteudo do input dinamicamente------------------------------------------------------------------------------
 
 const comentclear = () => {
